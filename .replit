@@ -4,6 +4,7 @@ expertMode = true
 
 [nix]
 channel = "stable-25_05"
+packages = ["glibcLocales", "libxcrypt", "libyaml"]
 
 [workflows]
 runButton = "Project"
@@ -25,7 +26,7 @@ author = "agent"
 outputType = "webview"
 
 [[workflows.workflow.tasks]]
-task = "shell.exec"
+task = "shell.exec
 args = "cd apps/frontend && pnpm dev"
 waitForPort = 5000
 
@@ -47,7 +48,7 @@ localPort = 34125
 externalPort = 3001
 
 [[ports]]
-localPort = 37707
+localPort = 4113
 externalPort = 3000
 
 [deployment]
