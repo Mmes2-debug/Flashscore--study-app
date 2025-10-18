@@ -2,14 +2,30 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests/e2e',
+  timeout: 30_000,
+  expect: {
+    timeout: 5_000,
+  },
   fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: [['list'], ['html', { open: 'never' }]],
   use: {
-    baseURL: 'http://localhost:5000',
-    trace: 'on-first-retry',
+    // Base URL used in page.goto('/')
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000',
+
+    // Common options for all tests
+    headless: true,
+    viewport: { width: 1280, height: 720 },
+    actionTimeout: 0,
+    trace: 'retain-on-failure',
+  },
+
+  // Start the frontend automatically before running tests.
+  // Adjust the command if your frontend workspace name or scripts differ.
+  webServer: {
+    command: 'npm --workspace=@magajico/frontend run dev',
+    port: 3000,
+    timeout: 120_000,
+    reuseExistingServer: !process.env.CI,
   },
 
   projects: [
@@ -18,18 +34,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
   ],
-
-  webServer: {
-    command: 'cd apps/frontend && pnpm dev',
-    url: 'http://localhost:5000',
-    reuseExistingServer: !process.env.CI,
-  },
 });
