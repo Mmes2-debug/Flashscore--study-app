@@ -4,11 +4,6 @@
   "outputDirectory": "apps/frontend/.next",
   "framework": "nextjs",
   "regions": ["iad1"],
-  "functions": {
-    "apps/frontend/src/app/api/**/*.ts": {
-      "maxDuration": 30
-    }
-  },
   "rewrites": [
     {
       "source": "/api/backend/:path*",
