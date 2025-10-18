@@ -5,31 +5,39 @@ import mongoose from 'mongoose';
 export async function healthRoutes(fastify: FastifyInstance) {
   // Basic health check
   fastify.get('/health', async (request, reply) => {
-    const dbConnected = mongoose.connection.readyState === 1;
-    const dbStatus = dbConnected ? 'ok' : 'down';
-    const requireDb = process.env.REQUIRE_DB === 'true' || process.env.NODE_ENV === 'production';
+    try {
+      const dbConnected = mongoose.connection.readyState === 1;
+      const dbStatus = dbConnected ? 'ok' : 'down';
+      const requireDb = process.env.REQUIRE_DB === 'true' || process.env.NODE_ENV === 'production';
 
-    const health = {
-      status: (requireDb && !dbConnected) ? 'degraded' : 'ok',
-      api: 'ok',
-      db: {
-        status: dbStatus,
-        required: requireDb,
-        readyState: mongoose.connection.readyState,
-        host: mongoose.connection.host || 'N/A',
-        name: mongoose.connection.name || 'N/A'
-      },
-      uptime: process.uptime(),
-      timestamp: new Date().toISOString(),
-      version: process.env.npm_package_version || '1.0.0'
-    };
+      const health = {
+        status: (requireDb && !dbConnected) ? 'degraded' : 'ok',
+        api: 'ok',
+        db: {
+          status: dbStatus,
+          required: requireDb,
+          readyState: mongoose.connection.readyState,
+          host: mongoose.connection.host || 'N/A',
+          name: mongoose.connection.name || 'N/A'
+        },
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+        version: process.env.npm_package_version || '1.0.0',
+        environment: process.env.NODE_ENV || 'development'
+      };
 
-    // Return 503 if DB is required but not available
-    if (requireDb && !dbConnected) {
-      reply.code(503);
+      // Always return 200 for basic health check (service is running)
+      // Database issues are reflected in the status field
+      reply.code(200);
+      return health;
+    } catch (error) {
+      reply.code(500);
+      return { 
+        status: 'error', 
+        message: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
+      };
     }
-
-    return health;
   });
 
   // Detailed metrics endpoint
@@ -44,7 +52,7 @@ export async function healthRoutes(fastify: FastifyInstance) {
         connected: dbConnected,
         host: mongoose.connection.host || 'N/A',
         readyState: mongoose.connection.readyState,
-        collections: dbConnected ? await mongoose.connection.db.listCollections().toArray() : []
+        collections: dbConnected ? await mongoose.connection.db?.listCollections().toArray() : []
       },
       memory: {
         rss: `${Math.round(memUsage.rss / 1024 / 1024)}MB`,
@@ -63,7 +71,8 @@ export async function healthRoutes(fastify: FastifyInstance) {
 
   // Liveness probe (for container orchestration)
   fastify.get('/health/live', async (request, reply) => {
-    return { status: 'alive' };
+    reply.code(200);
+    return { status: 'alive', timestamp: new Date().toISOString() };
   });
 
   // Readiness probe (for load balancers)
