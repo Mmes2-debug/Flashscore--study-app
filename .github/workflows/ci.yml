@@ -10,39 +10,29 @@ jobs:
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
+
+      - name: Cache npm
+        uses: actions/cache@v4
         with:
-          version: 10
-      
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-      
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-      
+            ${{ runner.os }}-npm-
+
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      
+        run: npm ci
+
       - name: Run unit tests
-        run: pnpm test
-      
+        run: npm test
+
       - name: Upload coverage reports
         uses: actions/upload-artifact@v4
         if: always()
@@ -56,27 +46,33 @@ jobs:
   e2e-tests:
     name: E2E Tests
     runs-on: ubuntu-latest
-    
+
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
+
+      - name: Cache npm
+        uses: actions/cache@v4
         with:
-          version: 10
-      
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Build frontend for smoke test
         run: |
           # Build only the frontend workspace to verify build succeeds in CI
-          pnpm --filter @magajico/frontend build
+          npm --workspace=@magajico/frontend run build
 
       - name: Verify frontend build output (smoke)
         run: |
@@ -88,13 +84,32 @@ jobs:
             ls -la apps/frontend || true
             exit 1
           fi
-      
+
       - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps chromium
-      
+        run: npx playwright install --with-deps chromium
+
+      - name: Start frontend (production) in background
+        run: |
+          # Start the built Next.js app in the background so playwright can hit it.
+          # Assumes apps/frontend has `start` script (npm start).
+          cd apps/frontend
+          npm run start &>/tmp/frontend.log &
+          # Give server a few seconds to bind
+          for i in {1..20}; do
+            if curl --silent --fail http://localhost:5000 >/dev/null 2>&1; then
+              echo "frontend is up"
+              break
+            fi
+            echo "waiting for frontend..."
+            sleep 1
+          done
+          tail -n +1 /tmp/frontend.log || true
+
       - name: Run E2E tests
-        run: pnpm test:e2e
-      
+        run: npm run test:e2e
+        env:
+          PLAYWRIGHT_BASE_URL: http://localhost:5000
+
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
         if: always()
@@ -106,22 +121,25 @@ jobs:
   type-check:
     name: TypeScript Check
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
+
+      - name: Cache npm
+        uses: actions/cache@v4
         with:
-          version: 10
-      
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      
+        run: npm ci
+
       - name: Run TypeScript check
-        run: pnpm tsc:check
+        run: npm run tsc:check
