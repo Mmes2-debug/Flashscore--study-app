@@ -1,4 +1,5 @@
-"name": "magajico-monorepo",
+{
+  "name": "magajico-monorepo",
   "private": true,
   "version": "1.0.0",
   "workspaces": [
