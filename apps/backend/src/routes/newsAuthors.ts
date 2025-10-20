@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { NewsAuthorController } from '../controllers/newsAuthorController.js';
 // import { authMiddleware } from '../middleware/authMiddleware.js'; // Disabled for build fix
-import { NewsAuthorService } from '../services/newsAuthorService';
+import { NewsAuthorService } from '../services/newsAuthorService.js';
 
 // ==== Request Body Interfaces (DTOs) ====
 interface CreateAuthorBody {
