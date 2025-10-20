@@ -1,8 +1,8 @@
 
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { Match, IOdds } from "../models/Match";
-import { ErrorLog } from "../models/ErrorLog";
+import { Match, IOdds } from "../models/Match.js";
+import { ErrorLog } from "../models/ErrorLog.js";
 
 /**
  * Generic scraper utility
