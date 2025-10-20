@@ -134,9 +134,9 @@ const endpointRateLimits = {
 };
 
 // Register performance optimizations
-import { responseCacheMiddleware } from './middleware/responseCache';
-// import { optimizeMongoDB } from './middleware/queryOptimizer'; // Disabled for build fix
-import { endpointRateLimitMiddleware } from './middleware/endpointRateLimit';
+import { responseCacheMiddleware } from './middleware/responseCache.js';
+// import { optimizeMongoDB } from './middleware/queryOptimizer.js'; // Disabled for build fix
+import { endpointRateLimitMiddleware } from './middleware/endpointRateLimit.js';
 
 // Add response caching for GET requests
 fastify.addHook('onRequest', responseCacheMiddleware({ ttl: 60000, keyPrefix: 'api' }));
