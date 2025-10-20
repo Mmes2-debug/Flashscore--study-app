@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { predictionService } from '../services/inMemoryPredictionService';
+import { predictionService } from '../services/inMemoryPredictionService.js';
 
 export default async function predictionsRoutes(fastify: FastifyInstance) {
   // Get all predictions
