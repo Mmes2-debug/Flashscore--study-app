@@ -1,7 +1,7 @@
 
 import { FastifyInstance } from "fastify";
-import { Match } from "../models/Match";
-import { getUpcomingMatches } from "../services/scraperServices";
+import { Match } from "../models/Match.js";
+import { getUpcomingMatches } from "../services/scraperServices.js";
 
 export async function matchRoutes(server: FastifyInstance) {
   // Get all matches
