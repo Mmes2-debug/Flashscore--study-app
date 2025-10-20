@@ -146,8 +146,8 @@ fastify.addHook('onRequest', endpointRateLimitMiddleware(endpointRateLimits));
 
 // COPPA compliance enforcement disabled for cost-effective deployment
 // TODO: Re-enable after fixing User model types
-// import { attachKidsModeFlag } from './middleware/kidsModeFilter';
-// import { coppaEnforcementMiddleware } from './middleware/coppaEnforcement';
+// import { attachKidsModeFlag } from './middleware/kidsModeFilter.js';
+// import { coppaEnforcementMiddleware } from './middleware/coppaEnforcement.js';
 // fastify.addHook('onRequest', attachKidsModeFlag);
 // fastify.addHook('onRequest', coppaEnforcementMiddleware);
 
