@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { NewsAuthorController } from '../controllers/newsAuthorController';
-// import { authMiddleware } from '../middleware/authMiddleware'; // Disabled for build fix
+// import { authMiddleware } from '../middleware/authMiddleware.js'; // Disabled for build fix
 import { NewsAuthorService } from '../services/newsAuthorService';
 
 // ==== Request Body Interfaces (DTOs) ====
