@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { NewsAuthorController } from '../controllers/newsAuthorController';
+import { NewsAuthorController } from '../controllers/newsAuthorController.js';
 // import { authMiddleware } from '../middleware/authMiddleware.js'; // Disabled for build fix
 import { NewsAuthorService } from '../services/newsAuthorService';
 
