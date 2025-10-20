@@ -18,7 +18,7 @@ import { matchRoutes } from "./routes/matches.js";
 // import coppaRoutes from "./routes/coppa.js"; // Disabled for build fix
 import errorsRoutes from "./routes/errors.js";
 import { healthRoutes } from "./routes/health.js";
-import { ErrorLog } from './models/ErrorLog';
+import { ErrorLog } from './models/ErrorLog.js';
 import { validateProductionEnv, logEnvironmentStatus } from './utils/validateEnv.js';
 
 // Create Fastify instance
