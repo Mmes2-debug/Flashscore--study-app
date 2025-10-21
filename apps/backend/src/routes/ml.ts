@@ -1,6 +1,5 @@
 // routes/ml.ts
 import { FastifyInstance } from "fastify";
-import fetch from "node-fetch";
 
 export async function mlRoutes(fastify: FastifyInstance) {
   const ML_SERVICE_URL = process.env.ML_SERVICE_URL || "http://0.0.0.0:8000";
