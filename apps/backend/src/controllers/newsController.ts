@@ -1,7 +1,8 @@
+// src/controllers/newsController.ts
 import { FastifyRequest, FastifyReply } from 'fastify';
-import News from '../models/News';
+import { News, INews } from '../models/News'; // Named import with interface
 
-// Define interfaces for request types
+// Request/Body interfaces
 interface NewsParams {
   id: string;
 }
@@ -13,6 +14,7 @@ interface CreateNewsBody {
   author?: string;
   tags?: string[];
   imageUrl?: string;
+  isActive?: boolean;
 }
 
 interface UpdateNewsBody {
@@ -36,41 +38,37 @@ export class NewsController {
     res: FastifyReply
   ): Promise<void> {
     try {
-      const news = await News.find({ isActive: true })
+      const news: INews[] = await News.find({ isActive: true })
         .sort({ createdAt: -1 })
         .limit(20);
 
-      // Check user access level
+      // Check access
       const authHeader = req.headers.authorization;
       const authQuery = req.query?.auth;
-      const isValidAuth = authHeader?.includes('Bearer member') || authQuery === 'member';
+      const isMember = authHeader?.includes('Bearer member') || authQuery === 'member';
 
-      let responseData;
-
-      if (isValidAuth) {
-        // Member access - return full content
-        responseData = news;
-      } else {
-        // Guest access - return preview only
-        responseData = news.map(item => ({
-          ...item.toObject(),
-          fullContent: item.preview + '... [Member access required]',
-          isPreview: true
-        }));
-      }
+      const responseData = isMember
+        ? news
+        : news.map((item: INews) => ({
+            ...item.toObject(),
+            fullContent: item.preview + '... [Member access required]',
+            isPreview: true
+          }));
 
       res.send({
         success: true,
         data: responseData,
         count: responseData.length,
-        accessLevel: isValidAuth ? 'member' : 'guest',
-        memberBenefits: isValidAuth ? null : {
-          message: 'Upgrade to member access for full articles, exclusive analysis, and premium features.',
-          features: ['Full article content', 'Exclusive analysis', 'Premium predictions', 'Ad-free experience']
-        }
+        accessLevel: isMember ? 'member' : 'guest',
+        memberBenefits: isMember
+          ? null
+          : {
+              message: 'Upgrade to member access for full articles, exclusive analysis, and premium features.',
+              features: ['Full article content', 'Exclusive analysis', 'Premium predictions', 'Ad-free experience']
+            }
       });
     } catch (error) {
-      console.error('Error fetching news:', error);
+      req.log.error(error, 'Error fetching news');
       res.status(500).send({
         success: false,
         message: 'Failed to fetch news',
@@ -79,55 +77,48 @@ export class NewsController {
     }
   }
 
-  // Get single news item
+  // Get single news item by ID
   static async getNewsById(
     req: FastifyRequest<{ Params: NewsParams; Querystring: QueryWithAuth }>,
     res: FastifyReply
   ): Promise<void> {
     try {
       const { id } = req.params;
-      const news = await News.findOne({ id: parseInt(id), isActive: true });
+      const news: INews | null = await News.findOne({ id: parseInt(id), isActive: true });
 
       if (!news) {
-        res.status(404).send({
-          success: false,
-          message: 'News item not found'
-        });
+        res.status(404).send({ success: false, message: 'News item not found' });
         return;
       }
 
-      // Check user access level
       const authHeader = req.headers.authorization;
       const authQuery = req.query?.auth;
-      const isValidAuth = authHeader?.includes('Bearer member') || authQuery === 'member';
+      const isMember = authHeader?.includes('Bearer member') || authQuery === 'member';
 
-      let responseData;
+      const responseData = isMember
+        ? news
+        : {
+            ...news.toObject(),
+            fullContent: news.preview + '... [Member access required]',
+            isPreview: true,
+            memberAccess: {
+              required: true,
+              message: 'Upgrade to member access to read full article and unlock premium content.'
+            }
+          };
 
-      if (isValidAuth) {
-        // Member access - return full content
-        responseData = news;
-        // Increment view count for members
+      // Increment view count for members
+      if (isMember) {
         await News.findByIdAndUpdate(news._id, { $inc: { viewCount: 1 } });
-      } else {
-        // Guest access - return limited content
-        responseData = {
-          ...news.toObject(),
-          fullContent: news.preview + '... [Member access required for full content]',
-          isPreview: true,
-          memberAccess: {
-            required: true,
-            message: 'Upgrade to member access to read the full article and unlock premium content.'
-          }
-        };
       }
 
       res.send({
         success: true,
         data: responseData,
-        accessLevel: isValidAuth ? 'member' : 'guest'
+        accessLevel: isMember ? 'member' : 'guest'
       });
     } catch (error) {
-      console.error('Error fetching news by ID:', error);
+      req.log.error(error, 'Error fetching news by ID');
       res.status(500).send({
         success: false,
         message: 'Failed to fetch news item',
@@ -142,9 +133,8 @@ export class NewsController {
     res: FastifyReply
   ): Promise<void> {
     try {
-      const { title, preview, fullContent, author, tags, imageUrl } = req.body;
+      const { title, preview, fullContent, author, tags, imageUrl, isActive } = req.body;
 
-      // Get the next ID
       const lastNews = await News.findOne().sort({ id: -1 });
       const nextId = lastNews ? lastNews.id + 1 : 1;
 
@@ -155,7 +145,8 @@ export class NewsController {
         fullContent,
         author: author || 'Admin',
         tags: tags || [],
-        imageUrl
+        imageUrl,
+        isActive: isActive ?? true
       });
 
       const savedNews = await news.save();
@@ -166,7 +157,7 @@ export class NewsController {
         message: 'News created successfully'
       });
     } catch (error) {
-      console.error('Error creating news:', error);
+      req.log.error(error, 'Error creating news');
       res.status(400).send({
         success: false,
         message: 'Failed to create news',
@@ -184,27 +175,20 @@ export class NewsController {
       const { id } = req.params;
       const updateData = req.body;
 
-      const news = await News.findOneAndUpdate(
+      const news: INews | null = await News.findOneAndUpdate(
         { id: parseInt(id) },
         updateData,
         { new: true, runValidators: true }
       );
 
       if (!news) {
-        res.status(404).send({
-          success: false,
-          message: 'News item not found'
-        });
+        res.status(404).send({ success: false, message: 'News item not found' });
         return;
       }
 
-      res.send({
-        success: true,
-        data: news,
-        message: 'News updated successfully'
-      });
+      res.send({ success: true, data: news, message: 'News updated successfully' });
     } catch (error) {
-      console.error('Error updating news:', error);
+      req.log.error(error, 'Error updating news');
       res.status(400).send({
         success: false,
         message: 'Failed to update news',
@@ -213,7 +197,7 @@ export class NewsController {
     }
   }
 
-  // Delete news item (soft delete)
+  // Soft delete news
   static async deleteNews(
     req: FastifyRequest<{ Params: NewsParams }>,
     res: FastifyReply
@@ -221,26 +205,20 @@ export class NewsController {
     try {
       const { id } = req.params;
 
-      const news = await News.findOneAndUpdate(
+      const news: INews | null = await News.findOneAndUpdate(
         { id: parseInt(id) },
         { isActive: false },
         { new: true }
       );
 
       if (!news) {
-        res.status(404).send({
-          success: false,
-          message: 'News item not found'
-        });
+        res.status(404).send({ success: false, message: 'News item not found' });
         return;
       }
 
-      res.send({
-        success: true,
-        message: 'News deleted successfully'
-      });
+      res.send({ success: true, message: 'News deleted successfully' });
     } catch (error) {
-      console.error('Error deleting news:', error);
+      req.log.error(error, 'Error deleting news');
       res.status(500).send({
         success: false,
         message: 'Failed to delete news',
