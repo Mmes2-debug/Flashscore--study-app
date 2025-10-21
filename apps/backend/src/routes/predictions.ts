@@ -18,6 +18,21 @@ const predictionSchema = z.object({
 });
 
 // ---------------------------
+// Fallback response
+// ---------------------------
+const fallbackPrediction = {
+  prediction: "unknown",
+  confidence: 0,
+  probabilities: {
+    home: 0,
+    draw: 0,
+    away: 0,
+  },
+  model_version: "offline",
+  message: "ML service temporarily unavailable. Please try again later.",
+};
+
+// ---------------------------
 // Register predictions route
 // ---------------------------
 export async function predictionsRoutes(fastify: FastifyInstance) {
@@ -33,18 +48,17 @@ export async function predictionsRoutes(fastify: FastifyInstance) {
 
     // Circuit breaker: stop if too many failures
     if (mlFailures >= ML_FAILURE_THRESHOLD) {
-      return reply
-        .status(503)
-        .send({ error: "ML service unavailable. Please try later." });
+      return reply.status(503).send(fallbackPrediction);
     }
 
     try {
-  const response = await axios.post("http://127.0.0.1:8000/predict", { features });
-  mlFailures = 0; // reset on success
-  return reply.status(200).send(response.data);
-} catch (err) {
-  mlFailures++;
-  
-  // Return friendly fallback instead of raw error
-  return reply.status(503).send(fallbackPrediction);
-} 
+      // Call Python ML API
+      const response = await axios.post("http://127.0.0.1:8000/predict", { features });
+      mlFailures = 0; // reset on success
+      return reply.status(200).send(response.data);
+    } catch (err) {
+      mlFailures++;
+      return reply.status(503).send(fallbackPrediction);
+    }
+  });
+}
