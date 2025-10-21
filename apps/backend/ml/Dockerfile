@@ -1,8 +1,8 @@
-# =======================================
-# MagajiCo ML Prediction API - Render Ready Dockerfile
-# =======================================
+# ---------------------------------------
+# MagajiCo: Single Deployment Fastify + FastAPI
+# ---------------------------------------
 
-# Use lightweight official Python image
+# Base image: Python slim
 FROM python:3.11-slim
 
 # Set working directory
@@ -12,24 +12,33 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Install system dependencies
+# Install system dependencies + Node.js 22 LTS
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+    curl build-essential git \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copy dependency list
-COPY requirements.txt .
+# Copy Node.js dependencies
+COPY package*.json tsconfig.json ./
 
-# Install dependencies (use --no-cache for smaller image)
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+# Install Node.js packages
+RUN npm install
 
-# Copy the rest of the app
+# Copy Python dependencies
+COPY Ml/requirements.txt ./Ml/requirements.txt
+
+# Install Python packages
+RUN pip install --upgrade pip && pip install --no-cache-dir -r ./Ml/requirements.txt
+
+# Copy full source code
 COPY . .
 
-# Expose the port Render will use
-EXPOSE 10000
+# Build TypeScript for Fastify
+RUN npm run build
 
-# Start the FastAPI server
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]
+# Expose Fastify port (public)
+EXPOSE 3000
+
+# Default command: run Fastify which starts FastAPI internally
+CMD ["node", "dist/index.js"]
