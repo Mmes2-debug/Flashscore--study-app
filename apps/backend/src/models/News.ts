@@ -15,4 +15,3 @@ const NewsSchema: Schema = new Schema({
 });
 
 export const News = mongoose.models.News || mongoose.model<INews>("News", NewsSchema);
-export default News; // dual export ✅
