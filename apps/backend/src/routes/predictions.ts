@@ -39,13 +39,12 @@ export async function predictionsRoutes(fastify: FastifyInstance) {
     }
 
     try {
-      // Call Python ML API
-      const response = await axios.post("http://127.0.0.1:8000/predict", { features });
-      mlFailures = 0; // reset on success
-      return reply.status(200).send(response.data);
-    } catch (err) {
-      mlFailures++;
-      return reply.status(500).send({ error: "Prediction failed", details: err instanceof Error ? err.message : err });
-    }
-  });
-}
+  const response = await axios.post("http://127.0.0.1:8000/predict", { features });
+  mlFailures = 0; // reset on success
+  return reply.status(200).send(response.data);
+} catch (err) {
+  mlFailures++;
+  
+  // Return friendly fallback instead of raw error
+  return reply.status(503).send(fallbackPrediction);
+} 
