@@ -1,7 +1,8 @@
-// src/services/mlPredictionService.ts
+import { AbortController } from 'node-abort-controller'; // ✅ ensures compatibility in Node environments
 
-const ML_SERVICE_URL = process.env.ML_SERVICE_URL || "http://0.0.0.0:8000";
+const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://0.0.0.0:8000';
 
+// ==== Interfaces ====
 export interface PredictionRequest {
   homeTeam: string;
   awayTeam: string;
@@ -15,16 +16,26 @@ export interface PredictionResponse {
   model_version?: string;
 }
 
-async function safeFetch(url: string, options: any, retries = 2, timeout = 10000): Promise<any> {
+// ==== Safe Fetch Utility with Retry + Timeout ====
+async function safeFetch(
+  url: string,
+  options: RequestInit,
+  retries = 2,
+  timeout = 10000
+): Promise<any> {
   let lastError: any;
   for (let i = 0; i < retries; i++) {
     try {
       const controller = new AbortController();
-      const id = setTimeout(() => controller.abort(), timeout);
-      const response = await fetch(url, { ...options, signal: controller.signal });
-      clearTimeout(id);
+      const timer = setTimeout(() => controller.abort(), timeout);
 
-      if (!response.ok) throw new Error(`ML service returned ${response.status}`);
+      const response = await fetch(url, { ...options, signal: controller.signal });
+      clearTimeout(timer);
+
+      if (!response.ok) {
+        throw new Error(`ML service returned ${response.status}`);
+      }
+
       return await response.json();
     } catch (err: any) {
       lastError = err;
@@ -36,48 +47,54 @@ async function safeFetch(url: string, options: any, retries = 2, timeout = 10000
   throw new Error(`ML service unavailable after ${retries} retries: ${lastError?.message}`);
 }
 
+// ==== Main Service ====
 export const mlPredictionService = {
+  // 🎯 Predict a single match
   async predictMatch(req: PredictionRequest): Promise<PredictionResponse> {
     try {
       const data = await safeFetch(`${ML_SERVICE_URL}/predict`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(req),
       });
 
       return data;
     } catch (err) {
-      console.error("ML service failed, falling back to rule-based", err);
-      // Fallback logic
-      const fallbackPrediction = req.features[0] > req.features[1] ? "home" : "away";
-      return { prediction: fallbackPrediction, confidence: 0.6, model_version: "rule-based-v1" };
+      console.error('⚠️ ML service failed, falling back to rule-based prediction:', err);
+      const fallbackPrediction = req.features[0] > req.features[1] ? 'home' : 'away';
+      return {
+        prediction: fallbackPrediction,
+        confidence: 0.6,
+        model_version: 'rule-based-v1',
+      };
     }
   },
 
+  // 🧠 Predict in batch mode
   async batchPredict(predictions: PredictionRequest[]): Promise<PredictionResponse[]> {
     try {
       const data = await safeFetch(`${ML_SERVICE_URL}/predict/batch`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ predictions }),
       });
 
       return data;
     } catch (err) {
-      console.error("Batch ML service failed, using rule-based fallback", err);
+      console.error('⚠️ Batch ML service failed, using rule-based fallback:', err);
       return predictions.map((p) => ({
-        prediction: p.features[0] > p.features[1] ? "home" : "away",
+        prediction: p.features[0] > p.features[1] ? 'home' : 'away',
         confidence: 0.6,
-        model_version: "rule-based-v1",
+        model_version: 'rule-based-v1',
       }));
     }
   },
 
+  // 📊 Strategic post-analysis of predictions
   async strategicAnalysis(predictions: PredictionResponse[]): Promise<any> {
-    // Simple rule-based strategic analysis
-    const homeWins = predictions.filter((p) => p.prediction === "home").length;
-    const awayWins = predictions.filter((p) => p.prediction === "away").length;
-    const draws = predictions.filter((p) => p.prediction === "draw").length;
+    const homeWins = predictions.filter((p) => p.prediction === 'home').length;
+    const awayWins = predictions.filter((p) => p.prediction === 'away').length;
+    const draws = predictions.filter((p) => p.prediction === 'draw').length;
 
     return {
       total: predictions.length,
@@ -88,11 +105,10 @@ export const mlPredictionService = {
       filter5Score: Math.random(),
       totalOpportunities: homeWins + awayWins,
       riskManagementScore: 1 - Math.random(),
-      zuckerbergStrategy: "aggressive",
+      zuckerbergStrategy: 'aggressive',
     };
   },
 };
 
-export const predictMatch = mlPredictionService.predictMatch;
-export const batchPredict = mlPredictionService.batchPredict;
-export const strategicAnalysis = mlPredictionService.strategicAnalysis;
+// ==== Named Re-Exports ====
+export const { predictMatch, batchPredict, strategicAnalysis } = mlPredictionService;
