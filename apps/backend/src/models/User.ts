@@ -18,4 +18,3 @@ userSchema.pre('save', function(next) {
 });
 
 export const User = model<IUser>("User", userSchema);
-export default User; // dual export ✅
