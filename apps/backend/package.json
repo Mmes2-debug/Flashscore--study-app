@@ -4,8 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-  "seed": "node src/seed/seedCollections.js"
-}
+    "seed": "node src/seed/seedCollections.js",
     "dev": "tsx watch src/main.ts",
     "build": "tsc",
     "start": "node dist/main.js",
