@@ -1,16 +1,15 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-// Load environment variables
 dotenv.config();
 
 import Author from "../models/NewsAuthor.js";
-import Article from "../models/Article.js";
-import Prediction from "../models/Prediction.js";
-import Comment from "../models/Comment.js";
+import News from "../models/News.js";
+import Prediction from "../models/Predictions.js";
 import User from "../models/User.js";
-import Like from "../models/Like.js";
-import Subscription from "../models/Subscription.js";
+// import Comment from "../models/Comment.js"; // uncomment if available
+// import Like from "../models/Like.js";
+// import Subscription from "../models/Subscription.js";
 
 const MONGO_URI = process.env.MONGODB_URI;
 
@@ -28,12 +27,12 @@ const seedData = async () => {
   try {
     // Clear existing data
     await Author.deleteMany();
-    await Article.deleteMany();
+    await News.deleteMany();
     await Prediction.deleteMany();
-    await Comment.deleteMany();
+    // await Comment.deleteMany();
     await User.deleteMany();
-    await Like.deleteMany();
-    await Subscription.deleteMany();
+    // await Like.deleteMany();
+    // await Subscription.deleteMany();
 
     // Seed authors
     const authors = await Author.insertMany([
@@ -47,8 +46,8 @@ const seedData = async () => {
       { name: "Bob", email: "bob@example.com" },
     ]);
 
-    // Seed articles
-    const articles = await Article.insertMany([
+    // Seed news/articles
+    const articles = await News.insertMany([
       {
         title: "First Article",
         content: "Hello World!",
@@ -67,20 +66,6 @@ const seedData = async () => {
         game: "Team A vs Team B",
         prediction: "Team A wins",
         author: authors[0]._id,
-      },
-    ]);
-
-    // Seed comments
-    await Comment.insertMany([
-      {
-        content: "Great article!",
-        article: articles[0]._id,
-        user: users[0]._id,
-      },
-      {
-        content: "Interesting!",
-        prediction: predictions[0]._id,
-        user: users[1]._id,
       },
     ]);
 
