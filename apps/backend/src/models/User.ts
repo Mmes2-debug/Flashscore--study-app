@@ -1,17 +1,43 @@
 import { Schema, model, Document } from "mongoose";
 
 export interface IUser extends Document {
-  // ... your existing properties
+  username: string;
+  email: string;
   age: number;
   isMinor?: boolean;
   accessRestrictions: {
     bettingAllowed: boolean;
     paymentsAllowed: boolean;
   };
+  coppaConsent?: {
+    granted: boolean;
+    grantedAt?: Date;
+    parentEmail?: string;
+    verificationToken?: string;
+  };
+  preferences?: {
+    notifications?: boolean;
+    theme?: string;
+    language?: string;
+  };
+  lastActive?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const userSchema = new Schema<IUser>({
-  // ... your existing fields
+  username: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true
+  },
   age: {
     type: Number,
     required: true
@@ -29,7 +55,31 @@ const userSchema = new Schema<IUser>({
       type: Boolean,
       default: true
     }
-  }
+  },
+  coppaConsent: {
+    granted: {
+      type: Boolean,
+      default: false
+    },
+    grantedAt: Date,
+    parentEmail: String,
+    verificationToken: String
+  },
+  preferences: {
+    notifications: {
+      type: Boolean,
+      default: true
+    },
+    theme: {
+      type: String,
+      default: 'light'
+    },
+    language: {
+      type: String,
+      default: 'en'
+    }
+  },
+  lastActive: Date
 }, { timestamps: true });
 
 userSchema.pre('save', function(next) {
