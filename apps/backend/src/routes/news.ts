@@ -1,15 +1,16 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import News from "../models/News.js";
+import { News } from "../models/News.js";
 
 // Define body type for creating news
 interface CreateNewsBody {
   title: string;
   content: string;
+  preview: string;
   author?: string;
   publishedAt?: Date;
 }
 
-export default async function newsRoutes(fastify: FastifyInstance) {
+async function newsRoutes(fastify: FastifyInstance) {
   // 📰 Create news
   fastify.post(
     "/",
@@ -53,3 +54,5 @@ export default async function newsRoutes(fastify: FastifyInstance) {
     },
   );
 }
+
+export { newsRoutes };
