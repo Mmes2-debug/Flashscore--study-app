@@ -1,8 +1,36 @@
 import { Schema, model, Document } from "mongoose";
 
-export interface IUser extends Document { /* same as before */ }
+export interface IUser extends Document {
+  // ... your existing properties
+  age: number;
+  isMinor?: boolean;
+  accessRestrictions: {
+    bettingAllowed: boolean;
+    paymentsAllowed: boolean;
+  };
+}
 
-const userSchema = new Schema<IUser>({ /* same as before */ }, { timestamps: true });
+const userSchema = new Schema<IUser>({
+  // ... your existing fields
+  age: {
+    type: Number,
+    required: true
+  },
+  isMinor: {
+    type: Boolean,
+    default: false
+  },
+  accessRestrictions: {
+    bettingAllowed: {
+      type: Boolean,
+      default: true
+    },
+    paymentsAllowed: {
+      type: Boolean,
+      default: true
+    }
+  }
+}, { timestamps: true });
 
 userSchema.pre('save', function(next) {
   if (this.isMinor || this.age < 18) {
