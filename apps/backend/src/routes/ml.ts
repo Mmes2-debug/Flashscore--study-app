@@ -1,46 +1,21 @@
-// routes/ml.ts
-import { FastifyInstance } from "fastify";
+import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 
 export async function mlRoutes(fastify: FastifyInstance) {
-  const ML_SERVICE_URL = process.env.ML_SERVICE_URL || "http://0.0.0.0:8000";
-
-  fastify.post("/predict", async (request, reply) => {
+  fastify.post("/predict", async (req: FastifyRequest, reply: FastifyReply) => {
     try {
-      const response = await fetch(`${ML_SERVICE_URL}/predict`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(request.body),
-      });
-
-      if (!response.ok) {
-        const errText = await response.text();
-        return reply.status(response.status).send({ error: errText });
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (err) {
-      return reply.status(500).send({ error: "ML Service unavailable", details: err.message });
+      // ML logic here
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unknown error occurred";
+      return reply.status(500).send({ error: message });
     }
   });
 
-  fastify.post("/predict/batch", async (request, reply) => {
+  fastify.get("/results", async (_req: FastifyRequest, reply: FastifyReply) => {
     try {
-      const response = await fetch(`${ML_SERVICE_URL}/predict/batch`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(request.body),
-      });
-
-      const data = await response.json();
-      return data;
-    } catch (err) {
-      return reply.status(500).send({ error: "ML Service unavailable", details: err.message });
+      // ML results logic here
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unknown error occurred";
+      return reply.status(500).send({ error: message });
     }
-  });
-
-  fastify.get("/health", async () => {
-    const res = await fetch(`${ML_SERVICE_URL}/health`);
-    return res.json();
   });
 }
