@@ -3,7 +3,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { KidsModeProvider } from "../context/KidsModeContext";
 import { UserPreferencesProvider } from "./providers/UserPreferencesProvider";
-import NextAuthSessionProvider from "./providers/SessionProvider";
+import { SessionProvider as NextAuthSessionProvider } from './providers/SessionProvider';
 import './styles/globals.css'
 import './styles/mobile-optimizations.css'
 import { Analytics } from '@vercel/analytics/react';
@@ -12,16 +12,16 @@ import type { Metadata, Viewport } from "next";
 import PWAServiceWorker from "./components/PWAServiceWorker";
 import PushNotificationManager from "./components/PushNotificationManager";
 import MobilePerformanceOptimizer from "./components/MobilePerformanceOptimizer";
-import ErrorBoundaryWithPerformance from "./components/ErrorBoundary/ErrorBoundaryWithPerformance";
-import ErrorMonitor from './components/ErrorMonitor';
+import { ErrorBoundaryWithPerformance } from "./components/ErrorBoundary/ErrorBoundaryWithPerformance";
+import { ErrorMonitor } from './components/ErrorMonitor';
 import BackendStatusIndicator from './components/BackendStatusIndicator';
 import ThemeToggle from './components/ThemeToggle';
+import MobileMetaOptimizer from "./components/MobileMetaOptimizer";
 
 export const metadata: Metadata = {
   title: 'Sports Central - AI-Powered Predictions',
   description: 'Get AI-powered sports predictions, live scores, and real-time odds',
   manifest: '/manifest.json',
-  themeColor: '#1a1f3a',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
@@ -50,7 +50,10 @@ export const viewport: Viewport = {
   maximumScale: 5,
   userScalable: true,
   viewportFit: 'cover',
-  themeColor: '#1a1f3a',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#1a1f3a' }
+  ],
 };
 
 export default async function RootLayout({
@@ -72,12 +75,7 @@ export default async function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
         />
-        {/* Theme script moved to useEffect in ThemeToggle to fix SSR hydration error */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var theme=localStorage.getItem('theme')||'auto';var effectiveTheme=theme;if(theme==='auto'){effectiveTheme=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.classList.remove('light','dark');document.documentElement.classList.add(effectiveTheme);}catch(e){document.documentElement.classList.add('dark');}})();`,
-          }}
-        />
+        {/* Theme is now handled in ThemeToggle component to prevent SSR hydration errors */}
       </head>
       <body className="antialiased">
         <ErrorBoundaryWithPerformance>
@@ -87,6 +85,7 @@ export default async function RootLayout({
                 <UserPreferencesProvider>
                   <PWAServiceWorker />
                   <PushNotificationManager />
+                  <MobileMetaOptimizer />
                   <MobilePerformanceOptimizer />
                   <ThemeToggle />
                   {children}

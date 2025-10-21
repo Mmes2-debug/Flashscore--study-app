@@ -5,12 +5,10 @@ interface ComponentLoaderProps {
   children: React.ReactNode;
 }
 
-const ComponentLoader: React.FC<ComponentLoaderProps> = ({ children }) => {
+export const ComponentLoader: React.FC<ComponentLoaderProps> = ({ children }) => {
   return (
     <div className="relative">
       {children}
     </div>
   );
 };
-
-export default ComponentLoader;

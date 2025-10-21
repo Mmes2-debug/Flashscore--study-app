@@ -1,61 +1,42 @@
-
 'use client';
 
-import { useEffect } from 'react';
-import { useMobile } from '../hooks/useMobile';
-import { useBatteryOptimization } from '../hooks/useBatteryOptimization';
+import { useEffect, useCallback, useMemo } from 'react';
+import { usePathname } from 'next/navigation';
 
-export default function MobileHomeOptimizer() {
-  const isMobile = useMobile();
-  const { optimizationSettings } = useBatteryOptimization();
+export function MobileHomeOptimizer() {
+  const pathname = usePathname();
 
-  useEffect(() => {
+  const isMobile = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  }, []);
+
+  const optimizeForMobile = useCallback(() => {
     if (!isMobile) return;
 
-    // Reduce animation complexity on mobile
-    if (optimizationSettings.disableAnimations) {
-      document.documentElement.style.setProperty('--animation-duration', '0s');
-    }
+    // Disable hover effects on mobile
+    document.body.classList.add('mobile-optimized');
 
-    // Lazy load images with Intersection Observer
-    const images = document.querySelectorAll('img[data-src]');
-    const imageObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const img = entry.target as HTMLImageElement;
-          if (img.dataset.src) {
-            img.src = img.dataset.src;
-            img.removeAttribute('data-src');
-            imageObserver.unobserve(img);
-          }
-        }
-      });
-    }, {
-      rootMargin: '50px',
-      threshold: 0.01
-    });
-
-    images.forEach(img => imageObserver.observe(img));
-
-    // Optimize scroll performance
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          // Throttled scroll logic here
-          ticking = false;
-        });
-        ticking = true;
+    // Optimize touch targets
+    const style = document.createElement('style');
+    style.textContent = `
+      .mobile-optimized button,
+      .mobile-optimized a {
+        min-height: 44px;
+        min-width: 44px;
       }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    `;
+    document.head.appendChild(style);
 
     return () => {
-      imageObserver.disconnect();
-      window.removeEventListener('scroll', handleScroll);
+      document.head.removeChild(style);
     };
-  }, [isMobile, optimizationSettings]);
+  }, [isMobile]);
+
+  useEffect(() => {
+    const cleanup = optimizeForMobile();
+    return cleanup;
+  }, [optimizeForMobile]);
 
   return null;
 }

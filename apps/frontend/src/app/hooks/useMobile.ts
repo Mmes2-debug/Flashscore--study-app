@@ -1,13 +1,17 @@
 
-"use client";
+'use client';
+
 import { useState, useEffect } from 'react';
 
-export function useMobile(): boolean {
+export function useMobile() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+      setIsMobile(mobile);
     };
 
     checkMobile();
@@ -18,3 +22,5 @@ export function useMobile(): boolean {
 
   return isMobile;
 }
+
+export default useMobile;

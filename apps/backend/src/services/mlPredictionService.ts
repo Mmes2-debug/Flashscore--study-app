@@ -1,5 +1,4 @@
 // src/services/mlPredictionService.ts
-import fetch from "node-fetch";
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || "http://0.0.0.0:8000";
 
@@ -16,7 +15,7 @@ export interface PredictionResponse {
   model_version?: string;
 }
 
-async function safeFetch(url: string, options: any, retries = 3, timeout = 5000): Promise<any> {
+async function safeFetch(url: string, options: any, retries = 2, timeout = 10000): Promise<any> {
   let lastError: any;
   for (let i = 0; i < retries; i++) {
     try {
@@ -29,13 +28,15 @@ async function safeFetch(url: string, options: any, retries = 3, timeout = 5000)
       return await response.json();
     } catch (err: any) {
       lastError = err;
-      await new Promise((resolve) => setTimeout(resolve, 1000 * (i + 1)));
+      if (i < retries - 1) {
+        await new Promise((resolve) => setTimeout(resolve, 3000 * (i + 1)));
+      }
     }
   }
   throw new Error(`ML service unavailable after ${retries} retries: ${lastError?.message}`);
 }
 
-export default {
+export const mlPredictionService = {
   async predictMatch(req: PredictionRequest): Promise<PredictionResponse> {
     try {
       const data = await safeFetch(`${ML_SERVICE_URL}/predict`, {
@@ -91,3 +92,7 @@ export default {
     };
   },
 };
+
+export const predictMatch = mlPredictionService.predictMatch;
+export const batchPredict = mlPredictionService.batchPredict;
+export const strategicAnalysis = mlPredictionService.strategicAnalysis;
