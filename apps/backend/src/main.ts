@@ -1,8 +1,6 @@
 // CRITICAL: Load environment variables FIRST before any other imports
 import { config } from 'dotenv';
 import { resolve } from 'path';
-import { mlRoutes } from './routes/ml.js';
-fastify.register(mlRoutes, { prefix: '/api/ml' });
 
 // Explicitly load .env.development file
 config({ path: resolve(process.cwd(), '.env.development') });
@@ -12,11 +10,12 @@ import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import rateLimit from "@fastify/rate-limit";
 import mongoose from "mongoose";
-import newsAuthorsRoutes from "./routes/newsAuthors.js";
+import {newsAuthorsRoutes} from "./routes/newsAuthors.js";
 import paymentsRoutes from "./routes/payment.js";
-import newsRoutes from "./routes/news.js";
+import {newsRoutes} from "./routes/news.js";
 import predictionsRoutes from "./routes/predictions.js";
 import { matchRoutes } from "./routes/matches.js";
+import { mlRoutes } from './routes/ml.js';
 // import coppaRoutes from "./routes/coppa.js"; // Disabled for build fix
 import errorsRoutes from "./routes/errors.js";
 import { healthRoutes } from "./routes/health.js";
@@ -37,11 +36,11 @@ if (process.env.NODE_ENV === 'production') {
   if (process.env.FRONTEND_URL) {
     allowedOrigins.push(process.env.FRONTEND_URL);
   }
-  
+
   if (process.env.PRODUCTION_DOMAIN) {
     allowedOrigins.push(`https://${process.env.PRODUCTION_DOMAIN}`);
   }
-  
+
   // Replit production deployment
   if (process.env.REPLIT_DEPLOYMENT) {
     const deploymentDomain = process.env.REPLIT_DEV_DOMAIN?.replace('.replit.dev', '-00-00.replit.app');
@@ -49,7 +48,7 @@ if (process.env.NODE_ENV === 'production') {
       allowedOrigins.push(`https://${deploymentDomain}`);
     }
   }
-  
+
   // Log warning if no production origins configured
   if (allowedOrigins.length === 0) {
     fastify.log.error('⚠️ CRITICAL: No production CORS origins configured! Set FRONTEND_URL or PRODUCTION_DOMAIN');
@@ -61,11 +60,11 @@ if (process.env.NODE_ENV === 'production') {
   if (process.env.FRONTEND_URL) {
     allowedOrigins.push(process.env.FRONTEND_URL);
   }
-  
+
   if (process.env.REPLIT_DEV_DOMAIN) {
     allowedOrigins.push(`https://${process.env.REPLIT_DEV_DOMAIN}`);
   }
-  
+
   allowedOrigins.push('http://localhost:5000', 'http://127.0.0.1:5000', 'http://localhost:3000');
 }
 
@@ -269,6 +268,7 @@ fastify.register(newsAuthorsRoutes, { prefix: "/news" });
 fastify.register(paymentsRoutes, { prefix: "/api" });
 fastify.register(predictionsRoutes, { prefix: "/api/predictions" });
 fastify.register(matchRoutes, { prefix: "/matches" });
+fastify.register(mlRoutes, { prefix: '/api/ml' });
 // fastify.register(coppaRoutes, { prefix: "/coppa" }); // Disabled for build fix
 fastify.register(errorsRoutes, { prefix: "/errors" });
 
@@ -281,12 +281,12 @@ const start = async () => {
   try {
     // Log environment status
     logEnvironmentStatus();
-    
+
     // Validate production environment
     if (!validateProductionEnv()) {
       fastify.log.warn('⚠️ Environment validation warnings detected');
     }
-    
+
     // Wait for database connection if required
     if (dbConnectionPromise) {
       await dbConnectionPromise;
