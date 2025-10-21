@@ -1,4 +1,4 @@
-// src/libs/models/author.ts
+src/libs/models/author.ts
 
 export interface AuthorStats {
   totalPredictions: number;
@@ -46,7 +46,7 @@ export interface Prediction {
   [key: string]: any;
 }
 
-class Author {
+export class Author {
   id: string;
   name: string;
   email: string;
@@ -88,7 +88,6 @@ class Author {
     this.updatedAt = new Date();
   }
 
-  // Static method to create author from data
   static fromData(data: AuthorData): Author {
     return new Author(
       data.id,
@@ -102,7 +101,6 @@ class Author {
     );
   }
 
-  // Method to update author info
   update(updateData: Partial<AuthorData>): void {
     Object.keys(updateData).forEach(key => {
       if (this.hasOwnProperty(key) && key !== 'id' && key !== 'createdAt') {
@@ -112,14 +110,12 @@ class Author {
     this.updatedAt = new Date();
   }
 
-  // Method to get author's active predictions
   getActivePredictions(predictions: Prediction[]): Prediction[] {
     return predictions.filter(prediction => 
       prediction.authorId === this.id && prediction.isActive
     );
   }
 
-  // Method to validate author data
   validate(): { isValid: boolean; errors: string[] } {
     const errors: string[] = [];
 
@@ -141,13 +137,11 @@ class Author {
     };
   }
 
-  // Helper method to validate email
   isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
 
-  // Method to format author for display
   toDisplay(): AuthorDisplay {
     return {
       id: this.id,
@@ -162,19 +156,16 @@ class Author {
     };
   }
 
-  // Calculate win rate
   getWinRate(): number {
     if (this.stats.totalPredictions === 0) return 0;
     return Math.round((this.stats.correctPredictions / this.stats.totalPredictions) * 100);
   }
 
-  // Calculate author level based on stats
   getLevel(): number {
     const points = this.stats.correctPredictions * 10 + this.stats.followers * 2 + this.stats.engagement;
     return Math.floor(points / 100) + 1;
   }
 
-  // Add badge to author
   addBadge(badge: Badge): void {
     if (!this.badges.find(b => b.id === badge.id)) {
       this.badges.push(badge);
@@ -182,12 +173,10 @@ class Author {
     }
   }
 
-  // Check if author qualifies for new badges
   checkForNewBadges(): Badge[] {
     const newBadges: Badge[] = [];
     const winRate = this.getWinRate();
 
-    // Win rate badges
     if (winRate >= 80 && !this.badges.find(b => b.id === 'expert_predictor')) {
       newBadges.push({
         id: 'expert_predictor',
@@ -231,6 +220,3 @@ class Author {
     newBadges.forEach(badge => this.addBadge(badge));
     return newBadges;
   }
-}
-
-export default Author;
