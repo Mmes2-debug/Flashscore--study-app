@@ -14,4 +14,5 @@ const NewsSchema: Schema = new Schema({
   publishedAt: { type: Date, default: Date.now }
 });
 
-export default mongoose.models.News || mongoose.model<INews>("News", NewsSchema);
+export const News = mongoose.models.News || mongoose.model<INews>("News", NewsSchema);
+export default News; // dual export ✅
