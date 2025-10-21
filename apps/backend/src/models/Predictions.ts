@@ -9,4 +9,3 @@ predictionSchema.index({ userId: 1, createdAt: -1 });
 predictionSchema.index({ result: 1 });
 
 export const Prediction = model<IPrediction>("Prediction", predictionSchema);
-export default Prediction; // dual export ✅
