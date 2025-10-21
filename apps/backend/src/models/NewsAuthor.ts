@@ -30,4 +30,3 @@ NewsAuthorSchema.index({ expertise: 1 });
 NewsAuthorSchema.index({ collaborationCount: -1 });
 
 export const NewsAuthor = mongoose.models.NewsAuthor || mongoose.model<INewsAuthor>('NewsAuthor', NewsAuthorSchema);
-export default NewsAuthor; // dual export ✅
