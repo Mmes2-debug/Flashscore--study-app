@@ -1,6 +1,8 @@
 // CRITICAL: Load environment variables FIRST before any other imports
 import { config } from 'dotenv';
 import { resolve } from 'path';
+import { mlRoutes } from './routes/ml.js';
+fastify.register(mlRoutes, { prefix: '/api/ml' });
 
 // Explicitly load .env.development file
 config({ path: resolve(process.cwd(), '.env.development') });
