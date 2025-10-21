@@ -1,152 +1,71 @@
-import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import { z } from "zod";
+// src/routes/mlRoutes.ts
+import { FastifyInstance } from "fastify";
 
-// ML service URL (FastAPI)
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || "http://0.0.0.0:8000";
 
-// Graceful fallback tracker
-let mlFailures = 0;
-const ML_FAILURE_THRESHOLD = 3;
-
-// Request schemas
-const PredictSchema = z.object({
-  homeTeam: z.string(),
-  awayTeam: z.string(),
-  features: z.array(z.number()).length(7),
-  enableAI: z.boolean().optional(),
-});
-
-const BatchSchema = z.object({
-  predictions: z.array(z.array(z.number().length(7))),
-});
-
 export async function mlRoutes(server: FastifyInstance) {
-  // Health check
+  // Health check proxy
   server.get("/ml-status", async (_req, reply) => {
     try {
-      const resp = await fetch(`${ML_SERVICE_URL}/health`, {
-        signal: AbortSignal.timeout(3000),
-      });
-      const data = await resp.json();
+      const res = await fetch(`${ML_SERVICE_URL}/health`, { signal: AbortSignal.timeout(3000) });
+      const data = await res.json();
       return { status: "operational", mlService: data };
-    } catch {
-      return reply
-        .status(503)
-        .send({ status: "degraded", fallback: "rule-based predictions" });
+    } catch (e: any) {
+      return reply.status(503).send({ status: "degraded", error: e.message, fallback: "rule-based used" });
     }
   });
 
-  // Single prediction
-  server.post("/predict", async (req: FastifyRequest, reply: FastifyReply) => {
+  // Prediction proxy
+  server.post("/predict", async (req, reply) => {
+    const body = req.body as Record<string, any>;
     try {
-      const body = PredictSchema.parse(req.body);
-
-      if (mlFailures >= ML_FAILURE_THRESHOLD) {
-        return reply.send({
-          prediction: "unknown",
-          confidence: 0,
-          probabilities: { home: 0, draw: 0, away: 0 },
-          model_version: "offline",
-        });
-      }
-
-      const response = await fetch(`${ML_SERVICE_URL}/predict`, {
+      const res = await fetch(`${ML_SERVICE_URL}/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          features: body.features,
-          homeTeam: body.homeTeam,
-          awayTeam: body.awayTeam,
-        }),
-        signal: AbortSignal.timeout(10000),
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(10000)
       });
-
-      if (!response.ok)
-        throw new Error(`ML service returned ${response.status}`);
-
-      const mlResult = await response.json();
-      mlFailures = 0; // reset failures on success
-
-      if (body.enableAI) {
-        const enhanced = await fetch(`${ML_SERVICE_URL}/enhance`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            prediction: mlResult,
-            context: { homeTeam: body.homeTeam, awayTeam: body.awayTeam },
-          }),
-        }).then((res) => res.json());
-
-        return {
-          success: true,
-          data: enhanced.prediction,
-          aiInsights: enhanced.aiInsights,
-          strategicAdvice: enhanced.strategicAdvice,
-          magajico: {
-            version: "MagajiCo-ML-v2.1-AI",
-            ceo_approved: true,
-            strategic_level: "executive",
-            ai_enhanced: true,
-          },
-        };
-      }
-
-      return {
-        success: true,
-        data: mlResult,
-        magajico: {
-          version: "MagajiCo-ML-v2.0",
-          ceo_approved: true,
-          strategic_level: "executive",
-        },
-      };
-    } catch (err: any) {
-      mlFailures++;
-      server.log.error(err);
-      return reply.status(500).send({
-        success: false,
-        error: err.message || "Prediction failed, fallback engaged",
-      });
+      const data = await res.json();
+      return { success: true, data };
+    } catch (e: any) {
+      server.log.error(e);
+      return reply.status(500).send({ success: false, error: e.message, fallback: "rule-based used" });
     }
   });
 
-  // Batch predictions
-  server.post(
-    "/predict/batch",
-    async (req: FastifyRequest, reply: FastifyReply) => {
-      try {
-        const body = BatchSchema.parse(req.body);
-        const resp = await fetch(`${ML_SERVICE_URL}/predict/batch`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ predictions: body.predictions }),
-          signal: AbortSignal.timeout(30000),
-        });
-        return { success: true, ...(await resp.json()) };
-      } catch (err: any) {
-        server.log.error(err);
-        return reply.status(500).send({ success: false, error: err.message });
-      }
-    },
-  );
-
-  // Train model proxy
-  server.post("/train", async (req: FastifyRequest, reply: FastifyReply) => {
+  // Batch prediction proxy
+  server.post("/predict/batch", async (req, reply) => {
+    const body = req.body as Record<string, any>;
     try {
-      const { data, labels } = req.body as {
-        data: number[][];
-        labels: number[];
-      };
-      const resp = await fetch(`${ML_SERVICE_URL}/train`, {
+      const res = await fetch(`${ML_SERVICE_URL}/predict/batch`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data, labels }),
-        signal: AbortSignal.timeout(60000),
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(30000)
       });
-      return { success: true, ...(await resp.json()) };
-    } catch (err: any) {
-      server.log.error(err);
-      return reply.status(500).send({ success: false, error: err.message });
+      const data = await res.json();
+      return { success: true, data };
+    } catch (e: any) {
+      server.log.error(e);
+      return reply.status(500).send({ success: false, error: e.message, fallback: "rule-based used" });
+    }
+  });
+
+  // Model training proxy
+  server.post("/ml/train", async (req, reply) => {
+    const body = req.body as Record<string, any>;
+    try {
+      const res = await fetch(`${ML_SERVICE_URL}/train`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(60000)
+      });
+      const data = await res.json();
+      return { success: true, data };
+    } catch (e: any) {
+      server.log.error(e);
+      return reply.status(500).send({ success: false, error: e.message });
     }
   });
 }
