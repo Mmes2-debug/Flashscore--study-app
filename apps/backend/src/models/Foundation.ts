@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IComponent {
   name: string;
@@ -24,6 +24,10 @@ export interface IFoundation extends Document {
   phases: IPhase[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+interface IFoundationModel extends Model<IFoundation> {
+  getDefaultPhases(): IPhase[];
 }
 
 const ComponentSchema = new Schema<IComponent>({
@@ -56,18 +60,13 @@ const FoundationSchema = new Schema<IFoundation>(
       unique: true,
       index: true
     },
-    totalPower: { 
-      type: Number, 
-      default: 0 
-    },
+    totalPower: { type: Number, default: 0 },
     phases: [PhaseSchema]
   },
-  { 
-    timestamps: true 
-  }
+  { timestamps: true }
 );
 
-// Initialize with default phases for new users
+// Initialize default phases
 FoundationSchema.statics.getDefaultPhases = function(): IPhase[] {
   return [
     {
@@ -125,4 +124,5 @@ FoundationSchema.statics.getDefaultPhases = function(): IPhase[] {
   ];
 };
 
-export default mongoose.model<IFoundation>('Foundation', FoundationSchema);
+
+export const Foundation = mongoose.model<IFoundation, IFoundationModel>('Foundation', FoundationSchema);
