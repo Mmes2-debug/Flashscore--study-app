@@ -13,15 +13,22 @@ interface ErrorLog {
   severity: 'low' | 'medium' | 'high' | 'critical';
 }
 
-export function ErrorMonitor() {
+interface ErrorData {
+  message: string;
+  stack?: string;
+  url?: string;
+  lineno?: number;
+  colno?: number;
+}
+
+export function ErrorMonitor(): React.ReactElement | null {
   const [errors, setErrors] = useState<ErrorLog[]>([]);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
     loadErrorLogs();
 
-    // Listen for new errors
-    const handleError = (event: ErrorEvent) => {
+    const handleError = (event: ErrorEvent): void => {
       logError({
         message: event.message,
         stack: event.error?.stack,
@@ -31,7 +38,7 @@ export function ErrorMonitor() {
       });
     };
 
-    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+    const handleUnhandledRejection = (event: PromiseRejectionEvent): void => {
       logError({
         message: `Unhandled Promise Rejection: ${event.reason}`,
         stack: event.reason?.stack
@@ -47,18 +54,18 @@ export function ErrorMonitor() {
     };
   }, []);
 
-  const loadErrorLogs = () => {
+  const loadErrorLogs = (): void => {
     try {
       const stored = localStorage.getItem('error_logs');
       if (stored) {
-        setErrors(JSON.parse(stored));
+        setErrors(JSON.parse(stored) as ErrorLog[]);
       }
     } catch (e) {
       console.warn('Could not load error logs:', e);
     }
   };
 
-  const logError = (errorData: any) => {
+  const logError = (errorData: ErrorData): void => {
     const newError: ErrorLog = {
       id: Date.now().toString(),
       message: errorData.message || 'Unknown error',
@@ -70,7 +77,7 @@ export function ErrorMonitor() {
     };
 
     setErrors(prev => {
-      const updated = [newError, ...prev].slice(0, 100); // Keep last 100 errors
+      const updated = [newError, ...prev].slice(0, 100);
       try {
         localStorage.setItem('error_logs', JSON.stringify(updated));
       } catch (e) {
@@ -81,31 +88,34 @@ export function ErrorMonitor() {
   };
 
   const determineSeverity = (message: string): ErrorLog['severity'] => {
-    if (message.toLowerCase().includes('critical') || message.toLowerCase().includes('crash')) {
+    const lowerMessage = message.toLowerCase();
+    
+    if (lowerMessage.includes('critical') || lowerMessage.includes('crash')) {
       return 'critical';
     }
-    if (message.toLowerCase().includes('error') || message.toLowerCase().includes('failed')) {
+    if (lowerMessage.includes('error') || lowerMessage.includes('failed')) {
       return 'high';
     }
-    if (message.toLowerCase().includes('warning') || message.toLowerCase().includes('deprecated')) {
+    if (lowerMessage.includes('warning') || lowerMessage.includes('deprecated')) {
       return 'medium';
     }
     return 'low';
   };
 
-  const clearErrors = () => {
+  const clearErrors = (): void => {
     setErrors([]);
     localStorage.removeItem('error_logs');
   };
 
-  const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case 'critical': return 'text-white bg-gradient-to-r from-red-600 to-red-700';
-      case 'high': return 'text-white bg-gradient-to-r from-orange-600 to-orange-700';
-      case 'medium': return 'text-white bg-gradient-to-r from-yellow-600 to-yellow-700';
-      case 'low': return 'text-white bg-gradient-to-r from-blue-600 to-blue-700';
-      default: return 'text-white bg-gradient-to-r from-gray-600 to-gray-700';
-    }
+  const getSeverityColor = (severity: ErrorLog['severity']): string => {
+    const colorMap: Record<ErrorLog['severity'], string> = {
+      critical: 'text-white bg-gradient-to-r from-red-600 to-red-700',
+      high: 'text-white bg-gradient-to-r from-orange-600 to-orange-700',
+      medium: 'text-white bg-gradient-to-r from-yellow-600 to-yellow-700',
+      low: 'text-white bg-gradient-to-r from-blue-600 to-blue-700'
+    };
+    
+    return colorMap[severity] || 'text-white bg-gradient-to-r from-gray-600 to-gray-700';
   };
 
   if (!isVisible) {
@@ -224,6 +234,3 @@ export function ErrorMonitor() {
     </div>
   );
 }
-
-export { ErrorMonitor };
-export default ErrorMonitor;
