@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import Foundation from '../models/Foundation';
+import { Foundation, IPhase, IComponent } from '../models/Foundation.js';
 
 interface FoundationParams {
   userId: string;
@@ -28,7 +28,7 @@ export async function foundationRoutes(server: FastifyInstance) {
           foundation = new Foundation({
             userId,
             totalPower: 0,
-            phases: (Foundation as any).getDefaultPhases()
+            phases: Foundation.getDefaultPhases()
           });
           await foundation.save();
         }
@@ -65,7 +65,7 @@ export async function foundationRoutes(server: FastifyInstance) {
         }
 
         // Find the phase
-        const phase = foundation.phases.find(p => p.id === phaseId);
+        const phase = foundation.phases.find((p: IPhase) => p.id === phaseId);
 
         if (!phase) {
           return reply.status(404).send({
@@ -127,7 +127,7 @@ export async function foundationRoutes(server: FastifyInstance) {
         }
 
         // Find the phase
-        const phase = foundation.phases.find(p => p.id === phaseId);
+        const phase = foundation.phases.find((p: IPhase) => p.id === phaseId);
 
         if (!phase) {
           return reply.status(404).send({
@@ -138,7 +138,7 @@ export async function foundationRoutes(server: FastifyInstance) {
 
         // Install all components and calculate power boost
         let powerBoost = 0;
-        phase.components.forEach(component => {
+        phase.components.forEach((component: IComponent) => {
           if (!component.installed) {
             component.installed = true;
             powerBoost += component.powerBoost;
@@ -153,7 +153,7 @@ export async function foundationRoutes(server: FastifyInstance) {
         foundation.totalPower += powerBoost;
 
         // Unlock next phases based on new power
-        foundation.phases.forEach(p => {
+        foundation.phases.forEach((p: IPhase) => {
           if (foundation.totalPower >= p.requiredPower && !p.completed) {
             p.unlocked = true;
           }
@@ -187,7 +187,7 @@ export async function foundationRoutes(server: FastifyInstance) {
           { userId },
           {
             totalPower: 0,
-            phases: (Foundation as any).getDefaultPhases()
+            phases: Foundation.getDefaultPhases()
           },
           { new: true, upsert: true }
         );
@@ -215,11 +215,11 @@ export async function foundationRoutes(server: FastifyInstance) {
         .limit(10)
         .select('userId totalPower phases');
 
-      const formatted = leaderboard.map((entry, index) => ({
+      const formatted = leaderboard.map((entry: any, index: number) => ({
         rank: index + 1,
         userId: entry.userId,
         totalPower: entry.totalPower,
-        completedPhases: entry.phases.filter(p => p.completed).length,
+        completedPhases: entry.phases.filter((p: IPhase) => p.completed).length,
         totalPhases: entry.phases.length
       }));
 
