@@ -1,31 +1,17 @@
-import Fastify from "fastify";
-import mongoose from "mongoose";
-import newsRoutes from "./routes/news";
+const startServer = async () => {
+  try {
+    await mongoose.connect("mongodb://127.0.0.1:27017/sportscentral");
+    fastify.log.info("✅ MongoDB connected successfully");
 
-const fastify = Fastify({ logger: true });
+    await fastify.register(newsRoutes, { prefix: "/news" });
 
-// Register JSON body parser (Fastify does this by default)
-fastify.addHook("onRequest", async (request, reply) => {
-  reply.header("Content-Type", "application/json");
-});
-
-// 🧩 MongoDB connection
-mongoose
-  .connect("mongodb://127.0.0.1:27017/sportscentral")
-  .then(() => fastify.log.info("✅ MongoDB connected successfully"))
-  .catch((err) => {
-    fastify.log.error("❌ MongoDB connection failed:", err);
+    const PORT = Number(process.env.PORT) || 3001;
+    await fastify.listen({ port: PORT, host: "0.0.0.0" });
+    fastify.log.info(`✅ Backend 💯 running at http://0.0.0.0:${PORT}`);
+  } catch (err) {
+    fastify.log.error("❌ Server never de:", err);
     process.exit(1);
-  });
+  }
+};
 
-// 🗞️ Register routes
-fastify.register(newsRoutes, { prefix: "/news" });
-
-// 🧠 Predictions route removed – handled by frontend
-
-// 🚀 Start server
-const PORT = Number(process.env.PORT) || 3001;
-
-fastify.listen({ port: PORT, host: "0.0.0.0" }).then((address) => {
-  fastify.log.info(`✅ Backend 💯 running at ${address}`);
-});
+startServer();
