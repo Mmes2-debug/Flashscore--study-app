@@ -1,10 +1,8 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { NewsAuthorController } from '../controllers/newsAuthorController.js';
-// import { authMiddleware } from '../middleware/authMiddleware.js'; // Disabled for build fix
 import { NewsAuthorService } from '../services/newsAuthorService.js';
 
-// ==== Request Body Interfaces (DTOs) ====
-interface CreateAuthorBody {
+export interface CreateAuthorBody {
   id: string;
   name: string;
   icon: string;
@@ -12,7 +10,7 @@ interface CreateAuthorBody {
   expertise?: string[];
 }
 
-interface CreateCollaborationBody {
+export interface CreateCollaborationBody {
   title: string;
   preview: string;
   fullContent: string;
@@ -20,213 +18,104 @@ interface CreateCollaborationBody {
   tags?: string[];
 }
 
-// ==== Routes ====
-export default async function newsAuthorsRoutes(fastify: FastifyInstance) {
-  // ----- Public Routes -----
+export async function newsAuthorsRoutes(fastify: FastifyInstance) {
 
-  // Get all authors with leaderboard
-  fastify.get('/api/news-authors', async (
-    request: FastifyRequest,
-    reply: FastifyReply
-  ) => {
+  // ====== Public Routes ======
+  fastify.get('/api/news-authors', async (request, reply) => {
     try {
       const { limit = 10 } = request.query as { limit?: number };
       const authors = await NewsAuthorService.getActiveAuthors();
-
-      return reply.send({
-        success: true,
-        authors,
-        total: authors.length
-      });
+      return reply.send({ success: true, authors: authors.slice(0, limit), total: authors.length });
     } catch (error) {
       fastify.log.error({ err: error }, 'Error fetching news authors');
-      return reply.status(500).send({
-        success: false,
-        error: 'Failed to fetch news authors'
-      });
+      return reply.status(500).send({ success: false, error: 'Failed to fetch news authors' });
     }
   });
 
-  // Get single author by ID
   fastify.get('/api/news-authors/:id', async (
     request: FastifyRequest<{ Params: { id: string } }>,
-    reply: FastifyReply
+    reply
   ) => {
     try {
       const { id } = request.params;
       const author = await NewsAuthorService.getAuthorById(id);
-
-      if (!author) {
-        return reply.status(404).send({
-          success: false,
-          error: 'Author not found'
-        });
-      }
-
-      return reply.send({
-        success: true,
-        author
-      });
+      if (!author) return reply.status(404).send({ success: false, error: 'Author not found' });
+      return reply.send({ success: true, author });
     } catch (error) {
       fastify.log.error({ err: error }, 'Error fetching author');
-      return reply.status(500).send({
-        success: false,
-        error: 'Failed to fetch author'
-      });
+      return reply.status(500).send({ success: false, error: 'Failed to fetch author' });
     }
   });
 
-  // Get all authors (alternate endpoint)
-  fastify.get('/news-authors', async (
-    request: FastifyRequest,
-    reply: FastifyReply
-  ) => {
-    return NewsAuthorController.getAllAuthors(request, reply);
-  });
-
-  // Get single author (alternate endpoint)
-  fastify.get('/news-authors/:id', async (
-    request: FastifyRequest<{ Params: { id: string } }>,
-    reply: FastifyReply
-  ) => {
-    return NewsAuthorController.getAuthorById(request, reply);
-  });
-
-  // Initialize default authors
-  fastify.post('/news-authors/initialize', async (
-    request: FastifyRequest,
-    reply: FastifyReply
-  ) => {
-    return NewsAuthorController.initializeDefaultAuthors(request, reply);
-  });
-
-  // ----- Member Routes (Require Auth) -----
-  // TODO: Re-enable after setting up JWT keys in production
-
-  // Create or update author
-  fastify.post('/news-authors', async (request: any, reply: FastifyReply) => {
-    return NewsAuthorController.createOrUpdateAuthor(request, reply);
-  });
-
-  // Create collaboration
-  fastify.post<{ Params: { id: string }; Body: CreateCollaborationBody }>(
-    '/:id/collaborations',
+  // ====== Member Routes (with Schema Validation) ======
+  fastify.post<{ Body: CreateAuthorBody }>(
+    '/news-authors',
+    {
+      schema: {
+        body: {
+          type: 'object',
+          required: ['id', 'name', 'icon'],
+          properties: {
+            id: { type: 'string' },
+            name: { type: 'string' },
+            icon: { type: 'string' },
+            bio: { type: 'string' },
+            expertise: { type: 'array', items: { type: 'string' } },
+          },
+        },
+      },
+    },
     async (request, reply) => {
-      // TODO: Implement collaboration tracking service
-      // await collaborationService.trackCollaborationEvent(request as any, {
-      //   ...collaboration event data
-      // });
+      return NewsAuthorController.createOrUpdateAuthor(request, reply);
+    }
+  );
+
+  fastify.post<{ Params: { id: string }; Body: CreateCollaborationBody }>(
+    '/news-authors/:id/collaborations',
+    {
+      schema: {
+        body: {
+          type: 'object',
+          required: ['title', 'preview', 'fullContent', 'collaborationType'],
+          properties: {
+            title: { type: 'string' },
+            preview: { type: 'string' },
+            fullContent: { type: 'string' },
+            collaborationType: { type: 'string', enum: ['prediction', 'analysis', 'community', 'update'] },
+            tags: { type: 'array', items: { type: 'string' }, nullable: true },
+          },
+        },
+        params: {
+          type: 'object',
+          required: ['id'],
+          properties: {
+            id: { type: 'string' },
+          },
+        },
+      },
+    },
+    async (request, reply) => {
       return NewsAuthorController.createCollaborationNews(request, reply);
-    });
+    }
+  );
 
-  // Auto-generate news
-  fastify.post('/news-authors/auto-news', async (request: any, reply: FastifyReply) => {
-    return NewsAuthorController.generateAutoNews(request, reply);
-  });
+  fastify.post('/news-authors/auto-news', (request, reply) =>
+    NewsAuthorController.generateAutoNews(request, reply)
+  );
 
-  // ----- Routes for Internal Use (e.g., testing, specific API endpoints) -----
-
-  // Get top authors (using getActiveAuthors instead)
+  // ====== Internal / Admin Routes ======
   fastify.get('/authors/top', async (request, reply) => {
     try {
       const { limit = 10 } = request.query as any;
       const authors = await NewsAuthorService.getActiveAuthors();
-      
-      // Sort by collaboration count and limit
       const topAuthors = authors
         .sort((a, b) => (b.collaborationCount || 0) - (a.collaborationCount || 0))
         .slice(0, parseInt(limit));
 
-      return reply.send({
-        success: true,
-        data: topAuthors
-      });
+      return reply.send({ success: true, data: topAuthors });
     } catch (error) {
       fastify.log.error(error, 'Error fetching top authors');
-      return reply.status(500).send({
-        success: false,
-        error: 'Failed to fetch top authors'
-      });
-    }
-  });
-
-  // Get single author by ID
-  fastify.get('/authors/:id', async (request, reply) => {
-    try {
-      const { id } = request.params as { id: string };
-      const author = await NewsAuthorService.getAuthorById(id);
-
-      if (!author) {
-        return reply.status(404).send({
-          success: false,
-          error: 'Author not found'
-        });
-      }
-
-      return reply.send({
-        success: true,
-        data: author
-      });
-    } catch (error) {
-      fastify.log.error(error, 'Error fetching author');
-      return reply.status(500).send({
-        success: false,
-        error: 'Failed to fetch author'
-      });
-    }
-  });
-
-  // Create author (using createOrUpdateAuthor)
-  fastify.post('/authors', async (request, reply: FastifyReply) => {
-    try {
-      const { id, name, icon, bio, expertise } = request.body as CreateAuthorBody;
-      const newAuthor = await NewsAuthorService.createOrUpdateAuthor({
-        id,
-        name,
-        icon,
-        bio,
-        expertise
-      });
-
-      return reply.status(201).send({
-        success: true,
-        author: newAuthor
-      });
-    } catch (error) {
-      fastify.log.error(error, 'Error creating author');
-      return reply.status(500).send({
-        success: false,
-        error: 'Failed to create author'
-      });
-    }
-  });
-
-  // Track collaboration event
-  fastify.post('/authors/track-event', async (request, reply: FastifyReply) => {
-    try {
-      const { authorId, eventType, eventData } = request.body as {
-        authorId: string;
-        eventType: string;
-        eventData: any;
-      };
-
-      // Track collaboration event (service not yet implemented)
-      // await collaborationService.trackEvent({
-      //   authorId: authorId,
-      //   eventType: eventType,
-      //   eventData: eventData
-      // });
-
-      return reply.send({
-        success: true,
-        message: 'Event tracked successfully (simulation)'
-      });
-    } catch (error) {
-      fastify.log.error(error, 'Error tracking event');
-      return reply.status(500).send({
-        success: false,
-        error: 'Failed to track event'
-      });
+      return reply.status(500).send({ success: false, error: 'Failed to fetch top authors' });
     }
   });
 }
