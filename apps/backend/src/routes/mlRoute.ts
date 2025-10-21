@@ -1,71 +1,50 @@
-// src/routes/mlRoutes.ts
-import { FastifyInstance } from "fastify";
+// src/routes/predictions.ts
+import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import mlPredictionService from "../services/mlPredictionService";
+import aiEnhancementService from "../services/aiEnhancementService";
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || "http://0.0.0.0:8000";
 
-export async function mlRoutes(server: FastifyInstance) {
-  // Health check proxy
-  server.get("/ml-status", async (_req, reply) => {
+export async function predictionsRoutes(fastify: FastifyInstance) {
+  // Health check
+  fastify.get("/ml-status", async (_req: FastifyRequest, _rep: FastifyReply) => {
+    return { status: "operational", version: "MagajiCo-ML-v2.1", timestamp: new Date().toISOString() };
+  });
+
+  // Prediction with AI enhancement
+  fastify.post("/predict", async (req: FastifyRequest, rep: FastifyReply) => {
     try {
-      const res = await fetch(`${ML_SERVICE_URL}/health`, { signal: AbortSignal.timeout(3000) });
-      const data = await res.json();
-      return { status: "operational", mlService: data };
-    } catch (e: any) {
-      return reply.status(503).send({ status: "degraded", error: e.message, fallback: "rule-based used" });
+      const { homeTeam, awayTeam, features, enableAI } = req.body as any;
+
+      if (!homeTeam || !awayTeam || !features) {
+        return rep.status(400).send({ error: "Missing required fields" });
+      }
+
+      const prediction = await mlPredictionService.predictMatch({ homeTeam, awayTeam, features });
+
+      if (enableAI) {
+        const enhanced = await aiEnhancementService.enhancePredictionWithInsights(prediction, { homeTeam, awayTeam });
+        return { success: true, data: enhanced.prediction, aiInsights: enhanced.aiInsights, strategicAdvice: enhanced.strategicAdvice };
+      }
+
+      return { success: true, data: prediction };
+    } catch (error: any) {
+      fastify.log.error(error);
+      return rep.status(500).send({ success: false, error: error.message || "ML Prediction failed" });
     }
   });
 
-  // Prediction proxy
-  server.post("/predict", async (req, reply) => {
-    const body = req.body as Record<string, any>;
+  // Batch prediction endpoint
+  fastify.post("/predict/batch", async (req: FastifyRequest, rep: FastifyReply) => {
     try {
-      const res = await fetch(`${ML_SERVICE_URL}/predict`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-        signal: AbortSignal.timeout(10000)
-      });
-      const data = await res.json();
-      return { success: true, data };
-    } catch (e: any) {
-      server.log.error(e);
-      return reply.status(500).send({ success: false, error: e.message, fallback: "rule-based used" });
-    }
-  });
+      const { predictions } = req.body as any;
+      if (!predictions || !Array.isArray(predictions)) return rep.status(400).send({ error: "Predictions array required" });
 
-  // Batch prediction proxy
-  server.post("/predict/batch", async (req, reply) => {
-    const body = req.body as Record<string, any>;
-    try {
-      const res = await fetch(`${ML_SERVICE_URL}/predict/batch`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-        signal: AbortSignal.timeout(30000)
-      });
-      const data = await res.json();
-      return { success: true, data };
-    } catch (e: any) {
-      server.log.error(e);
-      return reply.status(500).send({ success: false, error: e.message, fallback: "rule-based used" });
-    }
-  });
-
-  // Model training proxy
-  server.post("/ml/train", async (req, reply) => {
-    const body = req.body as Record<string, any>;
-    try {
-      const res = await fetch(`${ML_SERVICE_URL}/train`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-        signal: AbortSignal.timeout(60000)
-      });
-      const data = await res.json();
-      return { success: true, data };
-    } catch (e: any) {
-      server.log.error(e);
-      return reply.status(500).send({ success: false, error: e.message });
+      const result = await mlPredictionService.batchPredict(predictions);
+      return { success: true, data: result };
+    } catch (error: any) {
+      fastify.log.error(error);
+      return rep.status(500).send({ success: false, error: error.message });
     }
   });
 }
