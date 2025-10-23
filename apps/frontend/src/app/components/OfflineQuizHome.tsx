@@ -1,8 +1,6 @@
-
 "use client";
 import React, { useState, useEffect } from 'react';
-import QuizMode from './QuizMode';
-import { useOfflineStatus } from '../hooks/useOfflineStatus';
+import { QuizMode } from './QuizMode';
 
 interface SystemStatus {
   quiz: 'stable' | 'loading' | 'error';
@@ -11,7 +9,29 @@ interface SystemStatus {
   storage: 'available' | 'limited';
 }
 
-const OfflineQuizHome: React.FC = () => {
+// Mock hook for demonstration
+const useOfflineStatus = () => {
+  const [isOffline, setIsOffline] = useState(false);
+
+  useEffect(() => {
+    const updateOnlineStatus = () => {
+      setIsOffline(!navigator.onLine);
+    };
+
+    updateOnlineStatus();
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    return () => {
+      window.removeEventListener('online', updateOnlineStatus);
+      window.removeEventListener('offline', updateOnlineStatus);
+    };
+  }, []);
+
+  return isOffline;
+};
+
+export const OfflineQuizHome: React.FC = () => {
   const [systemStatus, setSystemStatus] = useState<SystemStatus>({
     quiz: 'loading',
     offline: 'inactive', 
@@ -22,7 +42,6 @@ const OfflineQuizHome: React.FC = () => {
   const isOffline = useOfflineStatus();
 
   useEffect(() => {
-    // Check system stability
     const checkStability = () => {
       let score = 0;
       const newStatus: SystemStatus = {
@@ -34,7 +53,6 @@ const OfflineQuizHome: React.FC = () => {
 
       // Test Quiz System (30 points)
       try {
-        // Check if quiz components are accessible
         if (typeof localStorage !== 'undefined') {
           score += 30;
         }
@@ -76,8 +94,7 @@ const OfflineQuizHome: React.FC = () => {
     };
 
     checkStability();
-    
-    // Recheck every 30 seconds
+
     const interval = setInterval(checkStability, 30000);
     return () => clearInterval(interval);
   }, [isOffline]);
@@ -191,7 +208,9 @@ const OfflineQuizHome: React.FC = () => {
             borderRadius: '12px',
             padding: '20px',
             border: `1px solid ${getStatusColor(item.status)}33`,
-            textAlign: 'center'
+            textAlign: 'center',
+            transition: 'transform 0.2s',
+            cursor: 'default'
           }}>
             <div style={{ fontSize: '2rem', marginBottom: '8px' }}>
               {item.icon}
@@ -221,7 +240,8 @@ const OfflineQuizHome: React.FC = () => {
           marginBottom: '24px',
           textAlign: 'center',
           fontWeight: '600',
-          boxShadow: '0 4px 16px rgba(245, 158, 11, 0.3)'
+          boxShadow: '0 4px 16px rgba(245, 158, 11, 0.3)',
+          border: '2px solid rgba(255, 255, 255, 0.2)'
         }}>
           📱 Offline Mode Active • All quiz features available
         </div>
@@ -258,34 +278,58 @@ const OfflineQuizHome: React.FC = () => {
         }}>
           🛡️ Stability Level 3 Features
         </h3>
-        
+
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
           gap: '16px'
         }}>
           {[
-            '✅ Offline quiz functionality',
-            '✅ Local data persistence',
-            '✅ PiCoin reward system',
-            '✅ Progress tracking',
-            '✅ Error recovery',
-            '✅ Performance monitoring'
+            { text: 'Offline quiz functionality', icon: '✅' },
+            { text: 'Local data persistence', icon: '✅' },
+            { text: 'PiCoin reward system', icon: '✅' },
+            { text: 'Progress tracking', icon: '✅' },
+            { text: 'Error recovery', icon: '✅' },
+            { text: 'Performance monitoring', icon: '✅' }
           ].map((feature, index) => (
             <div key={index} style={{
               background: 'rgba(34, 197, 94, 0.1)',
               border: '1px solid rgba(34, 197, 94, 0.3)',
               borderRadius: '8px',
-              padding: '12px',
-              fontSize: '0.9rem'
+              padding: '12px 16px',
+              fontSize: '0.9rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.2s'
             }}>
-              {feature}
+              <span style={{ fontSize: '1.2rem' }}>{feature.icon}</span>
+              <span>{feature.text}</span>
             </div>
           ))}
+        </div>
+
+        {/* Additional Info */}
+        <div style={{
+          marginTop: '24px',
+          padding: '16px',
+          background: 'rgba(6, 182, 212, 0.1)',
+          border: '1px solid rgba(6, 182, 212, 0.3)',
+          borderRadius: '12px',
+          color: '#67e8f9'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+            <span style={{ fontSize: '1.5rem' }}>ℹ️</span>
+            <strong>System Information</strong>
+          </div>
+          <p style={{ margin: '0 0 8px 0', fontSize: '0.9rem' }}>
+            The quiz system monitors stability in real-time and adjusts performance automatically.
+          </p>
+          <p style={{ margin: 0, fontSize: '0.9rem' }}>
+            All progress is saved locally and synchronized when you're back online.
+          </p>
         </div>
       </div>
     </div>
   );
 };
-
-export default OfflineQuizHome;
