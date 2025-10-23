@@ -1,8 +1,15 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { mlPredictionService } from '../services/mlPredictionService.js';
+import { mlPredictionService, PredictionRequest } from '../services/mlPredictionService.js';
 import { aiEnhancementService } from '../services/aiEnhancementService.js';
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://0.0.0.0:8000';
+
+interface PredictRequestBody {
+  homeTeam: string;
+  awayTeam: string;
+  features: number[]; // ✅ Changed from Record<string, any> to number[]
+  enableAI?: boolean;
+}
 
 export async function predictionsRoutes(fastify: FastifyInstance) {
   // 🩺 Health check
@@ -17,12 +24,7 @@ export async function predictionsRoutes(fastify: FastifyInstance) {
   // ⚽ Single match prediction with optional AI enhancement
   fastify.post('/predict', async (req: FastifyRequest, rep: FastifyReply) => {
     try {
-      const { homeTeam, awayTeam, features, enableAI } = req.body as {
-        homeTeam: string;
-        awayTeam: string;
-        features: Record<string, any>;
-        enableAI?: boolean;
-      };
+      const { homeTeam, awayTeam, features, enableAI } = req.body as PredictRequestBody;
 
       if (!homeTeam || !awayTeam || !features) {
         return rep.status(400).send({ error: 'Missing required fields' });
@@ -61,7 +63,7 @@ export async function predictionsRoutes(fastify: FastifyInstance) {
   // 🧠 Batch prediction endpoint
   fastify.post('/predict/batch', async (req: FastifyRequest, rep: FastifyReply) => {
     try {
-      const { predictions } = req.body as { predictions: any[] };
+      const { predictions } = req.body as { predictions: PredictionRequest[] };
 
       if (!predictions || !Array.isArray(predictions)) {
         return rep.status(400).send({ error: 'Predictions array required' });
