@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
 import { loadSlim } from "@tsparticles/slim";
@@ -100,5 +101,3 @@ export default function BackgroundParticles() {
     />
   );
 }
-
-export default BackgroundParticles;
