@@ -183,10 +183,11 @@ const NewsAuthorManager: React.FC<NewsAuthorManagerProps> = ({ className = '' })
               </div>
               <p className="text-gray-300 text-sm mb-3">{author.bio}</p>
               <div className="flex flex-wrap gap-1">
-                {author.expertise.map((skill, index) => (
-                  <span
-                    key={index}
-                    className="bg-blue-600 text-xs px-2 py-1 rounded"
+// Replace the existing line(s) that render expertise tags:
+                {(author.expertise ?? []).map((skill, index) => (
+                   <span
+                     key={index}
+                     className="bg-blue-600 text-xs px-2 py-1 rounded"
                   >
                     {skill}
                   </span>
