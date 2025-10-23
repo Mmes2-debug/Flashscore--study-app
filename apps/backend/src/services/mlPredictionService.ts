@@ -1,4 +1,4 @@
-import { AbortController } from 'node-abort-controller'; // ✅ ensures compatibility in Node environments
+import { AbortController } from 'node-abort-controller';
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://0.0.0.0:8000';
 
@@ -29,7 +29,11 @@ async function safeFetch(
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), timeout);
 
-      const response = await fetch(url, { ...options, signal: controller.signal });
+      // Type assertion to resolve AbortSignal compatibility
+      const response = await fetch(url, { 
+        ...options, 
+        signal: controller.signal as any 
+      });
       clearTimeout(timer);
 
       if (!response.ok) {
