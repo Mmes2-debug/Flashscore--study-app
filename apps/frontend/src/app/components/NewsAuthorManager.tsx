@@ -8,7 +8,7 @@ interface NewsAuthorManagerProps {
   className?: string;
 }
 
-const NewsAuthorManager: React.FC<NewsAuthorManagerProps> = ({ className = '' }) => {
+export const NewsAuthorManager: React.FC<NewsAuthorManagerProps> = ({ className = '' }) => {
   const [authors, setAuthors] = useState<NewsAuthor[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedAuthor, setSelectedAuthor] = useState<NewsAuthor | null>(null);
@@ -112,181 +112,132 @@ const NewsAuthorManager: React.FC<NewsAuthorManagerProps> = ({ className = '' })
           <h3 className="text-lg font-semibold mb-4">Create New Author</h3>
           <form onSubmit={handleCreateAuthor} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="text"
-                placeholder="Author ID (e.g., mara)"
-                value={newAuthor.id}
-                onChange={(e) => setNewAuthor({ ...newAuthor, id: e.target.value })}
-                className="bg-gray-700 p-3 rounded border border-gray-600 focus:border-blue-500"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Author Name"
-                value={newAuthor.name}
-                onChange={(e) => setNewAuthor({ ...newAuthor, name: e.target.value })}
-                className="bg-gray-700 p-3 rounded border border-gray-600 focus:border-blue-500"
-                required
-              />
+              <div>
+                <label className="text-sm text-gray-300">ID</label>
+                <input
+                  value={newAuthor.id}
+                  onChange={(e) => setNewAuthor(prev => ({ ...prev, id: e.target.value }))}
+                  className="w-full mt-1 p-2 bg-gray-700 rounded"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-gray-300">Name</label>
+                <input
+                  value={newAuthor.name}
+                  onChange={(e) => setNewAuthor(prev => ({ ...prev, name: e.target.value }))}
+                  className="w-full mt-1 p-2 bg-gray-700 rounded"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-gray-300">Icon</label>
+                <input
+                  value={newAuthor.icon}
+                  onChange={(e) => setNewAuthor(prev => ({ ...prev, icon: e.target.value }))}
+                  className="w-full mt-1 p-2 bg-gray-700 rounded"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-gray-300">Expertise (comma separated)</label>
+                <input
+                  value={newAuthor.expertise}
+                  onChange={(e) => setNewAuthor(prev => ({ ...prev, expertise: e.target.value }))}
+                  className="w-full mt-1 p-2 bg-gray-700 rounded"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="text-sm text-gray-300">Bio</label>
+                <textarea
+                  value={newAuthor.bio}
+                  onChange={(e) => setNewAuthor(prev => ({ ...prev, bio: e.target.value }))}
+                  className="w-full mt-1 p-2 bg-gray-700 rounded"
+                />
+              </div>
+              <div className="md:col-span-2 flex gap-2">
+                <button type="submit" className="bg-green-600 px-4 py-2 rounded">Create</button>
+                <button type="button" onClick={() => setShowCreateForm(false)} className="bg-gray-600 px-4 py-2 rounded">Cancel</button>
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="text"
-                placeholder="Icon (emoji)"
-                value={newAuthor.icon}
-                onChange={(e) => setNewAuthor({ ...newAuthor, icon: e.target.value })}
-                className="bg-gray-700 p-3 rounded border border-gray-600 focus:border-blue-500"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Expertise (comma separated)"
-                value={newAuthor.expertise}
-                onChange={(e) => setNewAuthor({ ...newAuthor, expertise: e.target.value })}
-                className="bg-gray-700 p-3 rounded border border-gray-600 focus:border-blue-500"
-              />
-            </div>
-            <textarea
-              placeholder="Bio"
-              value={newAuthor.bio}
-              onChange={(e) => setNewAuthor({ ...newAuthor, bio: e.target.value })}
-              className="w-full bg-gray-700 p-3 rounded border border-gray-600 focus:border-blue-500"
-              rows={3}
-            />
-            <button
-              type="submit"
-              className="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-lg transition-colors"
-            >
-              Create Author
-            </button>
           </form>
         </div>
       )}
 
-      {/* Authors Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        {loading ? (
-          <div className="col-span-full text-center py-8">Loading authors...</div>
+      {/* Recent News */}
+      <div className="mb-6">
+        <h3 className="text-xl font-semibold mb-3">Recent Auto News</h3>
+
+        {recentNews.length === 0 ? (
+          <p className="text-sm text-gray-400">No recent auto-generated news</p>
         ) : (
-          authors.map((author) => (
-            <div
-              key={author.id}
-              className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-blue-500 transition-colors cursor-pointer"
-              onClick={() => setSelectedAuthor(selectedAuthor?.id === author.id ? null : author)}
-            >
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-2xl">{author.icon}</span>
-                <div>
-                  <h3 className="font-semibold">{author.name}</h3>
-                  <p className="text-gray-400 text-sm">{author.collaborationCount} collaborations</p>
+          <div className="space-y-4">
+            {recentNews.map((news) => {
+              // Normalize author: backend may return either a full author object or a string id
+              const author: NewsAuthor = typeof news.author === 'string'
+                ? {
+                    id: String(news.author),
+                    name: String(news.author),
+                    icon: '📝',
+                    bio: '',
+                    expertise: [],
+                    collaborationCount: 0
+                  }
+                : news.author;
+
+              return (
+                <div key={news.id} className="border-l-4 border-blue-500 pl-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-lg">{author.icon}</span>
+                    <span className="font-medium">{author.name}</span>
+                    <span className="bg-gray-700 text-xs px-2 py-1 rounded">
+                      {news.collaborationType}
+                    </span>
+                  </div>
+                  <div className="text-sm text-gray-300">{news.preview}</div>
                 </div>
-              </div>
-              <p className="text-gray-300 text-sm mb-3">{author.bio}</p>
-              <div className="flex flex-wrap gap-1">
-// Replace the existing line(s) that render expertise tags:
-                {(author.expertise ?? []).map((skill, index) => (
-                   <span
-                     key={index}
-                     className="bg-blue-600 text-xs px-2 py-1 rounded"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-              
-              {/* Action Buttons */}
-              {selectedAuthor?.id === author.id && (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleGenerateAutoNews(author.id, 'prediction');
-                    }}
-                    className="bg-green-600 hover:bg-green-700 text-xs px-3 py-1 rounded transition-colors"
-                  >
-                    🎯 Prediction News
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleGenerateAutoNews(author.id, 'milestone');
-                    }}
-                    className="bg-purple-600 hover:bg-purple-700 text-xs px-3 py-1 rounded transition-colors"
-                  >
-                    🏆 Milestone News
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleGenerateAutoNews(author.id, 'analysis');
-                    }}
-                    className="bg-orange-600 hover:bg-orange-700 text-xs px-3 py-1 rounded transition-colors"
-                  >
-                    📊 Analysis News
-                  </button>
-                </div>
-              )}
-            </div>
-          ))
+              );
+            })}
+          </div>
         )}
       </div>
 
-      {/* Recent News Section */}
-      <div className="bg-gray-800 p-4 rounded-lg">
-        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <span>📰</span>
-          Recent News by Authors
-        </h3>
-        <div className="space-y-3">
-          {recentNews.map((news) => (
-            <div key={news.id} className="border-l-4 border-blue-500 pl-4">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-lg">{news.author.icon}</span>
-                <span className="font-medium">{news.author.name}</span>
-                <span className="bg-gray-700 text-xs px-2 py-1 rounded">
-                  {news.collaborationType}
-                </span>
+      {/* Author List */}
+      <div>
+        <h3 className="text-xl font-semibold mb-3">Authors</h3>
+        <div className="grid md:grid-cols-3 gap-4">
+          {authors.map(author => (
+            <div key={author.id} className="bg-gray-800 p-4 rounded-lg">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center text-xl">
+                  {author.icon}
+                </div>
+                <div>
+                  <div className="font-semibold">{author.name}</div>
+                  <div className="text-xs text-gray-400">{author.expertise?.join(', ')}</div>
+                </div>
               </div>
-              <h4 className="font-semibold text-white">{news.title}</h4>
-              <p className="text-gray-300 text-sm">{news.preview}</p>
-              <div className="flex gap-2 mt-2">
-                {news.tags.map((tag, index) => (
-                  <span key={index} className="bg-gray-700 text-xs px-2 py-1 rounded">
-                    #{tag}
-                  </span>
-                ))}
+              <div className="mt-3 flex gap-2">
+                <button
+                  onClick={() => handleGenerateAutoNews(author.id, 'prediction')}
+                  className="px-3 py-1 bg-indigo-600 rounded"
+                >
+                  Generate Prediction News
+                </button>
+                <button
+                  onClick={() => handleGenerateAutoNews(author.id, 'milestone')}
+                  className="px-3 py-1 bg-yellow-600 rounded"
+                >
+                  Celebrate Milestone
+                </button>
+                <button
+                  onClick={() => handleGenerateAutoNews(author.id, 'analysis')}
+                  className="px-3 py-1 bg-green-600 rounded"
+                >
+                  Share Analysis
+                </button>
               </div>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Demo Actions */}
-      <div className="mt-6 bg-blue-900 p-4 rounded-lg">
-        <h3 className="text-lg font-semibold mb-3">⚡ Quick Demo Actions</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <button
-            onClick={() => handleGenerateAutoNews('mara', 'prediction')}
-            className="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded-lg transition-colors text-sm"
-          >
-            ⚡ Mara Prediction Success
-          </button>
-          <button
-            onClick={() => NewsAuthorService.initializeDefaultAuthors().then(() => loadAuthors())}
-            className="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg transition-colors text-sm"
-          >
-            🔄 Initialize Default Authors
-          </button>
-          <button
-            onClick={() => loadRecentNews()}
-            className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors text-sm"
-          >
-            🔄 Refresh News
-          </button>
-        </div>
-      </div>
     </div>
   );
 };
-
-export default NewsAuthorManager;
