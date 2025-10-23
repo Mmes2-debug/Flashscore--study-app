@@ -4,8 +4,8 @@ import {
   scrapeBetTodayPredictions,
   saveScrapedMatches,
   getUpcomingMatches
-} from "@bservices/scraperServices";
-import StatAreaService from "@bservices/statAreaService";
+} from "@/services/scraperServices";
+import StatAreaService from "@/services/statAreaService";
 
 export async function scraperRoutes(server: FastifyInstance) {
   // --- Scrape Odds ---

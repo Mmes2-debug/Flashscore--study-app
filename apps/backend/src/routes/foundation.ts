@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { Foundation, IPhase, IComponent } from '../models/Foundation.js';
+import { Foundation, IPhase, IComponent } from '@/models/Foundation.js';
 
 interface FoundationParams {
   userId: string;

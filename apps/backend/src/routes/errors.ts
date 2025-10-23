@@ -1,6 +1,6 @@
 
 import { FastifyPluginAsync } from 'fastify';
-import { ErrorLog } from '../models/ErrorLog.js';
+import { ErrorLog } from '@/models/ErrorLog.js';
 
 const errorsRoutes: FastifyPluginAsync = async (fastify) => {
   // Get all errors with filtering

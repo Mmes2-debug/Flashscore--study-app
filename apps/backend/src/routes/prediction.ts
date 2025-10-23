@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { mlPredictionService, PredictionRequest } from '../services/mlPredictionService.js';
-import { aiEnhancementService } from '../services/aiEnhancementService.js';
-import { Prediction } from '../models/Predictions.js';
+import { mlPredictionService, PredictionRequest } from '@/services/mlPredictionService.js';
+import { aiEnhancementService } from '@/services/aiEnhancementService.js';
+import { Prediction } from '@/models/Predictions.js';
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://0.0.0.0:8000';
 

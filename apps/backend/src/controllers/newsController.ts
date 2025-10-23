@@ -1,6 +1,6 @@
 // src/controllers/newsController.ts
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { News, INews } from '../models/News'; // Named import with interface
+import { News, INews } from '@/models/News'; // Named import with interface
 
 // Request/Body interfaces
 interface NewsParams {

@@ -1,6 +1,6 @@
 // services/enhancedSportsService.ts
-import { EnhancedMatchData } from 'types/match';
-import { MatchData, TeamStats } from 'types/analysis';
+import { EnhancedMatchData } from '@/types/match';
+import { MatchData, TeamStats } from '@/types/analysis';
 
 interface CacheEntry<T> {
   value: T;

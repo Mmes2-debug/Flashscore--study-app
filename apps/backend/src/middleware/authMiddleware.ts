@@ -1,6 +1,6 @@
 
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { JWTUtils } from '../utils/jwtUtils.js';
+import { JWTUtils } from '@/utils/jwtUtils.js';
 
 declare module 'fastify' {
   interface FastifyRequest {

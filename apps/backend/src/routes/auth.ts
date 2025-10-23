@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { JWTUtils } from '../utils/jwtUtils.js';
-import { User } from '../models/User.js';
+import { JWTUtils } from '@/utils/jwtUtils.js';
+import { User } from '@/models/User.js';
 import bcrypt from 'bcrypt';
 
 interface LoginBody {
