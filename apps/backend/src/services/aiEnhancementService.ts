@@ -1,7 +1,7 @@
 // src/services/aiEnhancementService.ts
 import { PredictionResponse } from "./mlPredictionService";
 
-export default {
+const. export aiEnhancementService {
   async enhancePredictionWithInsights(
     prediction: PredictionResponse,
     context: { homeTeam: string; awayTeam: string }
