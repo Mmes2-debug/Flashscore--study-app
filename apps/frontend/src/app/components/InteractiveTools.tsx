@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { ClientCacheManager } from '../../../../../packages/shared/src/libs/utils/cacheManager';
-import { ClientStorage } from '../../../../../packages/shared/src/libs/utils/clientStorage';
+import { ClientCacheManager } from '@magajico/shared/utils';
+import { ClientStorage } from '@magajico/shared/utils';
 
 interface ToolsProps {
   predictions: any[];

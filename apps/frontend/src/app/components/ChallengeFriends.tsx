@@ -2,8 +2,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { ClientStorage } from '../utils/clientStorage';
-import { PiCoinManager } from '../../../../../packages/shared/src/libs/utils/piCoinManager';
-import { UserManager } from '../../../../../packages/shared/src/libs/utils/userManager';
+import { PiCoinManager } from '@magajico/shared/utils';
+import { UserManager } from '@magajico/shared/utils';
 
 interface User {
   id: string;

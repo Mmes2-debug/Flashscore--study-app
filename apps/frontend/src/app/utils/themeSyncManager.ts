@@ -1,5 +1,5 @@
 
-import ReplitStorage from '@/../packages/shared/src/libs/utils/replitStorage';
+import { ReplitStorage } from '@magajico/shared/utils';
 
 interface ThemePreferences {
   theme: string;

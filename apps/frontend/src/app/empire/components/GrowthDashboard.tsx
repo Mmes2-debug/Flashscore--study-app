@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { sportsIntegration, GrowthScore, EMPIRE_LEVELS } from '../../../../../../packages/shared/src/libs/services/sportsIntegration';
-import { aiSuggestions, AISuggestion } from '../../../../../../packages/shared/src/libs/services/aiSuggestions';
+import { sportsIntegration, GrowthScore, EMPIRE_LEVELS } from '@magajico/shared/services';
+import { aiSuggestions, AISuggestion } from '@magajico/shared/services';
 
 interface GrowthDashboardProps {
   userId: string;

@@ -1,6 +1,6 @@
 
 import { NextApiRequest, NextApiResponse } from 'next';
-import SecurityUtils from './securityUtils';
+import { SecurityUtils } from './securityUtils';
 
 export interface SecureApiRequest extends NextApiRequest {
   user?: any;

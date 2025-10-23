@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SecurityUtils } from "@/libs/utils/securityUtils";
+import { SecurityUtils } from '@magajico/shared/utils';
 
 interface SecurityLog {
   id: string;

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertManager } from '@/../../packages/shared/src/libs/utils/alertUtils';
+import { AlertManager } from '@magajico/shared/utils';
 
 interface Props {
   children: ReactNode;

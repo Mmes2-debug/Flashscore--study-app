@@ -1,4 +1,4 @@
-import SecurityUtils from './securityUtils';
+import { SecurityUtils } from './securityUtils';
 // Assume ClientStorage is available for client-side storage operations, similar to localStorage
 // If ClientStorage is not defined, you might need to import or define it.
 // For demonstration, let's assume it's a global object or imported from a utility file.

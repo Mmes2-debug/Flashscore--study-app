@@ -1,7 +1,7 @@
 
 "use client";
 import React, { useState, useEffect } from 'react';
-import SecurityUtils from '@/../../packages/shared/src/libs/utils/securityUtils';
+import { SecurityUtils } from '@magajico/shared/utils';
 
 interface PaymentVerificationProps {
   amount: number;

@@ -1,7 +1,7 @@
 
 "use client";
 import React, { useState, useEffect } from 'react';
-import { timeZoneService } from '@/../../packages/shared/src/libs/services/timeZoneService';
+import { timeZoneService } from '@magajico/shared/services';
 
 interface TimeZoneDisplayProps {
   matchTime: Date | string;

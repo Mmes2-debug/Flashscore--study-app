@@ -1,10 +1,10 @@
 
 "use client";
 import React, { useState, useEffect } from 'react';
-import PaymentManager from '../../../../../packages/shared/src/libs/utils/paymentManager';
-import EmailManager from '../../../../../packages/shared/src/libs/utils/emailManager';
-import CRUDManager from '../../../../../packages/shared/src/libs/utils/crudManager';
-import SystemOptimizer from '../../../../../packages/shared/src/libs/utils/systemOptimizer';
+import PaymentManager from '@magajico/shared/utils';
+import EmailManager from '@magajico/shared/utils';
+import CRUDManager from '@magajico/shared/utils';
+import SystemOptimizer from '@magajico/shared/utils';
 import { useMobile } from '@hooks/useMobile';
 
 interface FeatureGroup {

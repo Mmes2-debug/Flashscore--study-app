@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { signIn, getSession } from 'next-auth/react';
-import { UserManager } from '../../../../../packages/shared/src/libs/utils/userManager';
+import { UserManager } from '@magajico/shared/utils';
 import ResponsibleBettingTutorial from './ResponsibleBettingTutorial';
 
 interface User {

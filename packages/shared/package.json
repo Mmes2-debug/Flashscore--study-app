@@ -24,6 +24,10 @@
     "./models": {
       "import": "./src/libs/models/index.ts",
       "types": "./src/libs/models/index.ts"
+    },
+    "./services": {
+      "import": "./src/libs/services/index.ts",
+      "types": "./src/libs/services/index.ts"
     }
   },
   "dependencies": {

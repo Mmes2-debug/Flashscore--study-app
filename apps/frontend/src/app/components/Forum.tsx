@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { UserManager } from '../../../../../packages/shared/src/libs/utils/userManager';
+import { UserManager } from '@magajico/shared/utils';
 
 interface User {
   id: string;
