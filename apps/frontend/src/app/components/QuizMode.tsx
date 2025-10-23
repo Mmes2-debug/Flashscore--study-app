@@ -1,7 +1,5 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { PiCoinManager } from '../../../../../packages/shared/src/libs/utils/piCoinManager';
-import { UserManager } from '../../../../../packages/shared/src/libs/utils/userManager';
 
 interface Question {
   id: number;
@@ -16,7 +14,34 @@ interface QuizProps {
   isOffline?: boolean;
 }
 
-const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
+// Mock managers for demonstration
+const PiCoinManager = {
+  getBalance: (userId: string) => ({
+    userId,
+    balance: 1250,
+    totalEarned: 2500,
+    lastUpdated: new Date()
+  }),
+  awardQuizCompletion: (userId: string, score: number, total: number) => {
+    const percentage = (score / total) * 100;
+    if (percentage === 100) return 25; // Perfect score
+    if (percentage >= 80) return 15;
+    if (percentage >= 60) return 10;
+    return 5;
+  },
+  awardDailyLoginBonus: (userId: string) => {
+    console.log('Daily login bonus awarded to', userId);
+    return 5;
+  }
+};
+
+const UserManager = {
+  getCurrentUserId: () => 'default',
+  getCurrentUser: () => ({ id: 'default', name: 'Guest' }),
+  createUser: (name: string, email: string) => ({ id: 'default', name, email })
+};
+
+export const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -28,14 +53,9 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
   const [quizComplete, setQuizComplete] = useState(false);
   const [piCoinsEarned, setPiCoinsEarned] = useState(0);
   const [currentBalance, setCurrentBalance] = useState(0);
-  const [showBettingAgreement, setShowBettingAgreement] = useState(false); // State for the betting agreement
-
-  // Prevent multiple awards for the same quiz session
-  const [quizSessionId] = useState(() => `quiz_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
+  const [showBettingAgreement, setShowBettingAgreement] = useState(false);
   const [hasAwardedPiCoins, setHasAwardedPiCoins] = useState(false);
 
-
-  // Offline questions cache
   const offlineQuestions: Question[] = [
     {
       id: 1,
@@ -83,27 +103,27 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
     if (isOffline) {
       setQuestions(offlineQuestions);
     } else {
-      // Load questions from API or use offline as fallback
       loadQuestions();
     }
 
-    // Award daily login bonus and load balance
     const handleDailyLogin = async () => {
       try {
-        // Ensure user is properly initialized before awarding daily login
         let userId = UserManager.getCurrentUserId();
         if (!userId) {
-          // Create a temporary user if none exists
           const tempUser = UserManager.createUser('Guest', 'guest@example.com');
           userId = tempUser.id;
         }
 
         if (userId && userId !== 'undefined' && userId.length > 0) {
-          PiCoinManager.awardDailyLogin(userId);
+          // Use the correct method name
+          if (typeof PiCoinManager.awardDailyLoginBonus === 'function') {
+            PiCoinManager.awardDailyLoginBonus(userId);
+          } else if (typeof (PiCoinManager as any).awardDailyLogin === 'function') {
+            (PiCoinManager as any).awardDailyLogin(userId);
+          }
         }
       } catch (error) {
         console.error('Daily login error:', error);
-        // Don't throw the error, just log it to prevent component crash
       }
     };
 
@@ -112,8 +132,7 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
     const balance = PiCoinManager.getBalance('default');
     setCurrentBalance(balance.balance);
 
-    // Check if the user has logged in to show the betting agreement
-    const currentUser = UserManager.getCurrentUser(); // Assuming this function exists and returns user info or null
+    const currentUser = UserManager.getCurrentUser();
     if (currentUser) {
       setShowBettingAgreement(true);
     }
@@ -133,7 +152,6 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
 
   const loadQuestions = async () => {
     try {
-      // Try to fetch from API
       const response = await fetch(`/api/quiz/${category}`);
       if (response.ok) {
         const data = await response.json();
@@ -155,6 +173,7 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
     setShowResult(false);
     setQuizComplete(false);
     setTimeLeft(30);
+    setHasAwardedPiCoins(false);
   };
 
   const handleAnswerSelect = (answerIndex: number) => {
@@ -174,9 +193,8 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
         setSelectedAnswer(null);
         setTimeLeft(30);
       } else {
-        // Award Pi coins based on performance (only once per session)
         let earnedCoins = 0;
-        if (!hasAwardedPiCoins && PiCoinManager?.awardQuizCompletion) {
+        if (!hasAwardedPiCoins && typeof PiCoinManager?.awardQuizCompletion === 'function') {
           earnedCoins = PiCoinManager.awardQuizCompletion('default', score, questions.length);
           if (earnedCoins > 0) {
             setHasAwardedPiCoins(true);
@@ -184,7 +202,6 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
         }
         setPiCoinsEarned(earnedCoins);
 
-        // Update balance
         const newBalance = PiCoinManager.getBalance('default');
         setCurrentBalance(newBalance.balance);
 
@@ -202,7 +219,7 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
     setQuizComplete(false);
     setTimeLeft(30);
     setPiCoinsEarned(0);
-    setHasAwardedPiCoins(false); // Reset the flag for new quiz session
+    setHasAwardedPiCoins(false);
   };
 
   const getScoreMessage = () => {
@@ -228,7 +245,7 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
         border: '1px solid rgba(255, 255, 255, 0.2)',
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
           <h2 style={{
             color: '#fff',
             fontSize: '2rem',
@@ -237,7 +254,7 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent'
           }}>
-            Quiz Mode - You're Still in the Game! 🎯
+            Quiz Mode 🎯
           </h2>
 
           <div style={{
@@ -254,7 +271,6 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
           </div>
         </div>
 
-        {/* Betting Agreement */}
         {showBettingAgreement && (
           <div style={{
             backgroundColor: 'rgba(255, 255, 255, 0.05)',
@@ -275,13 +291,14 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
                 background: 'transparent',
                 border: 'none',
                 color: '#fff',
-                fontSize: '1.2rem',
-                cursor: 'pointer'
+                fontSize: '1.5rem',
+                cursor: 'pointer',
+                lineHeight: 1
               }}
             >
-              &times;
+              ×
             </button>
-            <p>
+            <p style={{ margin: 0, paddingRight: '30px' }}>
               <strong>Betting Agreement:</strong> You agree to bet responsibly. Please remember to manage your wagers wisely.
             </p>
           </div>
@@ -316,7 +333,7 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
               boxShadow: '0 4px 16px rgba(34, 197, 94, 0.3)'
             }}
           >
-            🚀 Quick Start
+            🚀 Start Quiz
           </button>
 
           <select
@@ -328,21 +345,13 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
               border: '1px solid rgba(255, 255, 255, 0.3)',
               padding: '16px 20px',
               borderRadius: '12px',
-              fontSize: '1rem'
+              fontSize: '1rem',
+              cursor: 'pointer'
             }}
           >
-            <option value="sports">🏆 Choose Category - Sports</option>
+            <option value="sports">🏆 Sports</option>
             <option value="general">🧠 General Knowledge</option>
           </select>
-
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.1)',
-            padding: '16px 20px',
-            borderRadius: '12px',
-            border: '1px solid rgba(255, 255, 255, 0.2)'
-          }}>
-            🎯 Fun Scoreboard
-          </div>
         </div>
 
         <div style={{
@@ -354,7 +363,7 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
         }}>
           <div style={{ fontSize: '3rem', marginBottom: '16px' }}>💡</div>
           <h3 style={{ color: '#fff', marginBottom: '12px' }}>Fun Fact of the Day!</h3>
-          <p style={{ color: '#d1fae5', fontSize: '1rem' }}>
+          <p style={{ color: '#d1fae5', fontSize: '1rem', margin: 0 }}>
             Did you know? The fastest recorded tennis serve was 163.7 mph by Sam Groth!
           </p>
         </div>
@@ -385,13 +394,12 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
         }}>
           <div style={{ fontSize: '2rem', marginBottom: '8px' }}>⭐</div>
           <div style={{ color: 'white', fontSize: '1.5rem', marginBottom: '8px' }}>
-            Score {score}/{questions.length}
+            Score: {score}/{questions.length}
           </div>
           <div style={{ color: '#e8f5e8', fontSize: '1.2rem', marginBottom: '8px' }}>
             +{score * 10} points
           </div>
 
-          {/* Pi Coin Reward */}
           <div style={{
             background: 'rgba(255, 215, 0, 0.2)',
             borderRadius: '12px',
@@ -445,7 +453,6 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
       maxWidth: '600px',
       margin: '0 auto'
     }}>
-      {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div style={{ color: '#22c55e', fontWeight: '600' }}>
           Question {currentQuestion + 1}/{questions.length}
@@ -461,7 +468,6 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
         </div>
       </div>
 
-      {/* Question */}
       <div style={{
         background: 'rgba(255, 255, 255, 0.05)',
         borderRadius: '12px',
@@ -474,7 +480,6 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
         </h3>
       </div>
 
-      {/* Answers */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
         {currentQ?.answers.map((answer, index) => (
           <button
@@ -498,12 +503,11 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
               opacity: showResult && selectedAnswer !== index ? 0.6 : 1
             }}
           >
-            Answer {index + 1}: {answer}
+            {String.fromCharCode(65 + index)}. {answer}
           </button>
         ))}
       </div>
 
-      {/* Submit Button */}
       {selectedAnswer !== null && !showResult && (
         <button
           onClick={handleNextQuestion}
@@ -524,7 +528,6 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
         </button>
       )}
 
-      {/* Result Display */}
       {showResult && (
         <div style={{
           background: selectedAnswer === currentQ?.correctAnswer
@@ -559,5 +562,3 @@ const QuizMode: React.FC<QuizProps> = ({ isOffline = false }) => {
     </div>
   );
 };
-
-export default QuizMode;
