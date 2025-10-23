@@ -15,12 +15,12 @@ export const connectDB = async (): Promise<void | null> => {
 
     if (!MONGODB_URI) {
       const errorMsg = 'MONGODB_URI environment variable is not set';
-      
+
       if (REQUIRE_DB) {
         console.error(`❌ ${errorMsg} - Database is required in this environment`);
         throw new Error(errorMsg);
       }
-      
+
       console.warn('⚠️  MONGODB_URI not set, running without database (development mode)');
       console.warn('⚠️  Set REQUIRE_DB=true to enforce database connection');
       return null;
@@ -44,10 +44,7 @@ export const connectDB = async (): Promise<void | null> => {
     const options: Record<string, any> = {
       maxPoolSize: 10,
       serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-      bufferMaxEntries: 0,
-      useNewUrlParser: true,
-      useUnifiedTopology: true
+      socketTimeoutMS: 45000
     };
 
     // Add server API settings for Atlas connections
@@ -175,7 +172,7 @@ export const checkDBHealth = async (): Promise<boolean> => {
 
 export const verifyConnection = async (): Promise<void> => {
   const REQUIRE_DB = process.env.REQUIRE_DB === 'true' || process.env.NODE_ENV === 'production';
-  
+
   if (!REQUIRE_DB && db.isConnected !== 1) {
     console.warn('⚠️  Database connection not required in this environment');
     return;

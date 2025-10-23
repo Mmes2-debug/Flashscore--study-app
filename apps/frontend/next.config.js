@@ -4,11 +4,6 @@ const withNextIntl = createNextIntlPlugin("./src/i18n.ts");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  allowedDevOrigins: [
-    '35b3dd54-a8e5-4b3f-8300-6093dc2f0937-00-3clwrn3umkhzx.picard.replit.dev',
-    '127.0.0.1',
-    'localhost'
-  ],
   experimental: {
     externalDir: true,
     optimizeCss: true,
