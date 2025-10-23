@@ -1,75 +1,90 @@
-
 "use client";
 
 import { useEffect, useRef } from 'react';
 
 interface PerformanceMetrics {
-  pageLoadTime: number;
-  firstContentfulPaint: number;
-  largestContentfulPaint: number;
-  cumulativeLayoutShift: number;
-  firstInputDelay: number;
+  pageLoadTime?: number;
+  firstContentfulPaint?: number;
+  largestContentfulPaint?: number;
+  cumulativeLayoutShift?: number;
+  firstInputDelay?: number;
+  // event tracking
+  events?: Array<{ name: string; timestamp: number; payload?: any }>;
 }
 
 export const usePerformanceMonitor = () => {
-  const metricsRef = useRef<Partial<PerformanceMetrics>>({});
+  const metricsRef = useRef<Partial<PerformanceMetrics>>({
+    events: []
+  });
 
   useEffect(() => {
-    // Monitor Core Web Vitals
     const observePerformance = () => {
+      if (typeof window === 'undefined') return () => {};
+
       // Page Load Time
-      if (typeof window !== 'undefined' && window.performance) {
-        const loadTime = window.performance.timing.loadEventEnd - window.performance.timing.navigationStart;
-        metricsRef.current.pageLoadTime = loadTime;
+      if (window.performance && (performance as any).timing) {
+        try {
+          const timing = (performance as any).timing;
+          const loadTime = Math.max(0, timing.loadEventEnd - timing.navigationStart);
+          metricsRef.current.pageLoadTime = loadTime;
+        } catch (e) {
+          // ignore
+        }
       }
 
-      // First Contentful Paint
+      // First Contentful Paint & LCP & CLS & FID via PerformanceObserver
+      let paintObserver: PerformanceObserver | null = null;
+      let lcpObserver: PerformanceObserver | null = null;
+      let clsObserver: PerformanceObserver | null = null;
+      let fidObserver: PerformanceObserver | null = null;
+
       if ('PerformanceObserver' in window) {
-        const paintObserver = new PerformanceObserver((list) => {
-          for (const entry of list.getEntries()) {
-            if (entry.name === 'first-contentful-paint') {
-              metricsRef.current.firstContentfulPaint = entry.startTime;
+        try {
+          paintObserver = new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+              if ((entry as any).name === 'first-contentful-paint') {
+                metricsRef.current.firstContentfulPaint = (entry as any).startTime;
+              }
             }
-          }
-        });
-        paintObserver.observe({ entryTypes: ['paint'] });
+          });
+          paintObserver.observe({ entryTypes: ['paint'] });
 
-        // Largest Contentful Paint
-        const lcpObserver = new PerformanceObserver((list) => {
-          const entries = list.getEntries();
-          const lastEntry = entries[entries.length - 1];
-          metricsRef.current.largestContentfulPaint = lastEntry.startTime;
-        });
-        lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+          lcpObserver = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            const lastEntry = entries[entries.length - 1];
+            if (lastEntry) metricsRef.current.largestContentfulPaint = (lastEntry as any).startTime;
+          });
+          lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
 
-        // Cumulative Layout Shift
-        let clsValue = 0;
-        const clsObserver = new PerformanceObserver((list) => {
-          for (const entry of list.getEntries()) {
-            if (!(entry as any).hadRecentInput) {
-              clsValue += (entry as any).value;
+          let clsValue = 0;
+          clsObserver = new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+              if (!(entry as any).hadRecentInput) {
+                clsValue += (entry as any).value || 0;
+              }
             }
-          }
-          metricsRef.current.cumulativeLayoutShift = clsValue;
-        });
-        clsObserver.observe({ entryTypes: ['layout-shift'] });
+            metricsRef.current.cumulativeLayoutShift = clsValue;
+          });
+          clsObserver.observe({ entryTypes: ['layout-shift'] });
 
-        // First Input Delay
-        const fidObserver = new PerformanceObserver((list) => {
-          for (const entry of list.getEntries()) {
-            metricsRef.current.firstInputDelay = (entry as any).processingStart - entry.startTime;
-          }
-        });
-        fidObserver.observe({ entryTypes: ['first-input'] });
-
-        // Cleanup observers
-        return () => {
-          paintObserver.disconnect();
-          lcpObserver.disconnect();
-          clsObserver.disconnect();
-          fidObserver.disconnect();
-        };
+          fidObserver = new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+              metricsRef.current.firstInputDelay = ((entry as any).processingStart - (entry as any).startTime) || metricsRef.current.firstInputDelay;
+            }
+          });
+          fidObserver.observe({ entryTypes: ['first-input'] });
+        } catch (e) {
+          // Some browsers may throw for unavailable entry types — ignore silently
+        }
       }
+
+      // Return cleanup
+      return () => {
+        try { paintObserver?.disconnect(); } catch {}
+        try { lcpObserver?.disconnect(); } catch {}
+        try { clsObserver?.disconnect(); } catch {}
+        try { fidObserver?.disconnect(); } catch {}
+      };
     };
 
     const cleanup = observePerformance();
@@ -77,22 +92,56 @@ export const usePerformanceMonitor = () => {
   }, []);
 
   const getMetrics = (): Partial<PerformanceMetrics> => {
-    return { ...metricsRef.current };
+    // Make a shallow clone to avoid exposing the ref directly
+    return { ...metricsRef.current, events: metricsRef.current.events ? [...metricsRef.current.events] : [] };
   };
 
   const logMetrics = () => {
     const metrics = getMetrics();
+    // Friendly console output for debugging in the browser
     console.log('Performance Metrics:', {
-      'Page Load Time': `${metrics.pageLoadTime}ms`,
-      'First Contentful Paint': `${metrics.firstContentfulPaint}ms`,
-      'Largest Contentful Paint': `${metrics.largestContentfulPaint}ms`,
-      'Cumulative Layout Shift': metrics.cumulativeLayoutShift,
-      'First Input Delay': `${metrics.firstInputDelay}ms`
+      'Page Load Time': metrics.pageLoadTime ? `${metrics.pageLoadTime}ms` : 'n/a',
+      'First Contentful Paint': metrics.firstContentfulPaint ? `${metrics.firstContentfulPaint}ms` : 'n/a',
+      'Largest Contentful Paint': metrics.largestContentfulPaint ? `${metrics.largestContentfulPaint}ms` : 'n/a',
+      'Cumulative Layout Shift': metrics.cumulativeLayoutShift ?? 'n/a',
+      'First Input Delay': metrics.firstInputDelay ? `${metrics.firstInputDelay}ms` : 'n/a',
+      'Events Tracked': metrics.events?.length ?? 0
     });
+  };
+
+  // New: trackPerformance API expected by components (e.g. OptimizedDashboard)
+  const trackPerformance = (eventName: string, payload?: any) => {
+    if (typeof window === 'undefined') return;
+
+    const event = { name: eventName, timestamp: Date.now(), payload };
+    if (!metricsRef.current.events) metricsRef.current.events = [];
+    metricsRef.current.events.push(event);
+
+    // Lightweight console for debugging in dev/preview
+    if (process.env.NODE_ENV !== 'production') {
+      console.debug('[PerfMonitor] tracked event:', event);
+    }
+
+    // Optionally: send to server-side analytics if a runtime URL is provided
+    // NOTE: This fetch runs only at runtime in the browser; it will never execute during SSR/build.
+    const analyticsUrl = (window as any).__PERF_ANALYTICS_URL || (process.env.NEXT_PUBLIC_PERF_ANALYTICS_URL as string | undefined);
+    if (analyticsUrl) {
+      try {
+        // Fire-and-forget; don't await to avoid blocking UI
+        fetch(analyticsUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ event, metrics: getMetrics() })
+        }).catch(() => {});
+      } catch {
+        // ignore
+      }
+    }
   };
 
   return {
     getMetrics,
-    logMetrics
+    logMetrics,
+    trackPerformance
   };
 };
