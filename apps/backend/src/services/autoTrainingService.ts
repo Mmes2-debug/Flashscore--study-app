@@ -1,5 +1,4 @@
-
-import {mlPredictionService} from './mlPredictionService.js';
+import { mlPredictionService } from './mlPredictionService.js';
 
 interface PredictionOutcome {
   features: number[];
@@ -68,4 +67,8 @@ class AutoTrainingService {
   }
 }
 
-const. export new AutoTrainingService();
+// ✅ Fixed: Changed "export constant" to "export const"
+export const autoTrainingService = new AutoTrainingService();
+
+// Also export as default for flexibility
+export default autoTrainingService;
