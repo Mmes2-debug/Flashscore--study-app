@@ -111,5 +111,27 @@ export class NewsAuthorService {
     }
   }
 
-  // Other helper methods (generateAutoNews, initialize default authors, etc.) can remain as before and will use API_BASE_URL
+  // --- NEW: Simulate Mara collaboration (frontend wrapper) ---
+  // This method provides the simulateMaraCollaboration API that the UI expects.
+  // It delegates to createCollaborationNews so the backend creates/persists the news entry.
+  static async simulateMaraCollaboration(): Promise<NewsItem | null> {
+    try {
+      const collaborationPayload = {
+        title: 'Mara predicts Liverpool victory!',
+        preview: 'Mara predicted Liverpool would win — prediction successful!',
+        fullContent:
+          'Mara predicted a Liverpool win in Liverpool vs Arsenal. The prediction was correct and Mara\'s analytics model showed 85% confidence. This auto-generated article celebrates the prediction success and shares insights behind the model.',
+        collaborationType: 'prediction' as const,
+        tags: ['prediction', 'mara', 'demo']
+      };
+
+      const news = await this.createCollaborationNews('mara', collaborationPayload);
+      return news;
+    } catch (error) {
+      console.error('simulateMaraCollaboration failed:', error);
+      return null;
+    }
+  }
+
+  // (other helper methods such as celebrateMilestone, shareAnalysis can remain here or be implemented similarly)
 }
