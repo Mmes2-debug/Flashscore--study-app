@@ -1,6 +1,6 @@
 import Fastify from "fastify";
 import mongoose from "mongoose";
-import { predictionsRoutes } from "./routes/predictions";
+import { predictionsRoutes } from "./routes/prediction.js";
 
 const fastify = Fastify({ logger: true });
 
