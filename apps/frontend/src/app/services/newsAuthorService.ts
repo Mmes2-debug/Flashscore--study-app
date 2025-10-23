@@ -112,8 +112,6 @@ export class NewsAuthorService {
   }
 
   // --- NEW: Simulate Mara collaboration (frontend wrapper) ---
-  // This method provides the simulateMaraCollaboration API that the UI expects.
-  // It delegates to createCollaborationNews so the backend creates/persists the news entry.
   static async simulateMaraCollaboration(): Promise<NewsItem | null> {
     try {
       const collaborationPayload = {
@@ -133,5 +131,43 @@ export class NewsAuthorService {
     }
   }
 
-  // (other helper methods such as celebrateMilestone, shareAnalysis can remain here or be implemented similarly)
+  // --- NEW: Celebrate milestone (frontend wrapper) ---
+  static async celebrateMilestone(authorId: string, milestone: number): Promise<NewsItem | null> {
+    try {
+      const collaborationPayload = {
+        title: `Milestone: ${milestone} Collaborations!`,
+        preview: `${milestone} collaborations unlocked for ${authorId}. Celebrating community growth!`,
+        fullContent: `Congratulations to ${authorId} on reaching ${milestone} collaborations with the community. This milestone highlights consistent contributions and community engagement.`,
+        collaborationType: 'community' as const,
+        tags: ['milestone', 'community']
+      };
+
+      const news = await this.createCollaborationNews(authorId, collaborationPayload);
+      return news;
+    } catch (error) {
+      console.error('celebrateMilestone failed:', error);
+      return null;
+    }
+  }
+
+  // --- NEW: Share analysis (frontend wrapper) ---
+  static async shareAnalysis(authorId: string, topic: string): Promise<NewsItem | null> {
+    try {
+      const collaborationPayload = {
+        title: `Analysis: ${topic}`,
+        preview: `${topic} - expert analysis by ${authorId}`,
+        fullContent: `${authorId} shares an in-depth analysis on ${topic}, providing insights and data-driven takeaways for the community.`,
+        collaborationType: 'analysis' as const,
+        tags: ['analysis', topic.replace(/\s+/g, '-').toLowerCase()]
+      };
+
+      const news = await this.createCollaborationNews(authorId, collaborationPayload);
+      return news;
+    } catch (error) {
+      console.error('shareAnalysis failed:', error);
+      return null;
+    }
+  }
+
+  // (other helper methods can be added here as needed)
 }
