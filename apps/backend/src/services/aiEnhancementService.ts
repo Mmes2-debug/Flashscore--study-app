@@ -1,12 +1,11 @@
-// src/services/aiEnhancementService.ts
 import { PredictionResponse } from "./mlPredictionService";
 
-const. export aiEnhancementService {
+// Export as named export to match the import
+export const aiEnhancementService = {
   async enhancePredictionWithInsights(
     prediction: PredictionResponse,
     context: { homeTeam: string; awayTeam: string }
   ) {
-    // Dummy AI enhancement logic (can integrate real AI later)
     return {
       prediction,
       aiInsights: {
