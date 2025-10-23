@@ -220,3 +220,4 @@ export class Author {
     newBadges.forEach(badge => this.addBadge(badge));
     return newBadges;
   }
+}
