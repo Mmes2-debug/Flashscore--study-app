@@ -1,90 +1,79 @@
-"use client";
+'use client';
 
-import React from 'react';
-
-interface ProtectedContentProps {
-  children: React.ReactNode;
-  requiredRole?: string;
-  requireAuth?: boolean;
-  fallback?: React.ReactNode;
-}
-
-export default function ProtectedContent({
-  children,
-  requiredRole = 'user',
-  requireAuth = false,
-  fallback
-}: ProtectedContentProps) {
-  // Mock authentication check
-  const isAuthenticated = true;
-  const userRole = 'user';
-
-  if (requireAuth && !isAuthenticated) {
-    return fallback || (
-      <div className="flex items-center justify-center min-h-64 bg-gray-50 rounded-lg">
-        <div className="text-center">
-          <div className="text-4xl mb-4">🔒</div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            Authentication Required
-          </h3>
-          <p className="text-gray-600">
-            Please log in to access this content.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  const hasRequiredRole = userRole === requiredRole || userRole === 'admin';
-
-  if (!hasRequiredRole) {
-    return fallback || (
-      <div className="flex items-center justify-center min-h-64 bg-gray-50 rounded-lg">
-        <div className="text-center">
-          <div className="text-4xl mb-4">⚠️</div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            Access Denied
-          </h3>
-          <p className="text-gray-600">
-            You don't have permission to access this content.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  return <>{children}</>;
-}
-"use client";
-
-import React from 'react';
+import { type ReactNode, useState, useEffect } from 'react';
 
 interface ProtectedContentProps {
-  children: React.ReactNode;
-  requiredLevel?: number;
-  currentUser?: any;
+  children: ReactNode;
+  requireAge?: number;
 }
 
-export default function ProtectedContent({ 
-  children, 
-  requiredLevel = 1, 
-  currentUser 
-}: ProtectedContentProps) {
-  const hasAccess = currentUser && (currentUser.level >= requiredLevel);
+export const ProtectedContent = ({ children, requireAge = 18 }: ProtectedContentProps) => {
+  const [isAllowed, setIsAllowed] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  if (!hasAccess) {
+  useEffect(() => {
+    // Check age verification only on client side
+    const checkAge = () => {
+      try {
+        const stored = localStorage.getItem('user_age');
+        if (!stored) {
+          setIsAllowed(false);
+          setIsLoading(false);
+          return;
+        }
+        const age = parseInt(stored, 10);
+        setIsAllowed(!isNaN(age) && age >= requireAge);
+      } catch (error) {
+        console.error('Error checking age:', error);
+        setIsAllowed(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAge();
+  }, [requireAge]);
+
+  // Show loading state during hydration
+  if (isLoading) {
     return (
-      <div className="bg-gray-800 rounded-lg p-6 text-center">
-        <h3 className="text-xl font-bold text-white mb-2">Premium Content</h3>
-        <p className="text-gray-300 mb-4">
-          You need level {requiredLevel} access to view this content.
-        </p>
-        <button className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white">
-          Upgrade Account
-        </button>
+      <div className="p-4 bg-gray-50 rounded-lg animate-pulse">
+        <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+      </div>
+    );
+  }
+
+  if (!isAllowed) {
+    return (
+      <div className="p-6 bg-yellow-50 rounded-lg border border-yellow-200">
+        <div className="flex items-start gap-3">
+          <div className="text-2xl">🔞</div>
+          <div className="flex-1">
+            <h3 className="font-semibold text-yellow-900 mb-2">Restricted Content</h3>
+            <p className="text-sm text-yellow-800 mb-4">
+              This content is age restricted. You must be {requireAge} or older to access it.
+            </p>
+            <button
+              onClick={() => {
+                const age = prompt('Please enter your age:');
+                if (age) {
+                  const ageNum = parseInt(age, 10);
+                  if (!isNaN(ageNum)) {
+                    localStorage.setItem('user_age', age);
+                    setIsAllowed(ageNum >= requireAge);
+                  }
+                }
+              }}
+              className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm font-medium"
+            >
+              Verify Age
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
 
   return <>{children}</>;
-}
+};
