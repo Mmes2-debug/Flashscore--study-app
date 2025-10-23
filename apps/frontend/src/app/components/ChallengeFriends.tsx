@@ -103,6 +103,15 @@ const ChallengeFriends: React.FC<ChallengeFriendsProps> = ({ currentUser }) => {
     const friend = friends.find(f => f.id === selectedFriend);
     if (!friend) return;
 
+    // Check transaction rate limit
+    const piCoinManager = PiCoinManager.getInstance();
+    const rateInfo = piCoinManager.getTransactionRateInfo(currentUser.id);
+    
+    if (rateInfo.isLimited) {
+      alert(`Transaction rate limit reached! You can make ${rateInfo.remainingTransactions} more transactions. Please wait a moment.`);
+      return;
+    }
+
     const challenge: Challenge = {
       id: `challenge_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       challenger: {
@@ -127,12 +136,30 @@ const ChallengeFriends: React.FC<ChallengeFriendsProps> = ({ currentUser }) => {
     };
 
     // Deduct Pi stake
-    PiCoinManager.addTransaction(
+    const piCoinManager = PiCoinManager.getInstance();
+    
+    // Ensure wallet exists
+    let wallet = piCoinManager.getWallet(currentUser.id);
+    if (!wallet) {
+      wallet = piCoinManager.createWallet(currentUser.id);
+    }
+    
+    // Check if user has enough balance
+    if (wallet.balance < newChallenge.piStake) {
+      alert(`Insufficient Pi Coins! You need ${newChallenge.piStake} but only have ${wallet.balance}`);
+      return;
+    }
+    
+    const success = piCoinManager.spendCoins(
       currentUser.id,
-      -newChallenge.piStake,
-      'bonus',
+      newChallenge.piStake,
       `Challenge stake: ${newChallenge.matchName}`
     );
+    
+    if (!success) {
+      alert('Failed to deduct Pi stake. Please try again.');
+      return;
+    }
 
     saveChallenges([challenge, ...challenges]);
     setShowCreateChallenge(false);
@@ -149,15 +176,41 @@ const ChallengeFriends: React.FC<ChallengeFriendsProps> = ({ currentUser }) => {
   const acceptChallenge = (challengeId: string, prediction: string, confidence: number) => {
     if (!currentUser) return;
 
+    const piCoinManager = PiCoinManager.getInstance();
+    
+    // Check transaction rate limit
+    const rateInfo = piCoinManager.getTransactionRateInfo(currentUser.id);
+    if (rateInfo.isLimited) {
+      alert(`Transaction rate limit reached! You have ${rateInfo.remainingTransactions} transactions remaining. Please wait.`);
+      return;
+    }
+
     const updatedChallenges = challenges.map(c => {
       if (c.id === challengeId) {
         // Deduct Pi stake from challenged user
-        PiCoinManager.addTransaction(
+        
+        // Ensure wallet exists
+        let wallet = piCoinManager.getWallet(currentUser.id);
+        if (!wallet) {
+          wallet = piCoinManager.createWallet(currentUser.id);
+        }
+        
+        // Check if user has enough balance
+        if (wallet.balance < c.piStake) {
+          alert(`Insufficient Pi Coins! You need ${c.piStake} but only have ${wallet.balance}`);
+          return c;
+        }
+        
+        const success = piCoinManager.spendCoins(
           currentUser.id,
-          -c.piStake,
-          'bonus',
+          c.piStake,
           `Challenge stake: ${c.matchName}`
         );
+        
+        if (!success) {
+          alert('Failed to accept challenge. Please try again.');
+          return c;
+        }
 
         return {
           ...c,
@@ -180,10 +233,10 @@ const ChallengeFriends: React.FC<ChallengeFriendsProps> = ({ currentUser }) => {
         // Refund Pi stake to challenger
         const challenge = challenges.find(ch => ch.id === challengeId);
         if (challenge) {
-          PiCoinManager.addTransaction(
+          const piCoinManager = PiCoinManager.getInstance();
+          piCoinManager.earnCoins(
             challenge.challenger.id,
             challenge.piStake,
-            'bonus',
             `Challenge refund: ${challenge.matchName}`
           );
         }
@@ -207,35 +260,33 @@ const ChallengeFriends: React.FC<ChallengeFriendsProps> = ({ currentUser }) => {
     const challengerCorrect = challenge.challengerPrediction.outcome === actualResult;
     const challengedCorrect = challenge.challengedPrediction.outcome === actualResult;
 
+    const piCoinManager = PiCoinManager.getInstance();
+    
     if (challengerCorrect && !challengedCorrect) {
       winner = challenge.challenger.id;
       // Award double the stake to winner
-      PiCoinManager.addTransaction(
+      piCoinManager.earnCoins(
         challenge.challenger.id,
         challenge.piStake * 2,
-        'bonus',
         `Won challenge: ${challenge.matchName}`
       );
     } else if (challengedCorrect && !challengerCorrect) {
       winner = challenge.challenged.id;
-      PiCoinManager.addTransaction(
+      piCoinManager.earnCoins(
         challenge.challenged.id,
         challenge.piStake * 2,
-        'bonus',
         `Won challenge: ${challenge.matchName}`
       );
     } else {
       // Draw - refund both players
-      PiCoinManager.addTransaction(
+      piCoinManager.earnCoins(
         challenge.challenger.id,
         challenge.piStake,
-        'bonus',
         `Challenge draw refund: ${challenge.matchName}`
       );
-      PiCoinManager.addTransaction(
+      piCoinManager.earnCoins(
         challenge.challenged.id,
         challenge.piStake,
-        'bonus',
         `Challenge draw refund: ${challenge.matchName}`
       );
     }
