@@ -1,16 +1,17 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { mlPredictionService, PredictionRequest } from '../services/mlPredictionService.js';
-import { aiEnhancementService } from '../services/aiEnhancementService.js';
+import { mlPredictionService, PredictionRequest } from '../services/mlPredictionService';
+import { aiEnhancementService } from '../services/aiEnhancementService';
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://0.0.0.0:8000';
 
 interface PredictRequestBody {
   homeTeam: string;
   awayTeam: string;
-  features: number[]; // ✅ Changed from Record<string, any> to number[]
+  features: number[];
   enableAI?: boolean;
 }
 
+// ✅ Named export to match import in main.ts
 export async function predictionsRoutes(fastify: FastifyInstance) {
   // 🩺 Health check
   fastify.get('/ml-status', async (_req: FastifyRequest, _rep: FastifyReply) => {
