@@ -1,5 +1,5 @@
 
-import mlPredictionService from './mlPredictionService';
+import {mlPredictionService} from './mlPredictionService.js';
 
 interface PredictionOutcome {
   features: number[];
@@ -68,4 +68,4 @@ class AutoTrainingService {
   }
 }
 
-export default new AutoTrainingService();
+const. export new AutoTrainingService();
