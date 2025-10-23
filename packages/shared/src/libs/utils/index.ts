@@ -25,3 +25,4 @@ export * from './securityUtils';
 export * from './systemOptimizer';
 export * from './userManager';
 export * from './visitorManager';
+export { default as monetizationManager } from './monetizationManager';
