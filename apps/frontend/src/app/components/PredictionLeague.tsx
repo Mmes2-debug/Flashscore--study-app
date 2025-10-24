@@ -1,7 +1,7 @@
 
 "use client";
 import React, { useState, useEffect } from 'react';
-import PiCoinManager from '@services/PiCoinManager';
+import { PiCoinManager } from '@magajico/shared/utils';
 
 interface League {
   id: string;

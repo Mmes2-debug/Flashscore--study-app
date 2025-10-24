@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import PiCoinManager from '@services/PiCoinManager';
+import { PiCoinManager } from '@magajico/shared/utils';
 
 interface PiCoinStoreProps {
   isOpen: boolean;
