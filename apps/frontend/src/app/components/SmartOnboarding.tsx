@@ -1,8 +1,8 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
 import { ClientStorage } from '../utils/clientStorage';
+import { useAuth } from '@hooks/useAuth';
 
 interface OnboardingStep {
   id: string;
@@ -227,7 +227,7 @@ const SmartOnboarding: React.FC<{ onComplete: () => void }> = ({ onComplete }) =
                 width: index === currentStep ? '24px' : '8px',
                 height: '8px',
                 borderRadius: '4px',
-                background: index === currentStep 
+                background: index === currentStep
                   ? 'linear-gradient(90deg, #8b5cf6, #6366f1)'
                   : 'rgba(255, 255, 255, 0.2)',
                 transition: 'all 0.3s'

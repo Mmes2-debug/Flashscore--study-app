@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from 'react';
 import { ClientStorage } from '../utils/clientStorage';
@@ -67,11 +66,11 @@ const SocialPredictionStreams: React.FC = () => {
       predictions: [],
       donations: 0
     };
-    
+
     setActiveStream(session);
     setIsStreaming(true);
     setViewers(session.viewers);
-    
+
     // Add welcome message
     addChatMessage({
       id: Date.now().toString(),
@@ -90,12 +89,12 @@ const SocialPredictionStreams: React.FC = () => {
         isLive: false,
         endedAt: new Date()
       };
-      
+
       // Save stream history
       const history = ClientStorage.getItem('stream_history', []);
       history.unshift(streamData);
       ClientStorage.setItem('stream_history', history.slice(0, 10));
-      
+
       addChatMessage({
         id: Date.now().toString(),
         username: 'System',
@@ -103,7 +102,7 @@ const SocialPredictionStreams: React.FC = () => {
         timestamp: new Date()
       });
     }
-    
+
     setIsStreaming(false);
     setTimeout(() => {
       setActiveStream(null);
@@ -117,20 +116,20 @@ const SocialPredictionStreams: React.FC = () => {
 
   const sendMessage = () => {
     if (!newMessage.trim() || !activeStream) return;
-    
+
     addChatMessage({
       id: Date.now().toString(),
       username: ClientStorage.getItem('username', 'Anonymous'),
       message: newMessage,
       timestamp: new Date()
     });
-    
+
     setNewMessage('');
   };
 
   const makeLivePrediction = (match: string, prediction: string, confidence: number) => {
     if (!activeStream) return;
-    
+
     const newPrediction: StreamPrediction = {
       id: Date.now().toString(),
       match,
@@ -140,12 +139,12 @@ const SocialPredictionStreams: React.FC = () => {
       reasoning: 'Live analysis based on current form and statistics',
       timestamp: new Date()
     };
-    
+
     setActiveStream({
       ...activeStream,
       predictions: [...activeStream.predictions, newPrediction]
     });
-    
+
     addChatMessage({
       id: Date.now().toString(),
       username: activeStream.streamerName,
@@ -157,19 +156,19 @@ const SocialPredictionStreams: React.FC = () => {
 
   const sendTip = () => {
     if (!activeStream || tipAmount <= 0) return;
-    
+
     setActiveStream({
       ...activeStream,
       donations: activeStream.donations + tipAmount
     });
-    
+
     addChatMessage({
       id: Date.now().toString(),
       username: ClientStorage.getItem('username', 'Anonymous'),
       message: `💰 Sent π${tipAmount} tip!`,
       timestamp: new Date()
     });
-    
+
     // Deduct from user balance
     const currentBalance = ClientStorage.getItem('pi_coins_balance', 1000);
     ClientStorage.setItem('pi_coins_balance', currentBalance - tipAmount);
@@ -314,7 +313,7 @@ const SocialPredictionStreams: React.FC = () => {
               <div style={{ color: '#9ca3af', fontSize: '1.2rem', marginBottom: '24px' }}>
                 You are now streaming live!
               </div>
-              
+
               {/* Quick Prediction Panel */}
               <div style={{
                 background: 'rgba(0, 0, 0, 0.5)',

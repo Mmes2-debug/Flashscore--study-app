@@ -1,8 +1,7 @@
-
 "use client";
 
 import React, { useState, useMemo, useCallback } from 'react';
-import { usePerformanceMonitor } from '../hooks/usePerformanceMonitor';
+import { usePerformanceMonitor } from '@hooks/usePerformanceMonitor';
 
 interface DashboardMetrics {
   totalPredictions: number;
@@ -146,7 +145,7 @@ const OptimizedDashboard: React.FC = () => {
               </h1>
               <p className="text-gray-300 mt-1">Welcome back! Here's your performance overview</p>
             </div>
-            
+
             {/* Section Navigation */}
             <div className="flex gap-2 p-1 bg-white/5 rounded-xl">
               {[

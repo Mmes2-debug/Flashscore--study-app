@@ -1,7 +1,7 @@
-
 "use client";
 import React, { useState, useEffect } from 'react';
 import { ClientStorage } from '../utils/clientStorage';
+import { useAuth } from '@hooks/useAuth';
 
 interface User {
   id: string;
@@ -286,7 +286,7 @@ const PredictionRooms: React.FC<PredictionRoomsProps> = ({ currentUser }) => {
           border: '1px solid rgba(255, 255, 255, 0.2)'
         }}>
           <h3 style={{ color: '#3b82f6', marginBottom: '20px' }}>Create New Prediction Room</h3>
-          
+
           <div style={{ display: 'grid', gap: '16px' }}>
             <input
               type="text"
@@ -398,7 +398,7 @@ const PredictionRooms: React.FC<PredictionRoomsProps> = ({ currentUser }) => {
           border: '1px solid rgba(255, 255, 255, 0.2)'
         }}>
           <h3 style={{ color: '#10b981', marginBottom: '20px' }}>Join Prediction Room</h3>
-          
+
           <div style={{ display: 'grid', gap: '16px' }}>
             <input
               type="text"

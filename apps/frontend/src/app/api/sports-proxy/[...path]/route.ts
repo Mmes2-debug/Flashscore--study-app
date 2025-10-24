@@ -1,4 +1,5 @@
 import { createSportsAPIService } from '../service';
+import { validateApiKey } from '@/app/api/sports-proxy/[...path]/service';
 
 interface Match {
   id: number;

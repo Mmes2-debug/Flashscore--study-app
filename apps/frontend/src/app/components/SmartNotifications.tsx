@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from 'react';
 import { ClientStorage } from '../utils/clientStorage';
@@ -57,7 +56,7 @@ const SmartNotifications: React.FC = () => {
   useEffect(() => {
     loadNotifications();
     loadSettings();
-    
+
     // Check for new notifications every 5 minutes (only if enabled)
     const interval = setInterval(() => {
       if (settings.pushEnabled) {
@@ -121,14 +120,14 @@ const SmartNotifications: React.FC = () => {
 
   const shouldShowNotification = (notification: Notification): boolean => {
     if (!settings.pushEnabled) return false;
-    
+
     // Check quiet hours
     if (settings.quietHours.enabled) {
       const now = new Date();
       const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
       const start = settings.quietHours.start;
       const end = settings.quietHours.end;
-      
+
       if (start > end) { // Crosses midnight
         if (currentTime >= start || currentTime <= end) return false;
       } else {
@@ -162,7 +161,7 @@ const SmartNotifications: React.FC = () => {
     // Simulate smart notifications based on user activity
     const now = new Date();
     const hour = now.getHours();
-    
+
     // Morning digest
     if (hour === 9 && settings.dailyDigest) {
       addNotification({
@@ -173,7 +172,7 @@ const SmartNotifications: React.FC = () => {
         icon: '🌅'
       });
     }
-    
+
     // Evening summary
     if (hour === 18 && settings.dailyDigest) {
       addNotification({
@@ -427,7 +426,7 @@ const SmartNotifications: React.FC = () => {
                         ✕
                       </button>
                     </div>
-                    
+
                     <h4 style={{
                       color: notification.read ? '#d1d5db' : '#fff',
                       fontSize: '0.9rem',
@@ -436,7 +435,7 @@ const SmartNotifications: React.FC = () => {
                     }}>
                       {notification.title}
                     </h4>
-                    
+
                     <p style={{
                       color: notification.read ? '#9ca3af' : '#d1fae5',
                       fontSize: '0.8rem',
@@ -445,7 +444,7 @@ const SmartNotifications: React.FC = () => {
                     }}>
                       {notification.message}
                     </p>
-                    
+
                     <div style={{
                       fontSize: '0.7rem',
                       color: '#6b7280'
@@ -476,7 +475,7 @@ const SmartNotifications: React.FC = () => {
                 >
                   {settings.pushEnabled ? (
                     <path 
-                      d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" 
+                      d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68c-.15.03-.29.08-.42.12-.1.03-.2.07-.3.11h-.01L18 14.68z" 
                       fill="#22c55e"
                     />
                   ) : (

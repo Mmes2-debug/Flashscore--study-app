@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { useGestureControls } from '../hooks/useGestureControls';
+import { useGestureControls } from '@hooks/useGestureControls';
 import { haptic } from './HapticFeedback';
 
 interface MobileGestureEnhancementsProps {

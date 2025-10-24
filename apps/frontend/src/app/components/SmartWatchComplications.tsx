@@ -1,7 +1,6 @@
-
 "use client";
 import React, { useState, useEffect } from 'react';
-import { ClientStorage } from '../utils/clientStorage';
+import { ClientStorage } from '@utils/clientStorage';
 
 interface WatchComplication {
   id: string;
@@ -93,12 +92,12 @@ const SmartWatchComplications: React.FC = () => {
   useEffect(() => {
     checkWatchSupport();
     loadSettings();
-    
+
     if (settings.enabled) {
       const interval = setInterval(() => {
         updateComplications();
       }, settings.updateFrequency * 60 * 1000);
-      
+
       return () => clearInterval(interval);
     }
   }, [settings.enabled, settings.updateFrequency]);
@@ -107,7 +106,7 @@ const SmartWatchComplications: React.FC = () => {
     // Check for smartwatch API support
     const hasWatchAPI = 'WakeLock' in window || 'bluetooth' in navigator;
     setIsSupported(hasWatchAPI);
-    
+
     // Check for actual connection (simulated for now)
     const savedConnection = ClientStorage.getItem('watch_connected', false);
     setIsConnected(savedConnection);
@@ -147,23 +146,23 @@ const SmartWatchComplications: React.FC = () => {
           return comp;
       }
     });
-    
+
     setComplications(updated);
     syncToWatch(updated);
   };
 
   const syncToWatch = (data: WatchComplication[]) => {
     if (!isConnected || !settings.enabled) return;
-    
+
     // Send data to watch using Web Bluetooth or other API
     const watchData = {
       timestamp: Date.now(),
       complications: data,
       settings: settings.complications
     };
-    
+
     ClientStorage.setItem('watch_sync_data', watchData);
-    
+
     // Trigger actual sync if watch API is available
     if ('bluetooth' in navigator) {
       // Bluetooth sync would happen here
@@ -185,13 +184,13 @@ const SmartWatchComplications: React.FC = () => {
           filters: [{ services: ['heart_rate'] }],
           optionalServices: ['battery_service']
         });
-        
+
         setIsConnected(true);
         ClientStorage.setItem('watch_connected', true);
-        
+
         const enabledSettings = { ...settings, enabled: true };
         saveSettings(enabledSettings);
-        
+
         updateComplications();
       }
     } catch (error) {
@@ -249,7 +248,7 @@ const SmartWatchComplications: React.FC = () => {
             View predictions and scores on your wrist
           </p>
         </div>
-        
+
         <div style={{
           background: isConnected 
             ? 'linear-gradient(135deg, #22c55e, #16a34a)' 
@@ -288,14 +287,14 @@ const SmartWatchComplications: React.FC = () => {
         {Object.entries(settings.complications).slice(0, 4).map(([slot, type], index) => {
           const comp = complications.find(c => c.id === type);
           if (!comp) return null;
-          
+
           const positions = [
             { top: '20px', left: '20px' },      // corner1
             { top: '20px', right: '20px' },     // corner2
             { bottom: '20px', left: '20px' },   // corner3
             { bottom: '20px', right: '20px' }   // corner4
           ];
-          
+
           return (
             <div
               key={slot}
@@ -326,12 +325,12 @@ const SmartWatchComplications: React.FC = () => {
             </div>
           );
         })}
-        
+
         {/* Center Complication */}
         {(() => {
           const centerComp = complications.find(c => c.id === settings.complications.center);
           if (!centerComp) return null;
-          
+
           return (
             <div style={{
               position: 'absolute',
@@ -422,7 +421,7 @@ const SmartWatchComplications: React.FC = () => {
         <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '1.1rem' }}>
           ⚙️ Configure Complications
         </h3>
-        
+
         <div style={{ display: 'grid', gap: '12px' }}>
           {Object.entries(settings.complications).map(([slot, type]) => (
             <div key={slot} style={{
@@ -469,7 +468,7 @@ const SmartWatchComplications: React.FC = () => {
         <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '1.1rem' }}>
           🔄 Sync Settings
         </h3>
-        
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div style={{
             display: 'flex',
@@ -497,7 +496,7 @@ const SmartWatchComplications: React.FC = () => {
               <option value="30">Every 30 minutes</option>
             </select>
           </div>
-          
+
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',

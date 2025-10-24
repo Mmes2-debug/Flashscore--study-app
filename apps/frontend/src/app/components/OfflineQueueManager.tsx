@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ClientStorage } from '../utils/clientStorage';
+import { useOfflineStatus } from '@hooks/useOfflineStatus';
 
 interface QueuedAction {
   id: string;
@@ -14,27 +15,20 @@ interface QueuedAction {
 const OfflineQueueManager: React.FC = () => {
   const [queue, setQueue] = useState<QueuedAction[]>([]);
   const [syncing, setSyncing] = useState(false);
-  const [isOnline, setIsOnline] = useState(true);
+  const isOnline = useOfflineStatus(); // Replaced state with hook
 
   useEffect(() => {
     const savedQueue = ClientStorage.getItem('offline_queue', []);
     setQueue(Array.isArray(savedQueue) ? savedQueue : []);
 
-    const handleOnline = () => {
-      setIsOnline(true);
-      syncQueue();
-    };
-
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
+    // Removed redundant online/offline event listeners as useOfflineStatus hook handles this
   }, []);
+
+  useEffect(() => {
+    if (isOnline) {
+      syncQueue();
+    }
+  }, [isOnline]); // Sync when online status changes
 
   const syncQueue = async () => {
     const queueLength = queue?.length ?? 0;

@@ -1,8 +1,8 @@
-
 "use client";
 
 import React from 'react';
 import AdvancedAnalytics from '../components/AdvancedAnalytics';
+import OptimizedDashboard from '@components/OptimizedDashboard';
 
 export default function PersonalAnalyticsPage() {
   return (
@@ -36,8 +36,9 @@ export default function PersonalAnalyticsPage() {
             Track your prediction accuracy, earnings, and performance insights
           </p>
         </div>
-        
+
         <AdvancedAnalytics />
+        <OptimizedDashboard />
       </div>
     </div>
   );

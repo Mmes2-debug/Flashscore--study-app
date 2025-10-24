@@ -1,7 +1,7 @@
-
 "use client";
 import React, { useState, useEffect } from 'react';
 import { ClientStorage } from '../utils/clientStorage';
+import { useAuth } from '@hooks/useAuth';
 
 interface PersonalizationEngine {
   userBehavior: {
@@ -68,7 +68,7 @@ const SmartPersonalization: React.FC = () => {
     // AI-powered personalized predictions
     const userBehavior = ClientStorage.getItem('user_behavior_analytics', {});
     const favoriteSports = userBehavior.mostViewedSports || ['football', 'basketball'];
-    
+
     const recommendations = {
       predictionsForYou: [
         {

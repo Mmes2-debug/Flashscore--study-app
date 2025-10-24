@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from 'react';
 import { ClientStorage } from '../utils/clientStorage';
@@ -22,7 +21,7 @@ const QuickBetSlip: React.FC<QuickBetSlipProps> = ({ match, onBetPlaced }) => {
 
   const placeBet = async (outcome: 'home' | 'draw' | 'away') => {
     setIsPlacing(true);
-    
+
     const bet = {
       matchId: match.id,
       outcome,
@@ -46,7 +45,7 @@ const QuickBetSlip: React.FC<QuickBetSlipProps> = ({ match, onBetPlaced }) => {
       // Victory pattern: short-long-short
       navigator.vibrate([50, 100, 50]);
     }
-    
+
     // Show mini celebration
     const celebration = document.createElement('div');
     celebration.style.cssText = `
@@ -77,11 +76,11 @@ const QuickBetSlip: React.FC<QuickBetSlipProps> = ({ match, onBetPlaced }) => {
       </div>
     `;
     document.body.appendChild(celebration);
-    
+
     setTimeout(() => celebration.remove(), 2000);
-    
+
     onBetPlaced?.(bet);
-    
+
     setTimeout(() => {
       setIsPlacing(false);
       setSelectedOutcome(null);
