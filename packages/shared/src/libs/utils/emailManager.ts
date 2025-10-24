@@ -297,4 +297,4 @@ export class EmailManager {
   }
 }
 
-export default EmailManager.getInstance();
+export const emailManagerInstance = EmailManager.getInstance();

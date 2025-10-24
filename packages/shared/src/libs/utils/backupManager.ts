@@ -159,5 +159,5 @@ class BackupManager {
   }
 }
 
-export default BackupManager;
+export { BackupManager };
 export type { BackupData };

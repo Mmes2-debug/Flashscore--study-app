@@ -342,4 +342,4 @@ class GamificationEngine {
   }
 }
 
-export const gamificationEngine = new GamificationEngine();
+export const gamificationEngineInstance = new GamificationEngine();

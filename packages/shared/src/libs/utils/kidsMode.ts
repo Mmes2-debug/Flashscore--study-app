@@ -78,7 +78,8 @@ export function createConsentRecord(args: {
   return record;
 }
 
-export default {
+// Named exports only - no default export
+export const kidsModeUtils = {
   isChild,
   kidsModeEnabledForAccount,
   createConsentRecord,

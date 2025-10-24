@@ -384,4 +384,4 @@ export class SystemOptimizer {
   }
 }
 
-export default SystemOptimizer.getInstance();
+export const systemOptimizerInstance = SystemOptimizer.getInstance();

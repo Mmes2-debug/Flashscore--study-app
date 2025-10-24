@@ -250,5 +250,5 @@ class PartnershipManager {
   }
 }
 
-export default PartnershipManager;
+export { PartnershipManager };
 export type { PartnershipOpportunity, APIMonetization };

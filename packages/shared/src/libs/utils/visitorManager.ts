@@ -283,4 +283,4 @@ class VisitorManager {
   }
 }
 
-export default VisitorManager;
+export { VisitorManager };

@@ -128,4 +128,4 @@ export class ReplitStorage {
   }
 }
 
-export default ReplitStorage.getInstance();
+export const replitStorageInstance = ReplitStorage.getInstance();

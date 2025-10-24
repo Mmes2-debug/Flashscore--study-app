@@ -417,6 +417,4 @@ class PiCoinManager {
 
 // Export class and instance
 export { PiCoinManager };
-
-const piCoinManagerInstance = PiCoinManager.getInstance();
-export default piCoinManagerInstance;
+export const piCoinManagerInstance = PiCoinManager.getInstance();

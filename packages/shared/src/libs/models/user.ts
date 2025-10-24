@@ -50,5 +50,5 @@ export interface user {
   createdAt: Date;
   updatedAt: Date;
 }
-export default mongoose.models.User ||
+export const UserModel = mongoose.models.User ||
   mongoose.model<IUser>("User", UserSchema);

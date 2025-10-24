@@ -1,9 +1,9 @@
-import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import { FastifyInstance, FastifyRequest, FastifyReply, FastifyPluginAsync } from 'fastify';
 import Stripe from 'stripe';
-import { Payment } from '@bmodels/index.js';
-import User from '../models/User';
-import { authenticateToken } from '../middleware/authMiddleware';
-import { validateStripeEnv, getStripeMode } from '../utils/validateStripeEnv.js';
+import { Payment } from '@/models';
+import { User } from '@/models/User';
+import { authenticateToken } from '@/middleware/authMiddleware';
+import { validateStripeEnv, getStripeMode } from '@/utils/validateStripeEnv';
 
 const MINIMUM_AGE_FOR_PAYMENTS = 18;
 const MINIMUM_AGE_WITH_CONSENT = 13;
@@ -393,4 +393,4 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
   );
 };
 
-export default stripeRoutes;
+export { stripeRoutes };

@@ -315,4 +315,4 @@ export class CRUDManager {
   }
 }
 
-export default CRUDManager.getInstance();
+export const crudManagerInstance = CRUDManager.getInstance();

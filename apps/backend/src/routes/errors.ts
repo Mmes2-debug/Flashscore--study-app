@@ -269,4 +269,4 @@ const errorsRoutes: FastifyPluginAsync = async (fastify) => {
   });
 };
 
-export default errorsRoutes;
+export { errorsRoutes };

@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import { processPayment } from "../controllers/paymentController";
+import { processPayment } from "@/controllers/paymentController";
 
-export default async function apiRoutes(fastify: FastifyInstance) {
+export async function apiRoutes(fastify: FastifyInstance) {
   // Health check route
   fastify.get("/health", async (_request: FastifyRequest, reply: FastifyReply) => {
     return reply.send({ status: "ok" });

@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
-import { Match } from "@bmodels/index.js";
-import { getUpcomingMatches } from "../services/scraperServices.js";
+import { Match } from "@/models";
+import { getUpcomingMatches } from "@/services/scraperServices";
 
 export async function matchRoutes(server: FastifyInstance) {
   // Get all matches

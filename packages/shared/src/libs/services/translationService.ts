@@ -73,4 +73,4 @@ export class TranslationService {
   }
 }
 
-export const translationService = TranslationService.getInstance();
+export const translationServiceInstance = TranslationService.getInstance();

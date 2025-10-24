@@ -146,4 +146,4 @@ export class APIManager {
   }
 }
 
-export default APIManager.getInstance();
+export const apiManagerInstance = APIManager.getInstance();

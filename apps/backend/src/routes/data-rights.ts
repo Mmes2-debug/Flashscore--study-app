@@ -5,7 +5,7 @@ import {
   FastifyReply,
   FastifyRequest
 } from 'fastify';
-import { User as UserModel } from '../models/User';
+import { User as UserModel } from '@/models/User';
 
 interface ExportDataParams {
   Params: {
@@ -32,7 +32,7 @@ interface RectifyDataBody {
   };
 }
 
-export default async function dataRightsRoutes(
+export async function dataRightsRoutes(
   fastify: FastifyInstance,
   options: FastifyPluginOptions
 ) {

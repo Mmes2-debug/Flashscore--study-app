@@ -456,4 +456,4 @@ export class PaymentManager {
   }
 }
 
-export default PaymentManager.getInstance();
+export const paymentManagerInstance = PaymentManager.getInstance();

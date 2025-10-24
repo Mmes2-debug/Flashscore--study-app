@@ -268,4 +268,4 @@ class EthicalSecurityManager {
   }
 }
 
-export default EthicalSecurityManager;
+export { EthicalSecurityManager };

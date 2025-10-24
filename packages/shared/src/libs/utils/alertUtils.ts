@@ -55,4 +55,4 @@ export class AlertManager {
   }
 }
 
-export default AlertManager;
+// No default export - class is already exported

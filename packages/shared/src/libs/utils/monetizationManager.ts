@@ -542,4 +542,4 @@ export class MonetizationManager {
   }
 }
 
-export default MonetizationManager.getInstance();
+export const monetizationManagerInstance = MonetizationManager.getInstance();
