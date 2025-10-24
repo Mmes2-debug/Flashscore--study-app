@@ -1,8 +1,8 @@
-import { SecurityUtils } from './securityUtils';
+import { SecurityUtils } from '@shared/utils/securityUtils';
 // Assume ClientStorage is available for client-side storage operations, similar to localStorage
 // If ClientStorage is not defined, you might need to import or define it.
 // For demonstration, let's assume it's a global object or imported from a utility file.
-// import ClientStorage from './clientStorage'; // Example import
+// import ClientStorage from '@shared/utils/clientStorage'; // Example import
 
 // Mock ClientStorage if it's not globally available or imported elsewhere
 const ClientStorage = typeof window !== 'undefined' ? window.localStorage : {
@@ -453,7 +453,7 @@ class UserManager {
 
   private static initializeUserWallet(userId: string): void {
     // Import PiCoinManager dynamically to avoid circular dependency
-    import('./piCoinManager').then(({ default: PiCoinManager }) => {
+    import('@shared/utils/piCoinManager').then(({ default: PiCoinManager }) => {
       // Give welcome bonus
       // PiCoinManager.addTransaction is not available - implement transaction logic directly
       // await PiCoinManager.addTransaction({
