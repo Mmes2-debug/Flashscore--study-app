@@ -3,21 +3,19 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-
-interface Feature {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  category: 'ai' | 'social' | 'analytics' | 'education' | 'safety';
-  status: 'live' | 'beta' | 'coming-soon';
-  link?: string;
-}
+import { FEATURE_REGISTRY, getFeaturesByCategory, type FeatureMetadata } from '@/app/features/registry';
 
 export function FeatureShowcase() {
   const [activeCategory, setActiveCategory] = useState<string>('all');
 
-  const features: Feature[] = [
+  // Convert registry to array format
+  const features: FeatureMetadata[] = Object.values(FEATURE_REGISTRY).map(feature => ({
+    ...feature,
+    title: feature.name
+  }));
+
+  // Legacy features array kept for backwards compatibility
+  const legacyFeatures = [
     {
       id: 'ai-predictions',
       title: 'AI-Powered Predictions',

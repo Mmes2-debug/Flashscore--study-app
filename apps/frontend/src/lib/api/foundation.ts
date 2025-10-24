@@ -35,14 +35,14 @@ export interface LeaderboardEntry {
   contributions?: number;
 }
 
+import { sharedAPIClient } from '@magajico/shared';
+
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://0.0.0.0:3001';
 
 export const foundationApi = {
   async getProgress(userId: string): Promise<FoundationData> {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/foundation/${userId}`);
-      if (!response.ok) throw new Error('Failed to fetch foundation progress');
-      const result = await response.json();
+      const result = await sharedAPIClient.get<{ data: FoundationData }>(`/api/foundation/${userId}`);
       return result.data;
     } catch (error) {
       console.error('Error fetching foundation progress:', error);

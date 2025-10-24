@@ -31,15 +31,25 @@ export { MobileHomeOptimizer } from './MobileHomeOptimizer';
 export { MobileInstallPrompter } from './MobileInstallPrompter';
 export { TouchButton, SwipeableCard, PullToRefresh } from './MobileOptimizations';
 
+// ============================================
+// CORE UI COMPONENTS
+// ============================================
+
 // Theme & Settings
 export { ThemeToggle } from './ThemeToggle';
 export { BackendStatusIndicator } from './BackendStatusIndicator';
 export { LanguageSwitcher } from './LanguageSwitcher';
 
-// Content Components
+// Navigation & Layout
 export { AuthorsSidebar } from './AuthorsSidebar';
-export { ComprehensiveSportsHub } from './ComprehensiveSportsHub';
-export { ChessboardCompetitiveAnalysis } from './ChessboardCompetitiveAnalysis';
+export { ManagementNav } from './ManagementNav';
+export { ManagementSidebar } from './ManagementSidebar';
+export { BottomNavigation } from './BottomNavigation';
+export { Header } from './Header';
+
+// ============================================
+// FEATURE COMPONENTS
+// ============================================
 
 // Feature Showcases
 export { FeatureShowcase } from './FeatureShowcase';
@@ -48,9 +58,37 @@ export { UserFriendlyFeatures } from './UserFriendlyFeatures';
 
 // Sports & Match Tracking
 export { FlashScoreMatchTracker } from './FlashScoreMatchTracker';
+export { ComprehensiveSportsHub } from './ComprehensiveSportsHub';
+export { LiveMatchTracker } from './LiveMatchTracker';
+export { LiveScoreCard } from './LiveScoreCard';
+
+// Analytics & Insights
+export { ChessboardCompetitiveAnalysis } from './ChessboardCompetitiveAnalysis';
+export { AdvancedAnalytics } from './AdvancedAnalytics';
+
+// ============================================
+// USER EXPERIENCE
+// ============================================
 
 // Kids Mode
 export { KidsModeDashboard } from './KidsModeDashboard';
 
-// iOS Style Features
+// iOS & Mobile Features
 export { IOSStyleFeatures } from './IOSStyleFeatures';
+export { HapticFeedback } from './HapticFeedback';
+
+// Social & Sharing
+export { EnhancedSocialShare } from './EnhancedSocialShare';
+export { ChallengeFriends } from './ChallengeFriends';
+
+// ============================================
+// UTILITY COMPONENTS
+// ============================================
+
+// Loading & Error States
+export { LoadingSpinner } from './LoadingSpinner';
+export { LoadingSkeleton } from './LoadingSkeleton';
+export { AppErrorBoundary } from './AppErrorBoundary';
+
+// Re-export from nested directories for convenience
+export type { Component } from './FeatureHub';
