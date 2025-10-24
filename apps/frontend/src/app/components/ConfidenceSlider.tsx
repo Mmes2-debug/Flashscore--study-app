@@ -404,5 +404,3 @@ export function ConfidenceSlider({
     </div>
   );
 }
-
-export { ConfidenceSlider };

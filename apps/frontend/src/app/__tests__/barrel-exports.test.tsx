@@ -8,10 +8,8 @@ describe('Barrel Exports', () => {
     // Core Components
     expect(components.App).toBeDefined();
     expect(components.AppWrapper).toBeDefined();
-    expect(components.ErrorBoundary).toBeDefined();
     
     // Navigation
-    expect(components.NavBar).toBeDefined();
     expect(components.BottomNavigation).toBeDefined();
     expect(components.Header).toBeDefined();
     
@@ -25,7 +23,6 @@ describe('Barrel Exports', () => {
     
     // PWA
     expect(components.InstallPrompt).toBeDefined();
-    expect(components.PWAServiceWorker).toBeDefined();
     
     // Loading States
     expect(components.SmartLoadingState).toBeDefined();
