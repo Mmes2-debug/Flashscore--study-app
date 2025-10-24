@@ -49,7 +49,6 @@ const PaymentSchema: Schema = new Schema(
     providerTransactionId: {
       type: String,
       required: true,
-      unique: true,
     },
     description: {
       type: String,
@@ -80,6 +79,6 @@ const PaymentSchema: Schema = new Schema(
 // Indexes for common queries
 PaymentSchema.index({ userId: 1, createdAt: -1 });
 PaymentSchema.index({ status: 1, createdAt: -1 });
-PaymentSchema.index({ providerTransactionId: 1 });
+PaymentSchema.index({ providerTransactionId: 1 }, { unique: true });
 
 export default mongoose.model<IPayment>('Payment', PaymentSchema);

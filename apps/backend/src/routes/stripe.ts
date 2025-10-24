@@ -1,6 +1,8 @@
 import { FastifyPluginAsync, FastifyRequest, FastifyReply } from 'fastify';
 import Stripe from 'stripe';
 import Payment from '../models/Payment';
+import User from '../models/User';
+import { authenticateToken } from '../middleware/authMiddleware';
 
 const MINIMUM_AGE_FOR_PAYMENTS = 18;
 const MINIMUM_AGE_WITH_CONSENT = 13;
@@ -15,15 +17,10 @@ interface CreatePaymentIntentBody {
   amount: number;
   currency?: string;
   description?: string;
-  userAge?: number;
-  isMinor?: boolean;
-  parentalConsent?: boolean;
-  userId: string;
 }
 
 interface ConfirmPaymentBody {
   paymentIntentId: string;
-  userId: string;
 }
 
 interface WebhookRequest extends FastifyRequest {
@@ -33,13 +30,30 @@ interface WebhookRequest extends FastifyRequest {
 const stripeRoutes: FastifyPluginAsync = async (fastify) => {
   /**
    * POST /create-payment-intent
-   * Create a Stripe Payment Intent
+   * Create a Stripe Payment Intent (Authenticated)
+   * 
+   * NOTE: To complete payments, integrate Stripe.js/Elements on the frontend:
+   * 1. Use the returned clientSecret with Stripe Elements
+   * 2. Collect card details securely on the frontend
+   * 3. Call stripe.confirmCardPayment(clientSecret, { payment_method })
+   * 4. Stripe webhooks will update the payment status automatically
    */
   fastify.post<{ Body: CreatePaymentIntentBody }>(
     '/create-payment-intent',
+    {
+      preHandler: authenticateToken,
+    },
     async (request, reply) => {
       try {
-        const { amount, currency = 'USD', description, userAge, isMinor, parentalConsent, userId } = request.body;
+        const { amount, currency = 'USD', description } = request.body;
+        const userId = request.user?.userId;
+
+        if (!userId) {
+          return reply.status(401).send({
+            success: false,
+            error: 'User not authenticated',
+          });
+        }
 
         // Validate amount
         if (!amount || amount <= 0) {
@@ -49,15 +63,19 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
           });
         }
 
-        // Validate userId
-        if (!userId) {
-          return reply.status(400).send({
+        // Get user from database to verify age and consent
+        const user = await User.findById(userId);
+        if (!user) {
+          return reply.status(404).send({
             success: false,
-            error: 'User ID is required',
+            error: 'User not found',
           });
         }
 
-        // Age verification
+        const userAge = user.age;
+        const parentalConsent = user.parentalConsent || false;
+
+        // Age verification from trusted user profile
         if (userAge !== undefined) {
           // Block payments for users under 13
           if (userAge < MINIMUM_AGE_WITH_CONSENT) {
@@ -96,10 +114,11 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
           amount: Math.round(amount * 100), // Convert to cents
           currency: currency.toLowerCase(),
           description: description || 'Payment',
+          automatic_payment_methods: { enabled: true },
           metadata: {
             userId,
             userAge: userAge?.toString() || '',
-            isMinor: isMinor?.toString() || 'false',
+            isMinor: (userAge && userAge < MINIMUM_AGE_FOR_PAYMENTS)?.toString() || 'false',
             parentalConsent: parentalConsent?.toString() || 'false',
           },
         });
@@ -141,29 +160,54 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
 
   /**
    * POST /confirm-payment
-   * Confirm a payment and update status
+   * Retrieve payment status (Authenticated)
+   * 
+   * NOTE: This endpoint checks the status of a payment intent.
+   * In production, payment confirmation happens via Stripe.js on the frontend,
+   * and webhooks update the database automatically.
    */
   fastify.post<{ Body: ConfirmPaymentBody }>(
     '/confirm-payment',
+    {
+      preHandler: authenticateToken,
+    },
     async (request, reply) => {
       try {
-        const { paymentIntentId, userId } = request.body;
+        const { paymentIntentId } = request.body;
+        const userId = request.user?.userId;
 
-        if (!paymentIntentId || !userId) {
+        if (!userId) {
+          return reply.status(401).send({
+            success: false,
+            error: 'User not authenticated',
+          });
+        }
+
+        if (!paymentIntentId) {
           return reply.status(400).send({
             success: false,
-            error: 'Payment Intent ID and User ID are required',
+            error: 'Payment Intent ID is required',
           });
         }
 
         // Retrieve the payment intent from Stripe
         const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
+        // Map Stripe status to our status
+        let status: 'pending' | 'succeeded' | 'failed' | 'cancelled' = 'pending';
+        if (paymentIntent.status === 'succeeded') {
+          status = 'succeeded';
+        } else if (paymentIntent.status === 'canceled') {
+          status = 'cancelled';
+        } else if (paymentIntent.status === 'payment_failed' || paymentIntent.status === 'requires_payment_method') {
+          status = 'failed';
+        }
+
         // Update payment status in database
         const payment = await Payment.findOneAndUpdate(
           { providerTransactionId: paymentIntentId, userId },
           {
-            status: paymentIntent.status === 'succeeded' ? 'succeeded' : paymentIntent.status === 'canceled' ? 'cancelled' : 'failed',
+            status,
             metadata: {
               stripePaymentIntentId: paymentIntent.id,
               stripeStatus: paymentIntent.status,
@@ -176,7 +220,7 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
         if (!payment) {
           return reply.status(404).send({
             success: false,
-            error: 'Payment not found',
+            error: 'Payment not found or does not belong to this user',
           });
         }
 
@@ -194,21 +238,32 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
         request.log.error(error);
         return reply.status(500).send({
           success: false,
-          error: 'Failed to confirm payment',
+          error: 'Failed to retrieve payment status',
         });
       }
     }
   );
 
   /**
-   * GET /transactions/:userId
-   * Get user's payment history
+   * GET /transactions
+   * Get authenticated user's payment history
    */
-  fastify.get<{ Params: { userId: string }; Querystring: { limit?: string; status?: string } }>(
-    '/transactions/:userId',
+  fastify.get<{ Querystring: { limit?: string; status?: string } }>(
+    '/transactions',
+    {
+      preHandler: authenticateToken,
+    },
     async (request, reply) => {
       try {
-        const { userId } = request.params;
+        const userId = request.user?.userId;
+        
+        if (!userId) {
+          return reply.status(401).send({
+            success: false,
+            error: 'User not authenticated',
+          });
+        }
+
         const { limit = '50', status } = request.query;
 
         const query: any = { userId };
@@ -239,6 +294,22 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
   /**
    * POST /webhook
    * Handle Stripe webhooks
+   * 
+   * IMPORTANT: For production use, configure Fastify to preserve raw request bodies
+   * for webhook signature verification. Options:
+   * 
+   * 1. Use fastify-raw-body plugin:
+   *    npm install fastify-raw-body
+   *    await fastify.register(require('fastify-raw-body'), {
+   *      field: 'rawBody',
+   *      global: false,
+   *      routes: ['/api/stripe/webhook']
+   *    })
+   * 
+   * 2. Or configure specific routes with addContentTypeParser
+   * 
+   * Without raw body access, signature verification will fail and webhooks won't work.
+   * For now, this endpoint will log errors but won't process webhooks correctly.
    */
   fastify.post(
     '/webhook',
@@ -248,20 +319,23 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
         const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
         if (!webhookSecret) {
-          request.log.warn('Stripe webhook secret not configured');
+          request.log.warn('⚠️  Stripe webhook secret not configured - set STRIPE_WEBHOOK_SECRET');
           return reply.status(400).send({ error: 'Webhook secret not configured' });
         }
 
         let event: Stripe.Event;
 
         try {
+          // NOTE: This will fail without raw body handling - see documentation above
+          const body = request.rawBody || JSON.stringify(request.body);
           event = stripe.webhooks.constructEvent(
-            request.rawBody || request.body as any,
+            body,
             sig,
             webhookSecret
           );
         } catch (err: any) {
-          request.log.error(`Webhook signature verification failed: ${err.message}`);
+          request.log.error(`⚠️  Webhook signature verification failed: ${err.message}`);
+          request.log.error(`   This is expected without raw body handling - see route documentation`);
           return reply.status(400).send({ error: `Webhook Error: ${err.message}` });
         }
 
@@ -273,7 +347,7 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
               { providerTransactionId: paymentIntent.id },
               { status: 'succeeded' }
             );
-            request.log.info(`Payment succeeded: ${paymentIntent.id}`);
+            request.log.info(`✅ Payment succeeded: ${paymentIntent.id}`);
             break;
           }
 
@@ -283,7 +357,7 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
               { providerTransactionId: paymentIntent.id },
               { status: 'failed' }
             );
-            request.log.info(`Payment failed: ${paymentIntent.id}`);
+            request.log.info(`❌ Payment failed: ${paymentIntent.id}`);
             break;
           }
 
@@ -293,12 +367,12 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
               { providerTransactionId: paymentIntent.id },
               { status: 'cancelled' }
             );
-            request.log.info(`Payment cancelled: ${paymentIntent.id}`);
+            request.log.info(`🚫 Payment cancelled: ${paymentIntent.id}`);
             break;
           }
 
           default:
-            request.log.info(`Unhandled event type: ${event.type}`);
+            request.log.info(`ℹ️  Unhandled webhook event type: ${event.type}`);
         }
 
         return reply.send({ received: true });

@@ -2,20 +2,41 @@
 
 import React, { useState } from 'react';
 
+/**
+ * Stripe Payment Form Component
+ * 
+ * IMPORTANT: This is a DEMO component. For production use, you MUST:
+ * 
+ * 1. Install Stripe.js:
+ *    npm install @stripe/stripe-js @stripe/react-stripe-js
+ * 
+ * 2. Wrap your app with StripeProvider:
+ *    import { loadStripe } from '@stripe/stripe-js';
+ *    import { Elements } from '@stripe/react-stripe-js';
+ *    const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+ *    <Elements stripe={stripePromise}>
+ *      <StripePaymentForm {...props} />
+ *    </Elements>
+ * 
+ * 3. Use Stripe Elements to collect card details:
+ *    import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+ *    const stripe = useStripe();
+ *    const elements = useElements();
+ *    const result = await stripe.confirmCardPayment(clientSecret, {
+ *      payment_method: { card: elements.getElement(CardElement) }
+ *    });
+ * 
+ * This demo component does NOT collect real card details and payments will not complete.
+ */
+
 interface StripePaymentFormProps {
-  userId: string;
-  userAge?: number;
-  isMinor?: boolean;
-  parentalConsent?: boolean;
+  accessToken: string;
   onSuccess?: (paymentId: string) => void;
   onError?: (error: string) => void;
 }
 
 export const StripePaymentForm: React.FC<StripePaymentFormProps> = ({
-  userId,
-  userAge,
-  isMinor,
-  parentalConsent,
+  accessToken,
   onSuccess,
   onError,
 }) => {
@@ -38,18 +59,17 @@ export const StripePaymentForm: React.FC<StripePaymentFormProps> = ({
         throw new Error('Please enter a valid amount');
       }
 
-      // Step 1: Create payment intent
+      // Step 1: Create payment intent (authenticated)
       const intentResponse = await fetch('/api/payments/create-intent', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
         body: JSON.stringify({
           amount: amountNum,
           currency: 'USD',
           description: description || 'Payment',
-          userAge,
-          isMinor,
-          parentalConsent,
-          userId,
         }),
       });
 
@@ -59,17 +79,21 @@ export const StripePaymentForm: React.FC<StripePaymentFormProps> = ({
         throw new Error(intentData.error || 'Failed to create payment intent');
       }
 
-      // Step 2: In a real app, you would use Stripe Elements here to collect card details
-      // For demo purposes, we'll simulate successful payment
+      // Step 2: In a real app, you would use Stripe.js here to collect card details
+      // Example: const result = await stripe.confirmCardPayment(intentData.clientSecret, {...});
+      // For demo purposes, we'll just check the payment status
       console.log('Payment Intent Created:', intentData.paymentIntentId);
+      console.log('Client Secret (use with Stripe.js):', intentData.clientSecret);
 
-      // Step 3: Confirm payment
+      // Step 3: Check payment status (in production, webhooks handle this automatically)
       const confirmResponse = await fetch('/api/payments/confirm', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
         body: JSON.stringify({
           paymentIntentId: intentData.paymentIntentId,
-          userId,
         }),
       });
 
@@ -111,19 +135,21 @@ export const StripePaymentForm: React.FC<StripePaymentFormProps> = ({
         💳 Make a Payment
       </h2>
 
-      {isMinor && (
-        <div style={{
-          padding: '12px',
-          backgroundColor: '#fef3c7',
-          borderLeft: '4px solid #f59e0b',
-          marginBottom: '16px',
-          borderRadius: '4px',
-        }}>
-          <p style={{ margin: 0, fontSize: '0.9rem', color: '#92400e' }}>
-            ⚠️ Minor account - Maximum transaction: $50
-          </p>
-        </div>
-      )}
+      <div style={{
+        padding: '12px',
+        backgroundColor: '#fef3c7',
+        borderLeft: '4px solid #f59e0b',
+        marginBottom: '16px',
+        borderRadius: '4px',
+      }}>
+        <p style={{ margin: 0, fontSize: '0.9rem', color: '#92400e', fontWeight: '600' }}>
+          ⚠️ DEMO MODE
+        </p>
+        <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: '#92400e' }}>
+          This component creates payment intents but does not collect card details.
+          Integrate Stripe Elements for production use.
+        </p>
+      </div>
 
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '16px' }}>

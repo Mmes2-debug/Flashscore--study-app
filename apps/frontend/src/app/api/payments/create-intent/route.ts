@@ -5,11 +5,22 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://0.0.0.0:3001';
 
-    // Forward request to backend Stripe API
+    // Get auth token from request headers
+    const authHeader = request.headers.get('authorization');
+    
+    if (!authHeader) {
+      return NextResponse.json(
+        { success: false, error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    // Forward request to backend Stripe API with authentication
     const response = await fetch(`${backendUrl}/api/stripe/create-payment-intent`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': authHeader,
       },
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(10000),
