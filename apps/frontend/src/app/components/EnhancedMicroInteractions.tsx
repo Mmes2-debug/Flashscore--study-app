@@ -1,9 +1,13 @@
 "use client";
 
 import { useState } from 'react';
-import { ConfidenceSlider, LiveOddsUpdater, PullToRefreshWrapper } from '@components';
+import { 
+  ConfidenceSlider, 
+  LiveOddsUpdater, 
+  PullToRefreshWrapper,
+  HapticFeedback 
+} from '@components';
 import { useGestureControls, useSwipeableItem } from '@hooks/useGestureControls';
-import { HapticFeedback } from '@components';
 
 const haptic = HapticFeedback;
 

@@ -1,6 +1,9 @@
-export * from './database';
-export * from './newsAuthorService';
-export * from './newsService';
-export * from './searchService';
-export * from './timeZoneService';
-export * from './translationService';
+
+export { newsAuthorService } from './newsAuthorService';
+export { newsService } from './newsService';
+export { searchService } from './searchService';
+export { timeZoneService } from './timeZoneService';
+export { translationService } from './translationService';
+
+// Re-export types
+export type { NewsItem, NewsAuthor } from './newsService';
