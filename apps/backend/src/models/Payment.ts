@@ -81,4 +81,4 @@ PaymentSchema.index({ userId: 1, createdAt: -1 });
 PaymentSchema.index({ status: 1, createdAt: -1 });
 PaymentSchema.index({ providerTransactionId: 1 }, { unique: true });
 
-export default mongoose.model<IPayment>('Payment', PaymentSchema);
+export const Payment = mongoose.model<IPayment>('Payment', PaymentSchema);

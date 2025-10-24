@@ -79,7 +79,7 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
         }
 
         const userAge = user.age;
-        const parentalConsent = user.parentalConsent || false;
+        const parentalConsent = user.coppaConsent?.granted || false;
 
         // Age verification from trusted user profile
         if (userAge !== undefined) {
@@ -205,7 +205,7 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
           status = 'succeeded';
         } else if (paymentIntent.status === 'canceled') {
           status = 'cancelled';
-        } else if (paymentIntent.status === 'payment_failed' || paymentIntent.status === 'requires_payment_method') {
+        } else if (paymentIntent.status === 'requires_payment_method' || (paymentIntent as any).last_payment_error) {
           status = 'failed';
         }
 
