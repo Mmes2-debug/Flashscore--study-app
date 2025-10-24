@@ -1,3 +1,4 @@
+
 const createNextIntlPlugin = require("next-intl/plugin");
 const withNextIntl = createNextIntlPlugin("./src/i18n.ts");
 
@@ -8,6 +9,7 @@ const nextConfig = {
     externalDir: true,
     optimizeCss: true,
     webpackBuildWorker: true,
+    esmExternals: 'loose',
   },
   assetPrefix: undefined,
 
@@ -25,9 +27,6 @@ const nextConfig = {
     NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL || 'http://0.0.0.0:3001',
     ML_SERVICE_URL: process.env.ML_SERVICE_URL || 'http://0.0.0.0:8000',
   },
-  
-  // Enable React strict mode for better mobile performance
-  reactStrictMode: true,
 
   // For monorepo setup with shared packages
   transpilePackages: ["@magajico/shared"],
