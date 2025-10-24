@@ -1,7 +1,8 @@
-// Core Components
-export { App } from './App';
-export { AppWrapper } from './AppWrapper';
+// Error Monitoring & Boundaries
+export { ErrorMonitor } from './ErrorMonitor';
 export { ProductionErrorBoundary as ErrorBoundary } from './ErrorBoundary/ErrorBoundaryWithPerformance';
+export { BackendHealthMonitor } from './BackendHealthMonitor';
+export { BackendStatusIndicator } from './BackendStatusIndicator';
 
 // Navigation
 export { BottomNavigation } from './BottomNavigation';
@@ -19,10 +20,13 @@ export { HapticFeedback } from './HapticFeedback';
 export { InstallPrompt } from './InstallPrompt';
 export { PWAServiceWorker } from './PWAServiceWorker';
 
-// Loading States
-export { SmartLoadingState } from './SmartLoadingState';
-export { LoadingSkeleton } from './LoadingSkeleton';
-export { LoadingSpinner } from './LoadingSpinner';
+// Feature Components
+export { FeatureShowcase } from './FeatureShowcase';
+export { FeatureHub } from './FeatureHub';
+
+// Live Features
+export { LiveMatchTracker } from './LiveMatchTracker';
+export { default as LiveScoreCard } from './LiveScoreCard';
 
 // Error Handling
 export { ErrorMonitor } from './ErrorMonitor';
@@ -43,25 +47,8 @@ export { LoginModal } from './LoginModal';
 export { MobileInstallPrompter } from './MobileInstallPrompter';
 export { ThemeToggle } from './ThemeToggle';
 
-// Management Components
-export { ManagementNav } from './ManagementNav';
-export { ManagementSidebar } from './ManagementSidebar';
-
-// Advanced Features
-export { AICoachAssistant } from './AICoachAssistant';
-export { ARPredictionOverlay } from './ARPredictionOverlay';
-export { AchievementCelebration } from './AchievementCelebration';
-export { AchievementSystem } from './AchievementSystem';
-export { AdvancedAnalytics } from './AdvancedAnalytics';
-export { BlockchainVerification } from './BlockchainVerification';
-export { ChallengeFriends } from './ChallengeFriends';
-export { ChallengeSystem } from './ChallengeSystem';
-export { CollaborativePrediction } from './CollaborativePrediction';
-export { CommunityVoting } from './CommunityVoting';
-export { ContentPaywall } from './ContentPaywall';
-export { CrossPlatformSync } from './CrossPlatformSync';
-export { ExpertFollowSystem } from './ExpertFollowSystem';
-export { MicroPredictions } from './MicroPredictions';
+// Alerts & Notifications
+export { default as FloatingAlert, triggerFloatingAlert } from './FloatingAlert';
 
 // Type exports
 export type { Achievement } from './AchievementCelebration';
