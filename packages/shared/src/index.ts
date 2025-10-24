@@ -29,6 +29,9 @@ export {
   apiManager
 } from './libs/utils';
 
+// Re-export all utilities for wildcard import support
+export * from './libs/utils';
+
 // Type exports
 export type * from './libs/types';
 export type * from './libs/models';

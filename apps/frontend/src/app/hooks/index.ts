@@ -9,7 +9,7 @@ export { useColorBlindMode } from './useColorBlindMode';
 
 // Device & Platform
 export { useMobile } from './useMobile';
-export { useGestureControls } from './useGestureControls';
+export { useGestureControls, useSwipeableItem } from './useGestureControls';
 export { useBatteryOptimization } from './useBatteryOptimization';
 
 // Performance & Monitoring

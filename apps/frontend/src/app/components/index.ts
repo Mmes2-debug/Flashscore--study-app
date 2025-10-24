@@ -146,3 +146,5 @@ export { BackgroundParticles } from './BackgroundParticles';
 export { LazyComponent } from './LazyComponent';
 export { ComponentLoader } from './ComponentLoader';
 export { AdaptiveImageLoader } from './AdaptiveImageLoader';
+export { HapticFeedback } from './HapticFeedback';
+export { EnhancedMicroInteractions } from './EnhancedMicroInteractions';

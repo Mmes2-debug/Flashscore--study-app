@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { ConfidenceSlider, LiveOddsUpdater, PullToRefreshWrapper } from '@components';
 import { useGestureControls, useSwipeableItem } from '@hooks/useGestureControls';
-import { haptic } from '@components/HapticFeedback';
+import { HapticFeedback } from '@components';
+
+const haptic = HapticFeedback;
 
 function EnhancedMicroInteractions() {
   const [selectedTab, setSelectedTab] = useState(0);
