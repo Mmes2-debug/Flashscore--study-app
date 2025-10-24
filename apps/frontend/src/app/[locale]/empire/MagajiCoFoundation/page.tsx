@@ -195,14 +195,16 @@ export default function MagajiCoFoundation() {
   // Check for newly unlocked phases
   useEffect(() => {
     phases.forEach((phase) => {
-      if (totalPower >= phase.requiredPower && !phase.unlocked && !phase.completed) {
-        setNewlyUnlocked(phase.id);
-        showNotification(`🎉 ${phase.name} unlocked!`, 'success');
-        setTimeout(() => setNewlyUnlocked(null), 1500);
-      }
-    });
-  }, [totalPower, phases]);
-
+     
+useEffect(() => {
+  phases.forEach((phase) => {
+    if (phase.requiredPower !== undefined && totalPower >= phase.requiredPower && !phase.unlocked && !phase.completed) {
+      setNewlyUnlocked(phase.id);
+      showNotification(`🎉 ${phase.name} unlocked!`, 'success');
+      setTimeout(() => setNewlyUnlocked(null), 1500);
+    }
+  });
+}, [totalPower, phases]);
   const startBuilding = async (phaseId: string) => {
     const phase = phases.find(p => p.id === phaseId);
     if (!phase) return;
