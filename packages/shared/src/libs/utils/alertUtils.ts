@@ -1,21 +1,35 @@
-// FloatingAlert is a frontend component, not available in shared package
-// This utility should be moved to frontend or refactored
 
+```typescript
+// AlertManager for shared package - server-side compatible
 export class AlertManager {
+  private static alerts: Array<{message: string; type: string; timestamp: number}> = [];
+
   static showInfo(message: string, persistent: boolean = false) {
-    // triggerFloatingAlert(message, 'info', persistent);
+    this.logAlert(message, 'info', persistent);
   }
 
   static showSuccess(message: string, persistent: boolean = false) {
-    // triggerFloatingAlert(message, 'success', persistent);
+    this.logAlert(message, 'success', persistent);
   }
 
   static showWarning(message: string, persistent: boolean = false) {
-    // triggerFloatingAlert(message, 'warning', persistent);
+    this.logAlert(message, 'warning', persistent);
   }
 
   static showError(message: string, persistent: boolean = true) {
-    // triggerFloatingAlert(message, 'error', persistent);
+    this.logAlert(message, 'error', persistent);
+  }
+
+  private static logAlert(message: string, type: string, persistent: boolean) {
+    const alert = { message, type, timestamp: Date.now(), persistent };
+    this.alerts.unshift(alert);
+    if (this.alerts.length > 100) this.alerts.pop();
+    
+    // Server-side logging
+    if (typeof console !== 'undefined') {
+      const emoji = type === 'error' ? '❌' : type === 'warning' ? '⚠️' : type === 'success' ? '✅' : 'ℹ️';
+      console.log(`${emoji} [${type.toUpperCase()}]: ${message}`);
+    }
   }
 
   // Sports-specific alerts
@@ -53,6 +67,13 @@ export class AlertManager {
   static showNewsUpdate(count: number) {
     this.showInfo(`${count} new sports articles available!`);
   }
-}
 
-// No default export - class is already exported
+  static getAlerts() {
+    return this.alerts;
+  }
+
+  static clearAlerts() {
+    this.alerts = [];
+  }
+}
+```

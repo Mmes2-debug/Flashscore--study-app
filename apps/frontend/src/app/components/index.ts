@@ -16,7 +16,7 @@ export { AutoDiagnostics } from './AutoDiagnostics';
 export { BackendHealthMonitor } from './BackendHealthMonitor';
 
 // Loading Components
-export { LoadingSkeleton, NewsLoadingSkeleton, QuizLoadingSkeleton, CardLoadingSkeleton, ListLoadingSkeleton } from './LoadingSkeleton';
+export { NewsLoadingSkeleton, QuizLoadingSkeleton, CardLoadingSkeleton, ListLoadingSkeleton } from './LoadingSkeleton';
 
 // Navigation & Layout
 export { NavBar } from './NavBar';

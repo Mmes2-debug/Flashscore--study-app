@@ -104,7 +104,7 @@ export const connectDB = async (): Promise<void | null> => {
 
     if (process.env.NODE_ENV === 'production') {
       console.log('⚠️  Retrying connection in 5 seconds...');
-      setTimeout(() => connectDB(), 5000);
+      setTimeout(() => connectDB(), 50000);
     } else {
       process.exit(1);
     }
