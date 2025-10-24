@@ -28,32 +28,35 @@ export function BackendHealthMonitor() {
 
     // Check backend API with metrics
     try {
-      const res = await fetch('/api/backend/health', { signal: AbortSignal.timeout(5000) });
+      const res = await fetch('/api/backend/health', { 
+        signal: AbortSignal.timeout(8000),
+        cache: 'no-store'
+      });
       if (res.ok) {
         const data = await res.json();
         newHealth.backend = data.status === 'ok' || data.status === 'degraded' ? 'online' : 'offline';
         newHealth.database = data.db?.status === 'ok' ? 'online' : 'offline';
-
-        // Track metrics in console for debugging
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Backend Health:', data);
-        }
       } else {
         newHealth.backend = 'offline';
         newHealth.database = 'offline';
       }
     } catch (err: any) {
-      console.error('Backend health check failed:', err.message || err);
+      if (err.name !== 'TimeoutError' && process.env.NODE_ENV === 'development') {
+        console.warn('Backend health check failed:', err.message || err);
+      }
       newHealth.backend = 'offline';
       newHealth.database = 'offline';
     }
 
     // Check ML service
     try {
-      const res = await fetch('/api/ml/health', { signal: AbortSignal.timeout(5000) });
+      const res = await fetch('/api/ml/health', { 
+        signal: AbortSignal.timeout(8000),
+        cache: 'no-store'
+      });
       newHealth.ml = res.ok ? 'online' : 'offline';
     } catch (err: any) {
-      if (process.env.NODE_ENV === 'development') {
+      if (err.name !== 'TimeoutError' && process.env.NODE_ENV === 'development') {
         console.warn('ML health check failed:', err.message || err);
       }
       newHealth.ml = 'offline';
@@ -64,7 +67,7 @@ export function BackendHealthMonitor() {
 
   useEffect(() => {
     checkHealth();
-    const interval = setInterval(checkHealth, 30000); // Check every 30s
+    const interval = setInterval(checkHealth, 60000); // Check every 60s
     return () => clearInterval(interval);
   }, []);
 
