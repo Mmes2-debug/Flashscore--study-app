@@ -150,7 +150,7 @@ task = "shell.exec"
 args = "echo \"Build complete!\""
 
 [deployment]
-build = ["sh", "-c", "cd apps/frontend && pnpm install && pnpm build"]
+build = ["sh", "-c", "npm install --legacy-peer-deps && npm run build --workspace=packages/shared && npm run build --workspace=apps/backend"]
 run = ["sh", "-c", "cd apps/backend && node dist/src/index.js"]
 
 [[deployment.responseHeaders]]
