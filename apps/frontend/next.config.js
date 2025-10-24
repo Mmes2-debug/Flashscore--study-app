@@ -10,8 +10,17 @@ const nextConfig = {
     optimizeCss: true,
     webpackBuildWorker: true,
     esmExternals: 'loose',
+    optimisticClientCache: false,
+    adjustFontFallbacks: true,
+    adjustFontFallbacksWithSizeAdjust: true,
   },
   assetPrefix: undefined,
+  
+  // Suppress hydration warnings in production
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
+  },
 
   // Production optimizations
   compress: true,
