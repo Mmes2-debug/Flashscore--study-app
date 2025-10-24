@@ -8,6 +8,7 @@ import os
 import asyncio
 from collections import deque
 import time
+from datetime import datetime
 
 # Request queue for load management
 request_queue = deque(maxlen=1000)
@@ -24,11 +25,11 @@ app = FastAPI(
 async def rate_limit_middleware(request: Request, call_next):
     client_ip = request.client.host
     current_time = time.time()
-    
+
     # Simple in-memory rate limiting (100 requests per minute per IP)
     if not hasattr(app.state, 'rate_limits'):
         app.state.rate_limits = {}
-    
+
     if client_ip in app.state.rate_limits:
         requests, window_start = app.state.rate_limits[client_ip]
         if current_time - window_start < 60:
@@ -39,7 +40,7 @@ async def rate_limit_middleware(request: Request, call_next):
             app.state.rate_limits[client_ip] = (1, current_time)
     else:
         app.state.rate_limits[client_ip] = (1, current_time)
-    
+
     response = await call_next(request)
     return response
 
@@ -79,7 +80,7 @@ class TrainingRequest(BaseModel):
 # Response models
 class PredictionResponse(BaseModel):
     model_config = {'protected_namespaces': ()}
-    
+
     prediction: str
     confidence: float
     probabilities: Dict[str, float]
@@ -104,29 +105,12 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    import psutil
-    import time
-    
-    # Advanced health metrics
-    cpu_percent = psutil.cpu_percent(interval=0.1)
-    memory = psutil.virtual_memory()
-    
-    status = "healthy"
-    if cpu_percent > 90 or memory.percent > 85:
-        status = "degraded"
-    
+    """Health check endpoint for monitoring"""
     return {
-        "status": status,
-        "model_loaded": predictor.model is not None,
-        "model_version": predictor.model_version,
-        "accuracy": predictor.accuracy,
-        "metrics": {
-            "cpu_percent": cpu_percent,
-            "memory_percent": memory.percent,
-            "memory_available_mb": memory.available / 1024 / 1024,
-            "uptime_seconds": time.time() - app.state.start_time if hasattr(app.state, 'start_time') else 0
-        },
-        "timestamp": time.time()
+        "status": "healthy",
+        "service": "ml",
+        "model_loaded": predictor is not None,
+        "timestamp": datetime.now().isoformat()
     }
 
 @app.on_event("startup")
@@ -143,10 +127,10 @@ async def get_model_info():
 async def predict(request: PredictionRequest):
     """
     Make a prediction based on match features.
-    
+
     Features (7 values, each 0-1):
     - home_form: Recent home team performance
-    - away_form: Recent away team performance  
+    - away_form: Recent away team performance
     - h2h_ratio: Head-to-head win ratio for home team
     - home_goals_for: Home team average goals scored
     - home_goals_against: Home team average goals conceded
@@ -156,16 +140,16 @@ async def predict(request: PredictionRequest):
     # Check cache first
     import hashlib
     cache_key = hashlib.md5(str(request.features).encode()).hexdigest()
-    
+
     if not hasattr(app.state, 'prediction_cache'):
         app.state.prediction_cache = {}
-    
+
     if cache_key in app.state.prediction_cache:
         cached_result, timestamp = app.state.prediction_cache[cache_key]
         if time.time() - timestamp < 300:  # 5 minute cache
             cached_result['cached'] = True
             return cached_result
-    
+
     try:
         # Use semaphore to limit concurrent predictions
         async with processing_semaphore:
@@ -181,10 +165,10 @@ async def predict(request: PredictionRequest):
             features_used=request.features,
             match_context=request.match_context
         )
-        
+
         # Cache the result
         app.state.prediction_cache[cache_key] = (response.dict(), time.time())
-        
+
         return response
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -235,9 +219,9 @@ async def get_statistics():
     Get prediction statistics and model performance metrics
     """
     from monitoring import monitor
-    
+
     runtime_stats = monitor.get_stats()
-    
+
     return {
         "model_version": predictor.model_version,
         "accuracy": predictor.accuracy,
@@ -256,7 +240,7 @@ async def get_metrics():
     """
     from monitoring import monitor
     stats = monitor.get_stats()
-    
+
     metrics = f"""# HELP ml_requests_total Total number of prediction requests
 # TYPE ml_requests_total counter
 ml_requests_total {stats['total_requests']}
@@ -278,9 +262,9 @@ ml_uptime_seconds {stats['uptime_seconds']}
 if __name__ == "__main__":
     port = int(os.getenv("PORT", os.getenv("ML_PORT", 8000)))
     environment = os.getenv("ENVIRONMENT", "development")
-    
-    print(f"🤖 Starting ML Service on http://0.0.0.0:{port} ({environment} mode)")
-    
+
+    print(f"🚀 ML Service started successfully")
+
     uvicorn.run(
         "api:app",
         host="0.0.0.0",

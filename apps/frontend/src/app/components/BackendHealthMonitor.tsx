@@ -33,7 +33,7 @@ export function BackendHealthMonitor() {
         const data = await res.json();
         newHealth.backend = data.status === 'ok' || data.status === 'degraded' ? 'online' : 'offline';
         newHealth.database = data.db?.status === 'ok' ? 'online' : 'offline';
-        
+
         // Track metrics in console for debugging
         if (process.env.NODE_ENV === 'development') {
           console.log('Backend Health:', data);
@@ -42,10 +42,8 @@ export function BackendHealthMonitor() {
         newHealth.backend = 'offline';
         newHealth.database = 'offline';
       }
-    } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('Backend health check failed:', err instanceof Error ? err.message : 'Unknown error');
-      }
+    } catch (err: any) {
+      console.error('Backend health check failed:', err.message || err);
       newHealth.backend = 'offline';
       newHealth.database = 'offline';
     }
@@ -54,9 +52,9 @@ export function BackendHealthMonitor() {
     try {
       const res = await fetch('/api/ml/health', { signal: AbortSignal.timeout(5000) });
       newHealth.ml = res.ok ? 'online' : 'offline';
-    } catch (err) {
+    } catch (err: any) {
       if (process.env.NODE_ENV === 'development') {
-        console.warn('ML health check failed:', err instanceof Error ? err.message : 'Unknown error');
+        console.warn('ML health check failed:', err.message || err);
       }
       newHealth.ml = 'offline';
     }
