@@ -464,8 +464,9 @@ export default function EnhancedMicroInteractions() {
             }
           }
         `}</style>
-    </div>
+      </div>
+    </PullToRefreshWrapper>
   );
 }
 
-export default EnhancedMicroInteractions;
+export { EnhancedMicroInteractions };
