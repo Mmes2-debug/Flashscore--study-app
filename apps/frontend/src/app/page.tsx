@@ -1,34 +1,20 @@
 "use client";
 
-import React, { Suspense } from 'react';
-import dynamic from 'next/dynamic';
+import React from 'react';
 import { useTranslations } from 'next-intl';
 import {
   ErrorMonitor,
   BackendHealthMonitor,
   SmartLoadingState,
-  LoadingSkeleton,
   FeatureShowcase,
   PWAServiceWorker,
   MobileMetaOptimizer,
-  MobilePerformanceOptimizer
+  MobilePerformanceOptimizer,
+  LatestNews,
+  SmartNewsFeed,
+  LiveMatchTracker,
+  PredictionInterface
 } from '@components';
-import { LatestNews } from '@components/LatestNews';
-
-const SmartNewsFeed = dynamic(() => import('@components/SmartNewsFeed').then(mod => ({ default: mod.SmartNewsFeed })), {
-  loading: () => <LoadingSkeleton />,
-  ssr: false
-});
-
-const LiveMatchTracker = dynamic(() => import('@components/LiveMatchTracker').then(mod => ({ default: mod.LiveMatchTracker })), {
-  loading: () => <LoadingSkeleton />,
-  ssr: false
-});
-
-const PredictionInterface = dynamic(() => import('@components/PredictionInterface').then(mod => ({ default: mod.PredictionInterface })), {
-  loading: () => <LoadingSkeleton />,
-  ssr: false
-});
 
 export default function HomePage() {
   const t = useTranslations('home');
@@ -54,20 +40,14 @@ export default function HomePage() {
 
           <FeatureShowcase />
 
-          <Suspense fallback={<SmartLoadingState />}>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <SmartNewsFeed />
-              <LiveMatchTracker />
-            </div>
-          </Suspense>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <SmartNewsFeed />
+            <LiveMatchTracker />
+          </div>
 
-          <Suspense fallback={<SmartLoadingState />}>
-            <PredictionInterface />
-          </Suspense>
+          <PredictionInterface />
 
-          <Suspense fallback={<SmartLoadingState />}>
-            <LatestNews />
-          </Suspense>
+          <LatestNews />
         </div>
       </main>
     </>
