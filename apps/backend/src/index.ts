@@ -11,6 +11,8 @@ import { newsAuthorsRoutes } from "./routes/newsAuthors.js";
 import { foundationRoutes } from "./routes/foundation.js";
 import errorsRoutes from "./routes/errors.js";
 import { authRoutes } from "./routes/auth.js";
+import stripeRoutes from "./routes/stripe.js";
+import paymentsRoutes from "./routes/payment.js";
 
 const fastify = Fastify({ logger: true });
 
@@ -38,6 +40,8 @@ const startServer = async () => {
     await fastify.register(newsAuthorsRoutes, { prefix: "/api/news-authors" });
     await fastify.register(foundationRoutes, { prefix: "/api" });
     await fastify.register(errorsRoutes, { prefix: "/api" });
+    await fastify.register(stripeRoutes, { prefix: "/api/stripe" });
+    await fastify.register(paymentsRoutes, { prefix: "/api/payments" });
 
     const PORT = Number(process.env.PORT) || 3001;
     await fastify.listen({ port: PORT, host: "0.0.0.0" });
@@ -51,7 +55,9 @@ const startServer = async () => {
     fastify.log.info(`   ✓ Foundation: /api/foundation/:userId (MongoDB)`);
     fastify.log.info(`   ✓ Errors: /api/errors/* (MongoDB)`);
     fastify.log.info(`   ✓ Authentication: /api/auth/* (JWT)`);
-    fastify.log.info(`📊 Models: Match, News, NewsAuthor, Prediction, User, Foundation, ErrorLog`);
+    fastify.log.info(`   ✓ Stripe Payments: /api/stripe/* (Stripe)`);
+    fastify.log.info(`   ✓ Payments: /api/payments/* (General)`);
+    fastify.log.info(`📊 Models: Match, News, NewsAuthor, Prediction, User, Foundation, ErrorLog, Payment`);
   } catch (err: unknown) {
     if (err instanceof Error) fastify.log.error(`❌ Server error: ${err.message}`);
     else fastify.log.error(`❌ Server error: ${err}`);
