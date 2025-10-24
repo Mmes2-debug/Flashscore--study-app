@@ -3,15 +3,21 @@ import Stripe from 'stripe';
 import Payment from '../models/Payment';
 import User from '../models/User';
 import { authenticateToken } from '../middleware/authMiddleware';
+import { validateStripeEnv, getStripeMode } from '../utils/validateStripeEnv';
 
 const MINIMUM_AGE_FOR_PAYMENTS = 18;
 const MINIMUM_AGE_WITH_CONSENT = 13;
 const MAX_MINOR_TRANSACTION = 50;
 
+// Validate environment variables
+const stripeConfig = validateStripeEnv();
+
 // Initialize Stripe
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+const stripe = new Stripe(stripeConfig.secretKey, {
   apiVersion: '2025-09-30.clover',
 });
+
+console.log(`✅ Stripe initialized in ${getStripeMode()} mode`);
 
 interface CreatePaymentIntentBody {
   amount: number;

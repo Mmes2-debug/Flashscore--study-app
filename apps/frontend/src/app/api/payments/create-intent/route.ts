@@ -1,3 +1,4 @@
+
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -16,13 +17,18 @@ export async function POST(request: NextRequest) {
     }
 
     // Forward request to backend Stripe API with authentication
+    // Backend will fetch user age/consent from database, not from request body
     const response = await fetch(`${backendUrl}/api/stripe/create-payment-intent`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': authHeader,
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        amount: body.amount,
+        currency: body.currency || 'USD',
+        description: body.description,
+      }),
       signal: AbortSignal.timeout(10000),
     });
 
