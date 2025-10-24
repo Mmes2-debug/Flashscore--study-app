@@ -324,4 +324,4 @@ const StakingSystem: React.FC = () => {
   );
 };
 
-export default StakingSystem;
+export { StakingSystem };

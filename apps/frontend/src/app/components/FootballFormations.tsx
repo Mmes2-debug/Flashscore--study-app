@@ -533,4 +533,4 @@ const FootballFormations: React.FC<FootballFormationsProps> = ({
   );
 };
 
-export default FootballFormations;
+export { FootballFormations };

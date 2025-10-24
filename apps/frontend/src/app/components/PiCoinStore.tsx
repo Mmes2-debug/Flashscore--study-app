@@ -299,4 +299,4 @@ const PiCoinStore: React.FC<PiCoinStoreProps> = ({ isOpen, onClose, userId, onPu
   );
 };
 
-export default PiCoinStore;
+export { PiCoinStore };

@@ -350,4 +350,4 @@ export { BackupManager };
   );
 };
 
-export default BackupSettings;
+export { BackupSettings };

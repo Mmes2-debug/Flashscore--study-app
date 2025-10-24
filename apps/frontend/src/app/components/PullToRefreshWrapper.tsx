@@ -13,7 +13,7 @@ interface PullToRefreshProps {
   releaseText?: string;
 }
 
-export default function PullToRefreshWrapper({
+export function PullToRefreshWrapper({
   onRefresh,
   children,
   pullThreshold = 80,

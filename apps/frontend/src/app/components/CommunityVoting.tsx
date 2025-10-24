@@ -573,4 +573,4 @@ const CommunityVoting: React.FC<CommunityVotingProps> = ({ currentUser }) => {
   );
 };
 
-export default CommunityVoting;
+export { CommunityVoting };
