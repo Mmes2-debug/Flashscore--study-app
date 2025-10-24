@@ -1,11 +1,11 @@
-
 export interface Phase {
   id: number;
   name: string;
   description: string;
-  requiredPower: number;
   unlocked: boolean;
   completed: boolean;
+  building?: boolean;
+  requiredPower: number;
   rewards?: {
     piCoins?: number;
     experience?: number;

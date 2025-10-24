@@ -1,5 +1,23 @@
 // src/libs/models/pytorchModel.ts
-import * as ort from 'onnxruntime-node';
+// Note: onnxruntime-node is optional - install if needed for production ML features
+// import * as ort from 'onnxruntime-node';
+
+// Type stub for ONNX runtime
+type InferenceSession = any;
+type Tensor = any;
+
+const ort = {
+  InferenceSession: {
+    create: async (path: string): Promise<InferenceSession> => {
+      throw new Error('onnxruntime-node not installed. Install with: npm install onnxruntime-node');
+    }
+  },
+  Tensor: class {
+    constructor(type: string, data: any, dims: number[]) {
+      throw new Error('onnxruntime-node not installed');
+    }
+  }
+};
 
 export interface ModelConfig {
   modelPath: string;

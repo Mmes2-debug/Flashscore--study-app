@@ -50,7 +50,7 @@ class MLEnhancement {
       const incorrectAvg = incorrectPredictions.reduce((sum, p) => sum + (p.features[feature] || 0), 0) / incorrectPredictions.length;
 
       const importance = Math.abs(correctAvg - incorrectAvg);
-      const impact = correctAvg > incorrectAvg ? 'positive' : 'negative';
+      const impact: 'positive' | 'negative' = correctAvg > incorrectAvg ? 'positive' : 'negative';
 
       return { feature, importance, impact };
     }).sort((a, b) => b.importance - a.importance);

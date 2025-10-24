@@ -49,59 +49,6 @@ class UserManager {
   }
 
   /**
-   * Load current user from storage
-   */
-  static loadCurrentUser(): User | null {
-    if (!this.isBrowser()) return null;
-
-    const currentUserId = this.getCurrentUserId();
-    if (!currentUserId) return null;
-
-    const users = this.getUsers();
-    return users.find(user => user.id === currentUserId) || null;
-  }
-
-  /**
-   * Get current user ID
-   */
-  static getCurrentUserId(): string | null {
-    if (!this.isBrowser()) return null;
-    return localStorage.getItem('currentUserId');
-  }
-
-  /**
-   * Get current user
-   */
-  static getCurrentUser(): User | null {
-    return this.loadCurrentUser();
-  }
-
-  /**
-   * Cleanup old session data
-   */
-  static cleanup(): void {
-    // In a real application, you might want to clean up expired sessions,
-    // invalid tokens, or old user data. For this example, we'll keep it simple.
-    if (this.isBrowser()) {
-      const users = this.getUsers();
-      const now = new Date();
-
-      // Remove users who haven't logged in for a long time (e.g., 1 year)
-      const activeUsers = users.filter(user => {
-        if (!user.lastLogin) return false;
-        const lastLoginDate = new Date(user.lastLogin);
-        return now.getTime() - lastLoginDate.getTime() < (365 * 24 * 60 * 60 * 1000);
-      });
-
-      // Update storage if users were removed
-      if (activeUsers.length < users.length) {
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(activeUsers));
-        console.log(`Cleaned up ${users.length - activeUsers.length} inactive users.`);
-      }
-    }
-  }
-
-  /**
    * Load the current user from storage
    */
   static loadCurrentUser(): User | null {
@@ -113,18 +60,6 @@ class UserManager {
       return users.find(user => user.id === currentUserId) || null;
     } catch (error) {
       console.error('Error loading current user:', error);
-      return null;
-    }
-  }
-
-  /**
-   * Get current user ID
-   */
-  static getCurrentUserId(): string | null {
-    try {
-      return ClientStorage.getItem(this.CURRENT_USER_KEY);
-    } catch (error) {
-      console.error('Error getting current user ID:', error);
       return null;
     }
   }
@@ -189,29 +124,6 @@ class UserManager {
     // TODO: Implement email verification process here
 
     return newUser;
-  }
-
-  static getCurrentUser(): User | null {
-    if (typeof window === 'undefined') return null;
-
-    try {
-      const userData = localStorage.getItem(this.CURRENT_USER_KEY);
-      if (!userData) {
-        return null;
-      }
-      const user: User = JSON.parse(userData);
-
-      // Check if session token is still valid (e.g., not expired)
-      if (user.sessionToken && !SecurityUtils.isTokenValid(user.sessionToken)) {
-        this.logoutUser();
-        return null;
-      }
-
-      return user;
-    } catch (error) {
-      console.error('Failed to get current user:', error);
-      return null;
-    }
   }
 
   static setCurrentUser(user: User): void {
@@ -333,6 +245,64 @@ class UserManager {
   }
 
   // Backup user's Pi coin data
+  /**
+   * Cleanup old session data
+   */
+  static cleanup(): void {
+    if (typeof window === 'undefined') return;
+    
+    const users = this.getAllUsers();
+    const now = new Date();
+
+    const activeUsers = users.filter(user => {
+      if (!user.lastLogin) return false;
+      const lastLoginDate = new Date(user.lastLogin);
+      return now.getTime() - lastLoginDate.getTime() < (365 * 24 * 60 * 60 * 1000);
+    });
+
+    if (activeUsers.length < users.length) {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(activeUsers));
+      console.log(`Cleaned up ${users.length - activeUsers.length} inactive users.`);
+    }
+  }
+
+  /**
+   * Get current user ID
+   */
+  static getCurrentUserId(): string | null {
+    try {
+      return ClientStorage.getItem(this.CURRENT_USER_KEY);
+    } catch (error) {
+      console.error('Error getting current user ID:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Get current user
+   */
+  static getCurrentUser(): User | null {
+    if (typeof window === 'undefined') return null;
+
+    try {
+      const userData = localStorage.getItem(this.CURRENT_USER_KEY);
+      if (!userData) {
+        return null;
+      }
+      const user: User = JSON.parse(userData);
+
+      if (user.sessionToken && !SecurityUtils.isTokenValid(user.sessionToken)) {
+        this.logoutUser();
+        return null;
+      }
+
+      return user;
+    } catch (error) {
+      console.error('Failed to get current user:', error);
+      return null;
+    }
+  }
+
   static backupUserData(userId: string): { success: boolean; backup?: any; message: string } {
     try {
       const user = this.getAllUsers().find(u => u.id === userId);

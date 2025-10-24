@@ -1,4 +1,3 @@
-src/libs/models/author.ts
 
 export interface AuthorStats {
   totalPredictions: number;
