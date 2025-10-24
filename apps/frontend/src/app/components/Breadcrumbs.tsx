@@ -14,7 +14,7 @@ interface BreadcrumbsProps {
   items: BreadcrumbItem[];
 }
 
-export default function Breadcrumbs({ items }: BreadcrumbsProps) {
+export function Breadcrumbs({ items }: BreadcrumbsProps) {
   const pathname = usePathname();
   const [origin, setOrigin] = useState('');
 

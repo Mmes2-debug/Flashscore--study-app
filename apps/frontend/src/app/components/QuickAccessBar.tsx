@@ -1,5 +1,5 @@
 
-"use client";
+'use client';
 
 import React, { useState, useEffect } from 'react';
 
@@ -11,7 +11,11 @@ interface QuickAction {
   badge?: number;
 }
 
-const QuickAccessBar: React.FC<{ actions?: QuickAction[] }> = ({ actions }) => {
+interface QuickAccessBarProps {
+  actions?: QuickAction[];
+}
+
+export const QuickAccessBar: React.FC<QuickAccessBarProps> = ({ actions }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -57,73 +61,66 @@ const QuickAccessBar: React.FC<{ actions?: QuickAction[] }> = ({ actions }) => {
   if (!isVisible) return null;
 
   return (
-    <div style={{
-      position: 'fixed',
-      bottom: '20px',
-      right: '20px',
-      zIndex: 1000,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '12px',
-      alignItems: 'flex-end'
-    }}>
-      {/* Quick Actions */}
+    <div
+      style={{
+        position: 'fixed',
+        bottom: '20px',
+        right: '20px',
+        zIndex: 1000,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
+        alignItems: 'flex-end'
+      }}
+    >
       {isExpanded && (
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '8px',
-          animation: 'slideIn 0.3s ease-out'
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px',
+            marginBottom: '10px'
+          }}
+        >
           {defaultActions.map((action, index) => (
             <button
               key={action.id}
               onClick={action.action}
               style={{
-                background: 'rgba(255, 255, 255, 0.95)',
-                backdropFilter: 'blur(10px)',
+                position: 'relative',
+                background: 'white',
                 border: 'none',
-                borderRadius: '50px',
+                borderRadius: '12px',
                 padding: '12px 20px',
+                cursor: 'pointer',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '10px',
-                cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-                transition: 'all 0.2s',
-                animation: `slideIn 0.3s ease-out ${index * 0.05}s backwards`,
-                position: 'relative'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateX(-5px) scale(1.05)';
-                e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.2)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateX(0) scale(1)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+                minWidth: '160px',
+                animation: `slideIn 0.3s ease-out ${index * 0.05}s both`
               }}
             >
-              <span style={{ fontSize: '1.3rem' }}>{action.icon}</span>
-              <span style={{ 
-                color: '#1f2937', 
-                fontWeight: '600',
-                fontSize: '0.9rem' 
-              }}>
-                {action.label}
-              </span>
-              {action.badge && action.badge > 0 && (
-                <span style={{
-                  background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                  color: 'white',
-                  borderRadius: '50%',
-                  width: '20px',
-                  height: '20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '0.7rem',
-                  fontWeight: '700'
-                }}>
+              <span style={{ fontSize: '1.2rem' }}>{action.icon}</span>
+              <span style={{ fontSize: '0.9rem', fontWeight: '500' }}>{action.label}</span>
+              {action.badge && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: '-5px',
+                    right: '-5px',
+                    background: '#ef4444',
+                    color: 'white',
+                    borderRadius: '50%',
+                    width: '20px',
+                    height: '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.7rem',
+                    fontWeight: 'bold'
+                  }}
+                >
                   {action.badge}
                 </span>
               )}
@@ -132,7 +129,6 @@ const QuickAccessBar: React.FC<{ actions?: QuickAction[] }> = ({ actions }) => {
         </div>
       )}
 
-      {/* Main Toggle Button */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         style={{
@@ -176,5 +172,3 @@ const QuickAccessBar: React.FC<{ actions?: QuickAction[] }> = ({ actions }) => {
     </div>
   );
 };
-
-export default QuickAccessBar;

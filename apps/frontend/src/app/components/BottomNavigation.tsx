@@ -13,7 +13,7 @@ interface NavItem {
   badge?: number;
 }
 
-export default function BottomNavigation() {
+export function BottomNavigation() {
   const pathname = usePathname();
 
   const navItems: NavItem[] = [

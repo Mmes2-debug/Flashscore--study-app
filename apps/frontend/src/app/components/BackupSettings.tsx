@@ -247,6 +247,13 @@ const BackupSettings: React.FC<BackupSettingsProps> = ({ isOpen, onClose }) => {
             </label>
           </div>
         </div>
+      </div>
+    );
+  };
+
+export { BackupManager };
+          </div>
+        </div>
 
         {/* Cloud Sync Section */}
         <div style={{

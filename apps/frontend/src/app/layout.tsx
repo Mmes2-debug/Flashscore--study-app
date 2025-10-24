@@ -10,14 +10,14 @@ import { UserPreferencesProvider } from "./providers/UserPreferencesProvider";
 import { SessionProvider } from './providers/SessionProvider';
 import '@/app/styles/globals.css';
 import './styles/mobile-optimizations.css';
-import PWAServiceWorker from "./components/PWAServiceWorker";
-import PushNotificationManager from "./components/PushNotificationManager";
-import MobilePerformanceOptimizer from "./components/MobilePerformanceOptimizer";
+import { PWAServiceWorker } from "./components/PWAServiceWorker";
+import { PushNotificationManager } from "./components/PushNotificationManager";
+import { MobilePerformanceOptimizer } from "./components/MobilePerformanceOptimizer";
 import { ErrorBoundaryWithPerformance } from "./components/ErrorBoundary/ErrorBoundaryWithPerformance";
 import { ErrorMonitor } from './components/ErrorMonitor';
-import BackendStatusIndicator from './components/BackendStatusIndicator';
-import ThemeToggle from './components/ThemeToggle';
-import MobileMetaOptimizer from "./components/MobileMetaOptimizer";
+import { BackendStatusIndicator } from './components/BackendStatusIndicator';
+import { ThemeToggle } from './components/ThemeToggle';
+import { MobileMetaOptimizer } from "./components/MobileMetaOptimizer";
 
 export const metadata: Metadata = {
   title: 'Sports Central - AI-Powered Predictions',

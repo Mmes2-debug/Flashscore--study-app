@@ -103,7 +103,7 @@ export default function NewsAuthorManager({ className = '' }: NewsAuthorManagerP
 
   const handleCreateAuthor = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validation
     if (!newAuthor.id || !newAuthor.name) {
       setError('ID and Name are required');
@@ -116,7 +116,7 @@ export default function NewsAuthorManager({ className = '' }: NewsAuthorManagerP
         ...newAuthor,
         expertise: newAuthor.expertise.split(',').map(e => e.trim()).filter(e => e.length > 0)
       };
-      
+
       await NewsAuthorService.createOrUpdateAuthor(authorData);
       setNewAuthor({ id: '', name: '', icon: '📝', bio: '', expertise: '' });
       setShowCreateForm(false);
@@ -133,7 +133,7 @@ export default function NewsAuthorManager({ className = '' }: NewsAuthorManagerP
     try {
       setError(null);
       let result = null;
-      
+
       switch (type) {
         case 'prediction':
           result = await NewsAuthorService.simulateMaraCollaboration();
@@ -145,7 +145,7 @@ export default function NewsAuthorManager({ className = '' }: NewsAuthorManagerP
           result = await NewsAuthorService.shareAnalysis(authorId, 'Premier League Form Analysis');
           break;
       }
-      
+
       if (result) {
         loadRecentNews();
         const author = authors.find(a => a.id === authorId);

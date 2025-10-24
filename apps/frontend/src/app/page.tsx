@@ -3,28 +3,28 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import dynamic from 'next/dynamic';
 import { useMobile } from './hooks/useMobile';
-import LoadingSkeleton from './components/LoadingSkeleton';
-import LanguageSwitcher from './components/LanguageSwitcher';
-import NavBar from './components/NavBar';
+import { LoadingSkeleton } from './components/LoadingSkeleton';
+import { LanguageSwitcher } from './components/LanguageSwitcher';
+import { NavBar } from './components/NavBar';
 import { MobileHomeOptimizer } from './components/MobileHomeOptimizer';
 import Link from 'next/link';
 
-const HorizontalCarousel = dynamic(() => import('./components/HorizontalCarousel'), {
+const HorizontalCarousel = dynamic(() => import('./components/HorizontalCarousel').then(mod => ({ default: mod.HorizontalCarousel })), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
 
-const ComprehensiveSportsHub = dynamic(() => import('./components/ComprehensiveSportsHub'), {
+const ComprehensiveSportsHub = dynamic(() => import('./components/ComprehensiveSportsHub').then(mod => ({ default: mod.ComprehensiveSportsHub })), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
 
-const AuthorsSidebar = dynamic(() => import('./components/AuthorsSidebar'), {
+const AuthorsSidebar = dynamic(() => import('./components/AuthorsSidebar').then(mod => ({ default: mod.AuthorsSidebar })), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
 
-const ChessboardCompetitiveAnalysis = dynamic(() => import('./components/ChessboardCompetitiveAnalysis'), {
+const ChessboardCompetitiveAnalysis = dynamic(() => import('./components/ChessboardCompetitiveAnalysis').then(mod => ({ default: mod.ChessboardCompetitiveAnalysis })), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
