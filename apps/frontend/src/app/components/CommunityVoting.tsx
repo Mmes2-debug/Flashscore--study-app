@@ -58,9 +58,8 @@ const CommunityVoting: React.FC<CommunityVotingProps> = ({ currentUser }) => {
   useEffect(() => {
     loadVotingTopics();
     if (currentUser) {
-      const piCoinManager = PiCoinManager.getInstance();
-      const balance = piCoinManager.getBalance(currentUser.id);
-      setUserBalance(balance.balance);
+      const balance = PiCoinManager.getBalance(currentUser.id);
+      setUserBalance(balance);
     }
   }, [currentUser]);
 
@@ -145,8 +144,7 @@ const CommunityVoting: React.FC<CommunityVotingProps> = ({ currentUser }) => {
     });
 
     // Deduct Pi coins from user balance
-    const piCoinManager = PiCoinManager.getInstance();
-    piCoinManager.spendCoins(
+    PiCoinManager.spendCoins(
       currentUser.id,
       coinsToSpend,
       `Voted on: ${votingTopics.find(t => t.id === topicId)?.title}`
@@ -155,8 +153,8 @@ const CommunityVoting: React.FC<CommunityVotingProps> = ({ currentUser }) => {
     saveVotingTopics(updatedTopics);
 
     // Update user balance
-    const newBalance = piCoinManager.getBalance(currentUser.id);
-    setUserBalance(newBalance.balance);
+    const newBalance = PiCoinManager.getBalance(currentUser.id);
+    setUserBalance(newBalance);
   };
 
   const addOption = () => {
