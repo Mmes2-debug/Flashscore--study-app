@@ -21,13 +21,18 @@
     "baseUrl": ".",
     "paths": {
       // --- Frontend ---
+      "@components": ["apps/frontend/src/app/components"],
       "@components/*": ["apps/frontend/src/app/components/*"],
+      "@hooks": ["apps/frontend/src/app/hooks"],
       "@hooks/*": ["apps/frontend/src/app/hooks/*"],
       "@controllers/*": ["apps/frontend/src/app/controllers/*"],
       "@api/*": ["apps/frontend/src/app/api/*"],
+      "@services": ["apps/frontend/src/app/services"],
       "@services/*": ["apps/frontend/src/app/services/*"],
       "@styles/*": ["apps/frontend/src/app/styles/*"],
       "@config/*": ["apps/frontend/src/app/config/*"],
+      "@utils": ["apps/frontend/src/app/utils"],
+      "@utils/*": ["apps/frontend/src/app/utils/*"],
 
       // --- Backend ---
       "@bcomponents/*": ["apps/backend/src/components/*"],

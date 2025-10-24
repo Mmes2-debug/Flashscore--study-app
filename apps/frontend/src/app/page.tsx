@@ -245,4 +245,4 @@ export function HomePage(): JSX.Element {
   );
 }
 
-export default HomePage;
+// Named export already exists above, removed duplicate default export

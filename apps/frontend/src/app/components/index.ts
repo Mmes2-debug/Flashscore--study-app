@@ -1,3 +1,4 @@
+
 export { ErrorMonitor } from './ErrorMonitor';
 export { App } from './App';
 export { ApiTest } from './ApiTest';
@@ -10,7 +11,6 @@ export { default as SmartErrorRecovery } from './SmartErrorRecovery';
 export { default as OfflineQueueManager } from './OfflineQueueManager';
 export { default as AutoDiagnostics } from './AutoDiagnostics';
 export { default as BackendHealthMonitor } from './BackendHealthMonitor';
-// Barrel exports for components
 export { LoadingSkeleton, NewsLoadingSkeleton, QuizLoadingSkeleton, CardLoadingSkeleton, ListLoadingSkeleton } from './LoadingSkeleton';
 export { NavBar } from './NavBar';
 export { HorizontalCarousel } from './HorizontalCarousel';
@@ -23,7 +23,11 @@ export { BackendStatusIndicator } from './BackendStatusIndicator';
 export { AuthorsSidebar } from './AuthorsSidebar';
 export { ComprehensiveSportsHub } from './ComprehensiveSportsHub';
 export { ChessboardCompetitiveAnalysis } from './ChessboardCompetitiveAnalysis';
+export { MobileHomeOptimizer } from './MobileHomeOptimizer';
 export { LanguageSwitcher } from './LanguageSwitcher';
-export { GoogleStyleMenu } from './GoogleStyleMenu';
-export { LiveMatchTracker } from './LiveMatchTracker';
-export { ErrorPredictionAI } from './ErrorPredictionAI';
+export { FeatureShowcase } from './FeatureShowcase';
+export { FeatureHub } from './FeatureHub';
+export { UserFriendlyFeatures } from './UserFriendlyFeatures';
+export { FlashScoreMatchTracker } from './FlashScoreMatchTracker';
+export { KidsModeDashboard } from './KidsModeDashboard';
+export { IOSStyleFeatures } from './IOSStyleFeatures';

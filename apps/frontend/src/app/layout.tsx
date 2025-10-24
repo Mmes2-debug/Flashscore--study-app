@@ -8,7 +8,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { KidsModeProvider } from "@/context/KidsModeContext";
 import { UserPreferencesProvider } from "@/app/providers/UserPreferencesProvider";
 import { SessionProvider } from '@/app/providers/SessionProvider';
-import { PWAServiceWorker, PushNotificationManager, MobilePerformanceOptimizer, MobileMetaOptimizer } from '@components';
+import { PWAServiceWorker, PushNotificationManager, MobilePerformanceOptimizer, MobileMetaOptimizer } from '@/app/components';
 import '@/app/styles/globals.css';
 import '@/app/styles/mobile-optimizations.css';
 import { ErrorBoundaryWithPerformance } from "./components/ErrorBoundary/ErrorBoundaryWithPerformance";
