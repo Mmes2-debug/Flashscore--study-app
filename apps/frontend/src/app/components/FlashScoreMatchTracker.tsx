@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Activity, Circle } from 'lucide-react';
-import LanguageSwitcher from './LanguageSwitcher';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 interface Match {
   id: string;
@@ -63,7 +63,7 @@ const sampleMatches: Match[] = [
   }
 ];
 
-export default function FlashScoreMatchTracker() {
+export function FlashScoreMatchTracker() {
   const [matches, setMatches] = useState<Match[]>(sampleMatches);
 
   useEffect(() => {

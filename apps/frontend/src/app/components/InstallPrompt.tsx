@@ -12,7 +12,7 @@ const isInStandaloneMode = () => {
   return window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true;
 };
 
-export default function InstallPrompt() {
+export function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [visible, setVisible] = useState(false);
   const [installed, setInstalled] = useState(false);

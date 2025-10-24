@@ -4,7 +4,7 @@ import React from 'react';
 import { useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { locales, localeNames, type Locale } from '@/i18n';
-import { useUserPreferences } from '../providers/UserPreferencesProvider';
+import { useUserPreferences } from '@providers/UserPreferencesProvider';
 
 export function LanguageSettings() {
   const locale = useLocale() as Locale;
@@ -202,4 +202,3 @@ export function LanguageSettings() {
   );
 }
 
-export default LanguageSettings;

@@ -35,7 +35,7 @@ interface CoachInsight {
   actionable: string;
 }
 
-export default function AICoachAssistant() {
+export function AICoachAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'analysis' | 'learning' | 'insights'>('analysis');
   const [selectedPrediction, setSelectedPrediction] = useState<PredictionHistory | null>(null);

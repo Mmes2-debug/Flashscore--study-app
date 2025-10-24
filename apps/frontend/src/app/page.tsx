@@ -3,26 +3,26 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useMobile } from './hooks/useMobile';
-import { LoadingSkeleton, LanguageSwitcher, NavBar, MobileHomeOptimizer } from './components';
+import { useMobile } from '@hooks/useMobile';
+import { LoadingSkeleton, LanguageSwitcher, NavBar, MobileHomeOptimizer } from '@app/components';
 
 // Dynamically import components
-const HorizontalCarousel = dynamic(() => import('./components').then(mod => ({ default: mod.HorizontalCarousel })), {
+const HorizontalCarousel = dynamic(() => import('@app/components').then(mod => mod.HorizontalCarousel), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
 
-const ComprehensiveSportsHub = dynamic(() => import('./components').then(mod => ({ default: mod.ComprehensiveSportsHub })), {
+const ComprehensiveSportsHub = dynamic(() => import('@app/components').then(mod => mod.ComprehensiveSportsHub), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
 
-const AuthorsSidebar = dynamic(() => import('./components').then(mod => ({ default: mod.AuthorsSidebar })), {
+const AuthorsSidebar = dynamic(() => import('@app/components').then(mod => mod.AuthorsSidebar), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
 
-const ChessboardCompetitiveAnalysis = dynamic(() => import('./components').then(mod => ({ default: mod.ChessboardCompetitiveAnalysis })), {
+const ChessboardCompetitiveAnalysis = dynamic(() => import('@app/components').then(mod => mod.ChessboardCompetitiveAnalysis), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
@@ -239,4 +239,4 @@ export function HomePage(): JSX.Element {
   );
 }
 
-// Named export already exists above, removed duplicate default export
+export default HomePage;

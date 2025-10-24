@@ -442,4 +442,4 @@ const AdvancedAnalytics: React.FC = () => {
   );
 };
 
-export default AdvancedAnalytics;
+export { AdvancedAnalytics };

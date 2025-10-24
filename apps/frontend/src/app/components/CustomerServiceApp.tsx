@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import MagajiCoManager from "./MagajiCoManager";
+import { MagajiCoManager } from "@components/MagajiCoManager";
 
-export default function CustomerServiceApp() {
+export function CustomerServiceApp() {
   const [highlightedMatch, setHighlightedMatch] = useState<string | null>(null);
 
   // Listen for CEO highlights

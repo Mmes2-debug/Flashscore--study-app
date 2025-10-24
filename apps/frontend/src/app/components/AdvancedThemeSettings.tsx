@@ -2,9 +2,9 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useThemeScheduler } from '../hooks/useThemeScheduler';
-import { useColorBlindMode } from '../hooks/useColorBlindMode';
-import { ThemeSyncManager } from '../utils/themeSyncManager';
+import { useThemeScheduler } from '@hooks/useThemeScheduler';
+import { useColorBlindMode } from '@hooks/useColorBlindMode';
+import { ThemeSyncManager } from '@utils/themeSyncManager';
 
 export function AdvancedThemeSettings() {
   const { updateSchedule, toggleScheduler } = useThemeScheduler();
@@ -92,5 +92,3 @@ export function AdvancedThemeSettings() {
     </div>
   );
 }
-
-export default AdvancedThemeSettings;

@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useGestureControls } from '@hooks/useGestureControls';
-import { haptic } from './HapticFeedback';
+import { haptic } from '@components/HapticFeedback';
 
 interface MobileGestureEnhancementsProps {
   onRefresh?: () => void;
@@ -11,7 +11,7 @@ interface MobileGestureEnhancementsProps {
   onNavigateForward?: () => void;
 }
 
-export default function MobileGestureEnhancements({
+export function MobileGestureEnhancements({
   onRefresh,
   onNavigateBack,
   onNavigateForward

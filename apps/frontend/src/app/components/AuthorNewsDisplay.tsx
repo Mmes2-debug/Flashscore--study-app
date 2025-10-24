@@ -268,4 +268,4 @@ const AuthorNewsDisplay: React.FC<AuthorNewsDisplayProps> = ({ news: newsData, c
   );
 };
 
-export default AuthorNewsDisplay;
+export { AuthorNewsDisplay };

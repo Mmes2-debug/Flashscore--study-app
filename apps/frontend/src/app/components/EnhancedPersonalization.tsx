@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { ClientStorage } from '../utils/clientStorage';
+import { ClientStorage } from '@utils/clientStorage';
 
 interface UserProfile {
   favoriteTeams: string[];
@@ -481,4 +481,4 @@ function EnhancedPersonalization() {
   );
 }
 
-export default EnhancedPersonalization;
+export { EnhancedPersonalization };

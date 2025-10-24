@@ -66,4 +66,4 @@ const AdaptiveImageLoader: React.FC<AdaptiveImageLoaderProps> = ({
   );
 };
 
-export default AdaptiveImageLoader;
+export { AdaptiveImageLoader };

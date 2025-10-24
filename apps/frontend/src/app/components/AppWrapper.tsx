@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import { ProductionErrorBoundary as ErrorBoundary } from "./ErrorBoundary/ErrorBoundaryWithPerformance";
+import { ProductionErrorBoundary as ErrorBoundary } from "@components/ErrorBoundary/ErrorBoundaryWithPerformance";
 
-export default function AppWrapper({ children }: { children: React.ReactNode }) {
+export function AppWrapper({ children }: { children: React.ReactNode }) {
   return (
     <ErrorBoundary
       onError={(error, errorInfo) => {

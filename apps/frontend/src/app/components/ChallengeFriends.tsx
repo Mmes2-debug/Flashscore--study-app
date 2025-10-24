@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { ClientStorage } from '../utils/clientStorage';
+import { ClientStorage } from '@utils/clientStorage';
 import { PiCoinManager } from '@magajico/shared/utils';
 import { UserManager } from '@magajico/shared/utils';
 
@@ -653,4 +653,4 @@ const ChallengeFriends: React.FC<ChallengeFriendsProps> = ({ currentUser }) => {
   );
 };
 
-export default ChallengeFriends;
+export { ChallengeFriends };

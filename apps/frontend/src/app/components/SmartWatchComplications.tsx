@@ -550,4 +550,4 @@ const SmartWatchComplications: React.FC = () => {
   );
 };
 
-export default SmartWatchComplications;
+export { SmartWatchComplications };

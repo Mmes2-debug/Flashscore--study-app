@@ -288,4 +288,4 @@ const ARPredictionOverlay: React.FC<ARPredictionOverlayProps> = ({ isActive = fa
   );
 };
 
-export default ARPredictionOverlay;
+export { ARPredictionOverlay };

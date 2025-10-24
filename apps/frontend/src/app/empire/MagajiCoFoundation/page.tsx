@@ -173,8 +173,6 @@ export function MagajiCoFoundation() {
     };
 
     fetchPhases();
-  }, []);
-
     loadProgress();
   }, [userId]);
 

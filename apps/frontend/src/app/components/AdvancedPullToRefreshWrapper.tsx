@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useCallback, useEffect } from 'react';
-import PullToRefresh from './PullToRefresh';
+import { PullToRefresh } from './PullToRefresh';
 import { triggerFloatingAlert } from './FloatingAlert';
 
 interface AdvancedPullToRefreshWrapperProps {
@@ -13,7 +13,7 @@ interface AdvancedPullToRefreshWrapperProps {
   refreshEndpoints?: string[];
 }
 
-export default function AdvancedPullToRefreshWrapper({
+export function AdvancedPullToRefreshWrapper({
   children,
   enableAutoRefresh = false,
   autoRefreshInterval = 30000, // 30 seconds

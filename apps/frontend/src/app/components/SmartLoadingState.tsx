@@ -91,4 +91,4 @@ const SmartLoadingState: React.FC<SmartLoadingStateProps> = ({
   return <div className="w-full">{renderSkeleton()}</div>;
 };
 
-export default SmartLoadingState;
+export { SmartLoadingState };

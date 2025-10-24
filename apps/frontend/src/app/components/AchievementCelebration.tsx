@@ -16,7 +16,7 @@ interface AchievementCelebrationProps {
   onComplete: () => void;
 }
 
-export default function AchievementCelebration({ achievement, onComplete }: AchievementCelebrationProps) {
+export function AchievementCelebration({ achievement, onComplete }: AchievementCelebrationProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; delay: number }>>([]);
 

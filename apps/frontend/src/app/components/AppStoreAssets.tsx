@@ -300,5 +300,3 @@ export const AppStorePreview: React.FC<AppStorePreviewProps> = ({ platform = 'go
     </div>
   );
 };
-
-export default AppStorePreview;

@@ -12,7 +12,7 @@ interface DiagnosticIssue {
   suggestion: string;
 }
 
-export default function AutoDiagnostics() {
+export function AutoDiagnostics() {
   const [issues, setIssues] = useState<DiagnosticIssue[]>([]);
   const [isScanning, setIsScanning] = useState(false);
 

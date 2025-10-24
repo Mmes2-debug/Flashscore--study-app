@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { ClientStorage } from '../utils/clientStorage';
+import { ClientStorage } from '@utils/clientStorage';
 import { useAuth } from '@hooks/useAuth';
 
 interface UserFriendlyFeaturesProps {
@@ -1745,4 +1745,4 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
   );
 };
 
-export default UserFriendlyFeatures;
+export { UserFriendlyFeatures };

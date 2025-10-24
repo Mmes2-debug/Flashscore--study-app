@@ -1,7 +1,7 @@
 
 "use client";
 import React, { useState, useEffect } from 'react';
-import { ClientStorage } from '../utils/clientStorage';
+import { ClientStorage } from '@utils/clientStorage';
 
 interface CollaborationRoom {
   id: string;
@@ -268,4 +268,3 @@ export function CollaborativePrediction() {
   );
 }
 
-export default CollaborativePrediction;

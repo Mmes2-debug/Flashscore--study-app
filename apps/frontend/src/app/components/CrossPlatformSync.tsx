@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { ClientStorage } from '../utils/clientStorage';
+import { ClientStorage } from '@utils/clientStorage';
 
 interface SyncDevice {
   id: string;
@@ -643,4 +643,4 @@ const CrossPlatformSync: React.FC = () => {
   );
 };
 
-export default CrossPlatformSync;
+export { CrossPlatformSync };

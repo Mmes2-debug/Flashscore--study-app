@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
-import { haptic } from './HapticFeedback';
+import { haptic } from '@components/HapticFeedback';
 
 interface OddsData {
   home: number;
@@ -17,7 +17,7 @@ interface LiveOddsUpdaterProps {
   onOddsChange?: (newOdds: OddsData) => void;
 }
 
-export default function LiveOddsUpdater({
+export function LiveOddsUpdater({
   matchId,
   initialOdds,
   updateInterval = 5000,

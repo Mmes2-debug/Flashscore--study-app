@@ -564,4 +564,4 @@ const FeatureHub: React.FC = () => {
   );
 };
 
-export default FeatureHub;
+export { FeatureHub };

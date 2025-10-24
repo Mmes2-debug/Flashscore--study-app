@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { ClientStorage } from '../utils/clientStorage';
+import { ClientStorage } from '@utils/clientStorage';
 import { useOfflineStatus } from '@hooks/useOfflineStatus';
 
 interface QueuedAction {
@@ -116,4 +116,4 @@ const OfflineQueueManager: React.FC = () => {
   );
 };
 
-export default OfflineQueueManager;
+export { OfflineQueueManager };

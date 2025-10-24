@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { Globe, ChevronDown, Search, Check } from 'lucide-react';
 import { locales, localeNames, type Locale } from '@/i18n';
-import { useUserPreferences } from '../providers/UserPreferencesProvider';
+import { useUserPreferences } from '@providers/UserPreferencesProvider';
 
 export function LanguageSwitcher() {
   const t = useTranslations('settings');

@@ -314,4 +314,4 @@ const AuthorCard: React.FC<AuthorCardProps> = ({ author, onFollow, isFollowed = 
   );
 };
 
-export default AuthorCard;
+export { AuthorCard };

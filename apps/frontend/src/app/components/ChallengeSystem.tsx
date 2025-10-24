@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { ClientStorage } from '../utils/clientStorage';
+import { ClientStorage } from '@utils/clientStorage';
 import { UserManager } from '@magajico/shared/utils';
 import { useAuth } from '@hooks/useAuth';
 
@@ -378,4 +378,4 @@ const ChallengeSystem: React.FC<ChallengeSystemProps> = ({ currentUser }) => {
   );
 };
 
-export default ChallengeSystem;
+export { ChallengeSystem };

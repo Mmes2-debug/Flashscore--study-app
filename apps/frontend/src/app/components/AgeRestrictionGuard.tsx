@@ -12,4 +12,3 @@ export function AgeRestrictionGuard({ children, feature = 'fullContent' }: AgeRe
   return <>{children}</>;
 }
 
-export default AgeRestrictionGuard;

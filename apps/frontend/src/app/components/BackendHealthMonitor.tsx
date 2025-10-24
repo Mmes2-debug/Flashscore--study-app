@@ -9,7 +9,7 @@ interface HealthStatus {
   lastCheck: Date;
 }
 
-export default function BackendHealthMonitor() {
+export function BackendHealthMonitor() {
   const [health, setHealth] = useState<HealthStatus>({
     backend: 'checking',
     ml: 'checking',

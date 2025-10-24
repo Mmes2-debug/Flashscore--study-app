@@ -103,4 +103,4 @@ class SmartErrorRecovery extends Component<Props, State> {
   }
 }
 
-export default SmartErrorRecovery;
+export { SmartErrorRecovery };

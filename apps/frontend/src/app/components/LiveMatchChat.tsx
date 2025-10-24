@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { ClientStorage } from '../utils/clientStorage';
+import { ClientStorage } from '@utils/clientStorage';
 import { UserManager } from '@magajico/shared/utils';
-import translationService from '../services/translationService';
-import timeZoneService from '../services/timeZoneService';
+import { translationService } from '@services/translationService';
+import { timeZoneService } from '@services/timeZoneService';
 
 interface User {
   id: string;
@@ -561,4 +561,4 @@ const LiveMatchChat: React.FC<LiveMatchChatProps> = ({ match, currentUser }) => 
   );
 };
 
-export default LiveMatchChat;
+export { LiveMatchChat };

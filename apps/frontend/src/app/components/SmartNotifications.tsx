@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { ClientStorage } from '../utils/clientStorage';
+import { ClientStorage } from '@utils/clientStorage';
 
 interface Notification {
   id: string;
@@ -559,4 +559,4 @@ const SmartNotifications: React.FC = () => {
   );
 };
 
-export default SmartNotifications;
+export { SmartNotifications };

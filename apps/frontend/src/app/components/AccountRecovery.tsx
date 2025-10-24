@@ -289,4 +289,4 @@ const AccountRecovery: React.FC<AccountRecoveryProps> = ({ isOpen, onClose, onRe
   );
 };
 
-export default AccountRecovery;
+export { AccountRecovery };

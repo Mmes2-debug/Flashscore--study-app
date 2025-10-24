@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { ClientStorage } from '../utils/clientStorage';
+import { ClientStorage } from '@utils/clientStorage';
 import { UserManager } from '@magajico/shared/utils';
 import { useAuth } from '@hooks/useAuth';
 
@@ -726,4 +726,4 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
   );
 };
 
-export default ContentPersonalization;
+export { ContentPersonalization };

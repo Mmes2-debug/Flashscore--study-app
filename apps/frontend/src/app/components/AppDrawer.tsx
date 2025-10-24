@@ -52,7 +52,7 @@ const drawerSections: DrawerSection[] = [
   }
 ];
 
-export default function AppDrawer() {
+export function AppDrawer() {
   const [isOpen, setIsOpen] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const drawerRef = useRef<HTMLDivElement>(null);

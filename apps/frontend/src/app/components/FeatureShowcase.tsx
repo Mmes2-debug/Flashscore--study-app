@@ -14,7 +14,7 @@ interface Feature {
   link?: string;
 }
 
-export default function FeatureShowcase() {
+export function FeatureShowcase() {
   const [activeCategory, setActiveCategory] = useState<string>('all');
 
   const features: Feature[] = [

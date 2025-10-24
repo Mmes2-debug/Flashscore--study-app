@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { haptic } from './HapticFeedback';
+import { haptic } from '@components/HapticFeedback';
 
 interface ConfidenceFactor {
   name: string;
@@ -16,7 +16,7 @@ interface ConfidenceSliderProps {
   showFactors?: boolean;
 }
 
-export default function ConfidenceSlider({
+export function ConfidenceSlider({
   baseConfidence,
   factors = [],
   onConfidenceChange,

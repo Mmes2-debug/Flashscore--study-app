@@ -7,7 +7,7 @@ interface IOSStyleFeaturesProps {
   children?: React.ReactNode;
 }
 
-export default function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
+export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);

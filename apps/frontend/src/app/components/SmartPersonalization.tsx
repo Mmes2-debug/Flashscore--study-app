@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { ClientStorage } from '../utils/clientStorage';
+import { ClientStorage } from '@utils/clientStorage';
 import { useAuth } from '@hooks/useAuth';
 
 interface PersonalizationEngine {
@@ -287,4 +287,4 @@ const SmartPersonalization: React.FC = () => {
   );
 };
 
-export default SmartPersonalization;
+export { SmartPersonalization };

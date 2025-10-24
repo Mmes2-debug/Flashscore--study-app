@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import AuthorCard from './AuthorCard';
+import { AuthorCard } from './AuthorCard';
 
 interface Author {
   id: number;
@@ -252,4 +252,4 @@ const AuthorsLeaderboard: React.FC = () => {
   );
 };
 
-export default AuthorsLeaderboard;
+export { AuthorsLeaderboard };

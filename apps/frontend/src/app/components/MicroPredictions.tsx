@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { ClientStorage } from '../utils/clientStorage';
+import { ClientStorage } from '@utils/clientStorage';
 
 interface MicroPrediction {
   id: string;
@@ -477,4 +477,4 @@ const MicroPredictions: React.FC = () => {
   );
 };
 
-export default MicroPredictions;
+export { MicroPredictions };

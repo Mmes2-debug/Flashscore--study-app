@@ -14,7 +14,7 @@ interface PullToRefreshProps {
   errorMessage?: string;
 }
 
-export default function PullToRefresh({
+export function PullToRefresh({
   onRefresh,
   children,
   threshold = 80,

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { ClientStorage } from '../utils/clientStorage';
+import { ClientStorage } from '@utils/clientStorage';
 
 interface Widget {
   id: string;
@@ -328,4 +328,4 @@ const DraggableWidgets: React.FC = () => {
   );
 };
 
-export default DraggableWidgets;
+export { DraggableWidgets };

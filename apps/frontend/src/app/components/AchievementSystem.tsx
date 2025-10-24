@@ -597,4 +597,4 @@ const AchievementSystem: React.FC<AchievementSystemProps> = ({
   );
 };
 
-export default AchievementSystem;
+export { AchievementSystem };

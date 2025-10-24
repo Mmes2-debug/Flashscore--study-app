@@ -91,7 +91,7 @@ const kidAchievements: Achievement[] = [
   }
 ];
 
-export default function KidsModeDashboard() {
+export function KidsModeDashboard() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);

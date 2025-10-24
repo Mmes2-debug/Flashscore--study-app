@@ -5,6 +5,7 @@ export * from './useBatteryOptimization';
 export * from './useColorBlindMode';
 export * from './useDebounce';
 export * from './useGestureControls';
+export * from './useKidsMode';
 export * from './useMobile';
 export * from './useOfflineStatus';
 export * from './usePerformanceMonitor';
