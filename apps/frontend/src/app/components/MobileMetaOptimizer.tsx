@@ -3,7 +3,7 @@
 
 import { useEffect } from 'react';
 
-export default function MobileMetaOptimizer() {
+export function MobileMetaOptimizer() {
   useEffect(() => {
     // Optimize viewport for mobile
     const viewport = document.querySelector('meta[name="viewport"]');

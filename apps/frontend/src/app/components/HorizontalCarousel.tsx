@@ -15,7 +15,7 @@ interface Card {
   category: 'sports' | 'social' | 'achievements' | 'finance' | 'community';
 }
 
-export default function HorizontalCarousel() {
+export function HorizontalCarousel() {
   const [liveMatches, setLiveMatches] = useState(0);
   const [todayPredictions, setTodayPredictions] = useState(0);
   const [piBalance, setPiBalance] = useState(0);

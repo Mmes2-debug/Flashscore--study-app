@@ -3,7 +3,7 @@
 
 import { useEffect, useState, useCallback, useMemo } from 'react';
 
-export default function MobilePerformanceOptimizer() {
+export function MobilePerformanceOptimizer() {
   const [connectionType, setConnectionType] = useState<string>('4g');
   const [dataMode, setDataMode] = useState<'full' | 'lite'>('full');
 

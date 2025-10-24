@@ -7,7 +7,7 @@ import { Globe, ChevronDown, Search, Check } from 'lucide-react';
 import { locales, localeNames, type Locale } from '@/i18n';
 import { useUserPreferences } from '../providers/UserPreferencesProvider';
 
-function LanguageSwitcher() {
+export function LanguageSwitcher() {
   const t = useTranslations('settings');
   const locale = useLocale() as Locale;
   const router = useRouter();
@@ -182,5 +182,3 @@ function LanguageSwitcher() {
     </div>
   );
 }
-
-export default LanguageSwitcher;

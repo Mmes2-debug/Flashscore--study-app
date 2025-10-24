@@ -2,7 +2,7 @@
 "use client";
 import { useState, useEffect } from "react";
 
-export default function ThemeToggle() {
+export function ThemeToggle() {
   const [theme, setTheme] = useState<"light" | "dark" | "auto">("auto");
   const [effectiveTheme, setEffectiveTheme] = useState<"light" | "dark">("light");
 

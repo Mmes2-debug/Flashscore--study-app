@@ -17,7 +17,7 @@ interface ChessPosition {
   description: string;
 }
 
-export default function ChessboardCompetitiveAnalysis() {
+export function ChessboardCompetitiveAnalysis() {
   const [gamePhase, setGamePhase] = useState<'opening' | 'middlegame' | 'endgame'>('opening');
   const [ourPosition, setOurPosition] = useState<number>(72);
 

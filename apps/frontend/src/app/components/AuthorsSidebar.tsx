@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
@@ -43,7 +42,21 @@ interface LeaderboardAuthor {
   rank: number;
 }
 
-export default function AuthorsSidebar() {
+// Placeholder for QuickMenuItem interface if it were defined elsewhere
+interface QuickMenuItem {
+  label: string;
+  link: string;
+}
+
+const quickMenuItems: QuickMenuItem[] = [
+  { label: "🏠 Home", link: "/" },
+  { label: "📰 News", link: "/news" },
+  { label: "📊 Predictions", link: "/predictions" },
+  { label: "📂 Archive", link: "/archive" },
+  { label: "✍️ Author", link: "/author" },
+];
+
+export function AuthorsSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [authors, setAuthors] = useState<Author[]>([
     { id: 1, name: "John Smith", expertise: "Premier League", newsCount: 12, accuracy: 87, totalPredictions: 145 },
@@ -251,30 +264,17 @@ export default function AuthorsSidebar() {
               Quick Links
             </h3>
             <div className="space-y-1.5">
-              <Link href="/" className="flex items-center gap-2.5 px-3 py-2.5 text-sm text-[#1d1d1f] font-medium hover:bg-[#f5f5f7] rounded-xl transition">
-                <Home className="w-4 h-4 text-[#6e6e73]" />
-                Home
-              </Link>
-              <Link href="/author" className="flex items-center gap-2.5 px-3 py-2.5 text-sm text-[#1d1d1f] font-medium hover:bg-[#f5f5f7] rounded-xl transition">
-                <Users className="w-4 h-4 text-[#6e6e73]" />
-                All Authors
-              </Link>
-              <Link href="/news" className="flex items-center gap-2.5 px-3 py-2.5 text-sm text-[#1d1d1f] font-medium hover:bg-[#f5f5f7] rounded-xl transition">
-                <Newspaper className="w-4 h-4 text-[#6e6e73]" />
-                All News
-              </Link>
-              <Link href="/predictions" className="flex items-center gap-2.5 px-3 py-2.5 text-sm text-[#1d1d1f] font-medium hover:bg-[#f5f5f7] rounded-xl transition">
-                <BarChart3 className="w-4 h-4 text-[#6e6e73]" />
-                Predictions
-              </Link>
-              <Link href="/odds" className="flex items-center gap-2.5 px-3 py-2.5 text-sm text-[#1d1d1f] font-medium hover:bg-[#f5f5f7] rounded-xl transition">
-                <DollarSign className="w-4 h-4 text-[#6e6e73]" />
-                Odds
-              </Link>
-              <Link href="/analytics" className="flex items-center gap-2.5 px-3 py-2.5 text-sm text-[#1d1d1f] font-medium hover:bg-[#f5f5f7] rounded-xl transition">
-                <LineChart className="w-4 h-4 text-[#6e6e73]" />
-                Analytics
-              </Link>
+              {quickMenuItems.map((item) => (
+                <Link 
+                  key={item.link} 
+                  href={item.link} 
+                  className="flex items-center gap-2.5 px-3 py-2.5 text-sm text-[#1d1d1f] font-medium hover:bg-[#f5f5f7] rounded-xl transition"
+                >
+                  {/* Icon mapping would go here if needed, otherwise keep as is */}
+                  {item.label.split(' ')[0]} {/* Simple way to show first char as placeholder */}
+                  {item.label.substring(item.label.indexOf(' ') + 1)}
+                </Link>
+              ))}
             </div>
           </div>
 

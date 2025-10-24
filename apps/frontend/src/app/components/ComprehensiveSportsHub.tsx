@@ -46,7 +46,7 @@ interface SocialComment {
   replies?: SocialComment[];
 }
 
-const ComprehensiveSportsHub: React.FC = () => {
+export const ComprehensiveSportsHub: React.FC = () => {
   const isMobile = useMobile();
   const [activeTab, setActiveTab] = useState('live');
   const [matches, setMatches] = useState<EnhancedMatch[]>([]);
@@ -685,5 +685,3 @@ const ComprehensiveSportsHub: React.FC = () => {
     </div>
   );
 };
-
-export default ComprehensiveSportsHub;

@@ -71,7 +71,7 @@ const quickMenuItems: QuickMenuItem[] = [
   { label: "✍️ Author", link: "/author" },
 ];
 
-const NavBar: React.FC = () => {
+export const NavBar: React.FC = () => {
   const { data: session, status } = useSession();
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -416,5 +416,3 @@ const NavBar: React.FC = () => {
     </nav>
   );
 };
-
-export default NavBar;

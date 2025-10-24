@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from 'react';
 
-export default function PushNotificationManager() {
+export function PushNotificationManager() {
   const [permission, setPermission] = useState<NotificationPermission>('default');
   const [subscription, setSubscription] = useState<PushSubscription | null>(null);
 

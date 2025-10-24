@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-export default function PWAServiceWorker() {
+export function PWAServiceWorker() {
   useEffect(() => {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

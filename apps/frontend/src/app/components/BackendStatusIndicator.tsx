@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-export default function BackendStatusIndicator() {
+export function BackendStatusIndicator() {
   const [status, setStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking');
   const [showDetails, setShowDetails] = useState(false);
 

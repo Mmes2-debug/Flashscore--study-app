@@ -7,7 +7,7 @@ interface LoadingSkeletonProps {
   animate?: boolean;
 }
 
-const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({ 
+export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({ 
   lines = 3, 
   className = '',
   variant = 'text',
@@ -133,5 +133,3 @@ export const CardLoadingSkeleton: React.FC<{ className?: string }> = ({ classNam
 export const ListLoadingSkeleton: React.FC<{ items?: number }> = ({ items = 5 }) => (
   <LoadingSkeleton variant="list" lines={items} />
 );
-
-export default LoadingSkeleton;
