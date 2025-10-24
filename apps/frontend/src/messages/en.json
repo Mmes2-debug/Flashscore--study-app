@@ -1,5 +1,8 @@
-
 {
+  "home": {
+    "welcome": "Welcome to MajajiCo",
+    "tagline": "AI-Powered Sports Predictions & Analytics"
+  },
   "common": {
     "home": "Home",
     "profile": "Profile",

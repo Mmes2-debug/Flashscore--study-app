@@ -33,53 +33,32 @@ interface MatchStats {
 }
 
 export function LiveMatchTracker() {
-  const [liveMatches, setLiveMatches] = useState<LiveMatch[]>([]);
-  const [selectedMatch, setSelectedMatch] = useState<string | null>(null);
-  const [inMatchPrediction, setInMatchPrediction] = useState<string>('');
-  const [predictionOdds, setPredictionOdds] = useState({ home: 2.5, draw: 3.2, away: 2.8 });
+  const [liveMatches, setLiveMatches] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    loadLiveMatches();
+    const fetchLiveMatches = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/matches/live');
+        if (!response.ok) throw new Error('Failed to fetch live matches');
+        const data = await response.json();
+        // Ensure data is always an array
+        const matchesArray = Array.isArray(data) ? data : (data?.matches || data?.data || []);
+        setLiveMatches(matchesArray);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error');
+        setLiveMatches([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLiveMatches();
     const interval = setInterval(updateLiveScores, 10000);
     return () => clearInterval(interval);
   }, []);
-
-  const loadLiveMatches = async () => {
-    try {
-      const response = await fetch('/api/matches/live');
-      if (response.ok) {
-        const data = await response.json();
-        setLiveMatches(data);
-      } else {
-        // Demo data
-        setLiveMatches([
-          {
-            id: '1',
-            homeTeam: 'Manchester United',
-            awayTeam: 'Liverpool',
-            homeScore: 2,
-            awayScore: 1,
-            minute: 67,
-            status: 'live',
-            events: [
-              { id: '1', type: 'goal', minute: 23, team: 'home', player: 'Rashford', description: 'Goal! Man Utd 1-0' },
-              { id: '2', type: 'goal', minute: 45, team: 'away', player: 'Salah', description: 'Goal! Liverpool 1-1' },
-              { id: '3', type: 'goal', minute: 61, team: 'home', player: 'Bruno', description: 'Goal! Man Utd 2-1' }
-            ],
-            stats: {
-              possession: { home: 48, away: 52 },
-              shots: { home: 12, away: 15 },
-              shotsOnTarget: { home: 6, away: 8 },
-              corners: { home: 4, away: 6 },
-              fouls: { home: 8, away: 11 }
-            }
-          }
-        ]);
-      }
-    } catch (error) {
-      console.error('Failed to load live matches:', error);
-    }
-  };
 
   const updateLiveScores = async () => {
     // Simulate live updates
@@ -91,11 +70,22 @@ export function LiveMatchTracker() {
 
   const placeInMatchPrediction = async (matchId: string, prediction: string) => {
     haptic.predictionPlaced();
-    setInMatchPrediction(prediction);
-    // API call to place prediction
+    // Assuming predictionOdds is fetched or set elsewhere, or use the state
+    // For now, we'll just log and set the prediction state
+    console.log(`Placed prediction for match ${matchId}: ${prediction}`);
+    // In a real app, you would make an API call here to save the prediction
+    // setInMatchPrediction(prediction); // This state might be better managed per match if needed
   };
 
   const selectedMatchData = liveMatches.find(m => m.id === selectedMatch);
+
+  if (loading) {
+    return <div className="text-white">Loading live matches...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500">Error: {error}</div>;
+  }
 
   return (
     <div className="live-match-tracker">
@@ -173,7 +163,7 @@ export function LiveMatchTracker() {
                     <div key={event.id} className={`event ${event.type}`}>
                       <span className="event-minute">{event.minute}'</span>
                       <span className="event-icon">
-                        {event.type === 'goal' ? '⚽' : event.type === 'card' ? '🟨' : '🔄'}
+                        {event.type === 'goal' ? '⚽' : event.type === 'card' ? '🟨' : event.type === 'substitution' ? '🔄' : event.type === 'var' ? '📺' : '?'}
                       </span>
                       <span className="event-desc">{event.description}</span>
                     </div>
