@@ -1,6 +1,4 @@
 
-import type { InferenceSession, Tensor } from 'onnxruntime-node';
-
 // Type stubs for ONNX runtime when package is not installed
 interface OrtModule {
   InferenceSession: {
@@ -8,6 +6,10 @@ interface OrtModule {
   };
   Tensor: new (type: string, data: any, dims: number[]) => any;
 }
+
+// Define fallback types when onnxruntime-node is not installed
+type InferenceSession = any;
+type Tensor = any;
 
 // Fallback implementation when onnxruntime-node is not available
 const createOrtFallback = (): OrtModule => ({

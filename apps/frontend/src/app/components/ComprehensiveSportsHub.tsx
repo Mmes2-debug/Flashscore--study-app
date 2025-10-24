@@ -5,9 +5,9 @@ import { useMobile } from '../hooks/useMobile';
 import dynamic from 'next/dynamic';
 
 // Lazy load heavy components
-const LiveMatchTracker = dynamic(() => import('./LiveMatchTracker').then(mod => ({ default: mod.LiveMatchTracker })), { 
+const LiveMatchTracker = dynamic(() => import('./LiveMatchTracker').then(mod => ({ default: mod.LiveMatchTracker })), {
   loading: () => <div>Loading tracker...</div>,
-  ssr: false 
+  ssr: false
 });
 
 interface EnhancedMatch {

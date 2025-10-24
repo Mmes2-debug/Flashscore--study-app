@@ -453,7 +453,7 @@ class UserManager {
 
   private static initializeUserWallet(userId: string): void {
     // Import PiCoinManager dynamically to avoid circular dependency
-    import('@shared/utils/piCoinManager').then(({ default: PiCoinManager }) => {
+    import('@shared/utils/piCoinManager').then(({ PiCoinManager }) => {
       // Give welcome bonus
       // PiCoinManager.addTransaction is not available - implement transaction logic directly
       // await PiCoinManager.addTransaction({
