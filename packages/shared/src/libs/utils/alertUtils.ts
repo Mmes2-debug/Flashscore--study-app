@@ -1,5 +1,4 @@
 
-```typescript
 // AlertManager for shared package - server-side compatible
 export class AlertManager {
   private static alerts: Array<{message: string; type: string; timestamp: number}> = [];
@@ -76,4 +75,5 @@ export class AlertManager {
     this.alerts = [];
   }
 }
-```
+
+export const alertManager = AlertManager;

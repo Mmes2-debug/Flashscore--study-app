@@ -2,19 +2,17 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import {
-  ErrorMonitor,
-  BackendHealthMonitor,
-  SmartLoadingState,
-  FeatureShowcase,
-  PWAServiceWorker,
-  MobileMetaOptimizer,
-  MobilePerformanceOptimizer,
-  LatestNews,
-  SmartNewsFeed,
-  LiveMatchTracker,
-  PredictionInterface
-} from '@components/index';
+import { ErrorMonitor } from '@components/ErrorMonitor';
+import { BackendHealthMonitor } from '@components/BackendHealthMonitor';
+import { SmartLoadingState } from '@components/SmartLoadingState';
+import { FeatureShowcase } from '@components/FeatureShowcase';
+import { PWAServiceWorker } from '@components/PWAServiceWorker';
+import { MobileMetaOptimizer } from '@components/MobileMetaOptimizer';
+import { MobilePerformanceOptimizer } from '@components/MobilePerformanceOptimizer';
+import { LatestNews } from '@components/LatestNews';
+import { SmartNewsFeed } from '@components/SmartNewsFeed';
+import { LiveMatchTracker } from '@components/LiveMatchTracker';
+import { PredictionInterface } from '@components/PredictionInterface';
 
 export default function HomePage() {
   const t = useTranslations('home');

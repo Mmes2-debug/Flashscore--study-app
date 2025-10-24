@@ -38,3 +38,18 @@ export { SmartNewsFeed } from './SmartNewsFeed';
 
 // Alerts & Notifications
 export { FloatingAlert } from './FloatingAlert';
+
+// Re-export all components for backward compatibility
+export * from './ErrorMonitor';
+export * from './BackendHealthMonitor';
+export * from './SmartLoadingState';
+export * from './FeatureShowcase';
+export * from './PWAServiceWorker';
+export * from './MobileMetaOptimizer';
+export * from './MobilePerformanceOptimizer';
+export * from './LatestNews';
+export * from './SmartNewsFeed';
+export * from './LiveMatchTracker';
+export * from './PredictionInterface';
+export * from './OfflineIndicator';
+export * from './InstallPrompt';
