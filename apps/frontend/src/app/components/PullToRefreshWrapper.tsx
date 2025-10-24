@@ -37,21 +37,21 @@ export function PullToRefreshWrapper({
 
   const handleTouchMove = (e: React.TouchEvent) => {
     const scrollTop = scrollableRef.current?.scrollTop || 0;
-    
+
     if (scrollTop === 0 && !isRefreshing && touchStartY.current > 0) {
       const touchY = e.touches[0].clientY;
       const distance = touchY - touchStartY.current;
-      
+
       if (distance > 0) {
         e.preventDefault();
-        
+
         const dampedDistance = Math.min(
           distance * 0.5,
           maxPullDistance
         );
-        
+
         setPullDistance(dampedDistance);
-        
+
         if (dampedDistance >= pullThreshold && !canRefresh) {
           setCanRefresh(true);
           haptic.selection();
@@ -65,7 +65,7 @@ export function PullToRefreshWrapper({
   const handleTouchEnd = async () => {
     if (pullDistance >= pullThreshold && !isRefreshing) {
       setIsRefreshing(true);
-      
+
       try {
         await onRefresh();
         if (typeof window !== 'undefined') {
@@ -220,7 +220,7 @@ export function PullToRefreshWrapper({
           .refresh-indicator {
             display: none;
           }
-          
+
           .scrollable-content {
             transform: none !important;
           }
@@ -229,3 +229,5 @@ export function PullToRefreshWrapper({
     </div>
   );
 }
+
+export { PullToRefreshWrapper };

@@ -90,7 +90,7 @@ export function ConfidenceSlider({
             <div className="confidence-glow" />
           </div>
         </div>
-        
+
         <div className="confidence-labels">
           <span>0%</span>
           <span className="confidence-level">{getConfidenceLabel(adjustedConfidence)}</span>
@@ -404,3 +404,5 @@ export function ConfidenceSlider({
     </div>
   );
 }
+
+export { ConfidenceSlider };

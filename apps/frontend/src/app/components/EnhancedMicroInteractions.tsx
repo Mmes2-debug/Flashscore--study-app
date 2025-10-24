@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from 'react';
-import ConfidenceSlider from './ConfidenceSlider';
-import LiveOddsUpdater from './LiveOddsUpdater';
-import PullToRefreshWrapper from './PullToRefreshWrapper';
-import { useGestureControls, useSwipeableItem } from '../hooks/useGestureControls';
-import { haptic } from './HapticFeedback';
+import { ConfidenceSlider, LiveOddsUpdater, PullToRefreshWrapper } from '@components';
+import { useGestureControls, useSwipeableItem } from '@hooks/useGestureControls';
+import { haptic } from '@components/HapticFeedback';
 
 function EnhancedMicroInteractions() {
   const [selectedTab, setSelectedTab] = useState(0);

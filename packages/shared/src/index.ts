@@ -1,32 +1,34 @@
-// Barrel exports for shared package
-// Models
+
+// Core Libraries
+export * from './libs/api/client';
 export * from './libs/models';
-
-// Services
 export * from './libs/services';
-
-// Types
 export * from './libs/types';
 
-// Utils
-export * from './libs/utils';
-
-// API Client
-export { SharedAPIClient, sharedAPIClient } from './libs/api/client';
-
-// Re-export commonly used utilities
-export { 
-  systemOptimizer,
+// Utilities - Named exports
+export {
+  ClientStorage,
+  UserManager,
+  PiCoinManager,
+  VisitorManager,
   paymentManager,
   emailManager,
   crudManager,
-  piCoinManager,
-  kidsModeUtils
+  systemOptimizer,
+  apiSecurity,
+  backupManager,
+  cacheManager,
+  offlineStorage,
+  kidsMode,
+  partnershipManager,
+  monetizationManager,
+  ethicalSecurityManager,
+  auditScan,
+  mlEnhancement,
+  imageOptimizer,
+  apiManager
 } from './libs/utils';
 
-// Re-export commonly used items
-export { Author } from './libs/models/author';
-export { PytorchModel, pytorchModelInstance, initializePytorchModel } from './libs/models/pytorchModel';
-export { foundationApi } from './libs/utils/apifoundation';
-export { mlEnhancement } from './libs/utils/mlEnhancement';
-export { UserManager, userManager } from './libs/utils/userManager';
+// Type exports
+export type * from './libs/types';
+export type * from './libs/models';

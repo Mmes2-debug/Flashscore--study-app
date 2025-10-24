@@ -37,7 +37,7 @@ export function LiveOddsUpdater({
         const response = await fetch(`/api/odds?matchId=${matchId}`);
         if (response.ok) {
           const newOdds = await response.json();
-          
+
           if (JSON.stringify(newOdds) !== JSON.stringify(currentOdds)) {
             setPreviousOdds(currentOdds);
             setCurrentOdds(newOdds);
@@ -342,3 +342,5 @@ export function LiveOddsUpdater({
     </div>
   );
 }
+
+export { LiveOddsUpdater };
