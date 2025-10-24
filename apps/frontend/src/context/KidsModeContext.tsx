@@ -14,23 +14,10 @@ const KidsModeContext = createContext<KidsModeContextValue | undefined>(
 export const KidsModeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [kidsMode, setKidsModeState] = useState<boolean>(() => {
-    try {
-      const stored = localStorage.getItem("kidsMode");
-      return stored === "true";
-    } catch {
-      return false;
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem("kidsMode", String(kidsMode));
-    } catch {}
-  }, [kidsMode]);
+  const [kidsMode, setKidsModeState] = useState<boolean>(false);
 
   const setKidsMode = (v: boolean) => {
-    setKidsModeState(v);
+    setKidsModeState(false);
   };
 
   return (

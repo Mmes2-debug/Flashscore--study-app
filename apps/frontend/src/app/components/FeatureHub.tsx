@@ -1,10 +1,6 @@
-
 "use client";
 import React, { useState, useEffect } from 'react';
-import PaymentManager from '@magajico/shared/utils';
-import EmailManager from '@magajico/shared/utils';
-import CRUDManager from '@magajico/shared/utils';
-import SystemOptimizer from '@magajico/shared/utils';
+import { systemOptimizer, paymentManager, emailManager, crudManager } from '@magajico/shared/utils';
 import { useMobile } from '@hooks/useMobile';
 
 interface FeatureGroup {
@@ -205,7 +201,7 @@ const FeatureHub: React.FC = () => {
 
   const loadSystemHealth = async () => {
     try {
-      const health = SystemOptimizer.getSystemHealth();
+      const health = systemOptimizer.getSystemHealth();
       setSystemHealth(health);
     } catch (error) {
       console.error('Error loading system health:', error);
@@ -215,21 +211,21 @@ const FeatureHub: React.FC = () => {
   const handleFeatureSearch = (query: string) => {
     setSearchQuery(query);
     if (query) {
-      const results = SystemOptimizer.search(query);
+      const results = systemOptimizer.search(query);
       console.log('Search results:', results);
     }
   };
 
   const testPaymentSystem = async () => {
     try {
-      const result = await PaymentManager.processPayment({
+      const result = await paymentManager.processPayment({
         amount: 10,
         currency: 'USD',
         provider: 'pi_network',
         userId: 'test_user',
         description: 'Test payment'
       });
-      
+
       alert(result.success ? 'Payment test successful!' : `Payment failed: ${result.error}`);
     } catch (error) {
       alert('Payment test error');
@@ -238,7 +234,7 @@ const FeatureHub: React.FC = () => {
 
   const testEmailSystem = async () => {
     try {
-      const success = await EmailManager.sendTemplatedEmail(
+      const success = await emailManager.sendTemplatedEmail(
         'welcome',
         'test@example.com',
         {
@@ -247,7 +243,7 @@ const FeatureHub: React.FC = () => {
           appUrl: window.location.origin
         }
       );
-      
+
       alert(success ? 'Email test successful!' : 'Email test failed');
     } catch (error) {
       alert('Email test error');
@@ -256,7 +252,7 @@ const FeatureHub: React.FC = () => {
 
   const testCRUDSystem = async () => {
     try {
-      const health = await CRUDManager.healthCheck();
+      const health = await crudManager.healthCheck();
       alert(`CRUD system health: ${health.status}`);
     } catch (error) {
       alert('CRUD test error');
@@ -294,7 +290,7 @@ const FeatureHub: React.FC = () => {
           {feature.status}
         </div>
       </div>
-      
+
       <p style={{
         margin: '0 0 12px 0',
         color: '#aaa',
@@ -303,7 +299,7 @@ const FeatureHub: React.FC = () => {
       }}>
         {feature.description}
       </p>
-      
+
       <div style={{ display: 'flex', gap: '12px' }}>
         <div style={{ flex: 1 }}>
           <div style={{
@@ -328,7 +324,7 @@ const FeatureHub: React.FC = () => {
             }} />
           </div>
         </div>
-        
+
         <div style={{ flex: 1 }}>
           <div style={{
             display: 'flex',
@@ -382,7 +378,7 @@ const FeatureHub: React.FC = () => {
         }}>
           🎯 Feature Management Hub
         </h1>
-        
+
         {/* Search Bar */}
         <div style={{ position: 'relative', marginBottom: '16px' }}>
           <input
@@ -439,7 +435,7 @@ const FeatureHub: React.FC = () => {
                 System {systemHealth.status}
               </span>
             </div>
-            
+
             <div style={{ fontSize: '12px', color: '#aaa' }}>
               Load Time: {systemHealth.metrics.loadTime}ms | 
               Cache Hit Rate: {(systemHealth.metrics.cacheHitRate * 100).toFixed(1)}%
@@ -510,7 +506,7 @@ const FeatureHub: React.FC = () => {
           <span>💳</span>
           Test Payment System
         </button>
-        
+
         <button
           onClick={testEmailSystem}
           style={{
@@ -530,7 +526,7 @@ const FeatureHub: React.FC = () => {
           <span>📧</span>
           Test Email System
         </button>
-        
+
         <button
           onClick={testCRUDSystem}
           style={{
