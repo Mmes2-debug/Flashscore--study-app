@@ -8,7 +8,7 @@ interface HeaderProps {
   onStoreClick?: () => void;
 }
 
-export default function Header({
+export function Header({
   currentUser,
   onLoginClick,
   onLogout,

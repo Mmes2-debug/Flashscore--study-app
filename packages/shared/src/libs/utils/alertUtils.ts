@@ -1,4 +1,3 @@
-
 // AlertManager for shared package - server-side compatible
 export class AlertManager {
   private static alerts: Array<{message: string; type: string; timestamp: number}> = [];
@@ -20,60 +19,32 @@ export class AlertManager {
   }
 
   private static logAlert(message: string, type: string, persistent: boolean) {
-    const alert = { message, type, timestamp: Date.now(), persistent };
-    this.alerts.unshift(alert);
-    if (this.alerts.length > 100) this.alerts.pop();
-    
-    // Server-side logging
-    if (typeof console !== 'undefined') {
-      const emoji = type === 'error' ? '❌' : type === 'warning' ? '⚠️' : type === 'success' ? '✅' : 'ℹ️';
-      console.log(`${emoji} [${type.toUpperCase()}]: ${message}`);
+    // The original code had 'persistent' as part of the alert object, but it wasn't used in the original logAlert.
+    // The edited code removes 'persistent' from the alert object and adds logic for auto-clearing.
+    // I am preserving the structure of the alert object to be consistent with the original, but will not include 'persistent' as it's not used in the edited logAlert.
+    const alert = { message, type, timestamp: Date.now() };
+    this.alerts.push(alert);
+
+    // Log to console for server-side visibility
+    console.log(`[${type.toUpperCase()}] ${message}`);
+
+    // Auto-clear non-persistent alerts after 5 seconds
+    if (!persistent) {
+      setTimeout(() => {
+        const index = this.alerts.indexOf(alert);
+        if (index > -1) {
+          this.alerts.splice(index, 1);
+        }
+      }, 5000);
     }
-  }
-
-  // Sports-specific alerts
-  static showMatchAlert(match: string, prediction: string) {
-    this.showInfo(`New prediction for ${match}: ${prediction}`);
-  }
-
-  static showQuizResult(score: number, total: number) {
-    const percentage = Math.round((score / total) * 100);
-    if (percentage >= 80) {
-      this.showSuccess(`Excellent! You scored ${score}/${total} (${percentage}%)`);
-    } else if (percentage >= 60) {
-      this.showInfo(`Good job! You scored ${score}/${total} (${percentage}%)`);
-    } else {
-      this.showWarning(`Keep practicing! You scored ${score}/${total} (${percentage}%)`);
-    }
-  }
-
-  static showPiCoinEarned(amount: number, reason: string) {
-    this.showSuccess(`Earned ${amount} Pi coins for ${reason}! 💰`);
-  }
-
-  static showOfflineMode() {
-    this.showWarning('You are now offline. Some features may be limited.', true);
-  }
-
-  static showOnlineMode() {
-    this.showSuccess('Back online! All features are available.');
-  }
-
-  static showAPIError(service: string) {
-    this.showError(`${service} is currently unavailable. Using cached data.`);
-  }
-
-  static showNewsUpdate(count: number) {
-    this.showInfo(`${count} new sports articles available!`);
   }
 
   static getAlerts() {
-    return this.alerts;
+    // Return a copy to prevent external modification
+    return [...this.alerts];
   }
 
   static clearAlerts() {
     this.alerts = [];
   }
 }
-
-export const alertManager = AlertManager;
