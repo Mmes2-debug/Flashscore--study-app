@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { ClientStorage } from '../utils/clientStorage';
 import { UserManager } from '@magajico/shared/utils';
+import { useAuth } from '@hooks/useAuth';
 
 interface User {
   id: string;
@@ -144,7 +145,7 @@ const ChallengeSystem: React.FC<ChallengeSystemProps> = ({ currentUser }) => {
         }}>
           🏆 Challenge Zone
         </h2>
-        
+
         {currentUser && (
           <button
             onClick={() => setShowCreateChallenge(!showCreateChallenge)}
@@ -174,7 +175,7 @@ const ChallengeSystem: React.FC<ChallengeSystemProps> = ({ currentUser }) => {
           border: '1px solid rgba(255, 255, 255, 0.2)'
         }}>
           <h3 style={{ color: '#22c55e', marginBottom: '20px' }}>Create New Challenge</h3>
-          
+
           <div style={{ display: 'grid', gap: '16px' }}>
             <input
               type="text"
@@ -190,7 +191,7 @@ const ChallengeSystem: React.FC<ChallengeSystemProps> = ({ currentUser }) => {
                 fontSize: '16px'
               }}
             />
-            
+
             <textarea
               placeholder="Challenge Description"
               value={newChallenge.description}
@@ -206,7 +207,7 @@ const ChallengeSystem: React.FC<ChallengeSystemProps> = ({ currentUser }) => {
                 resize: 'vertical'
               }}
             />
-            
+
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
               <select
                 value={newChallenge.type}
@@ -224,7 +225,7 @@ const ChallengeSystem: React.FC<ChallengeSystemProps> = ({ currentUser }) => {
                 <option value="prediction">🔮 Prediction</option>
                 <option value="trivia">🎯 Trivia</option>
               </select>
-              
+
               <select
                 value={newChallenge.difficulty}
                 onChange={(e) => setNewChallenge({ ...newChallenge, difficulty: e.target.value as any })}
@@ -241,7 +242,7 @@ const ChallengeSystem: React.FC<ChallengeSystemProps> = ({ currentUser }) => {
                 <option value="medium">Medium</option>
                 <option value="hard">Hard</option>
               </select>
-              
+
               <input
                 type="number"
                 placeholder="Reward (π coins)"
@@ -257,7 +258,7 @@ const ChallengeSystem: React.FC<ChallengeSystemProps> = ({ currentUser }) => {
                 }}
               />
             </div>
-            
+
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
               <button
                 onClick={() => setShowCreateChallenge(false)}
@@ -337,7 +338,7 @@ const ChallengeSystem: React.FC<ChallengeSystemProps> = ({ currentUser }) => {
                     </span>
                   </div>
                 </div>
-                
+
                 {currentUser && challenge.status === 'active' && (
                   <button
                     onClick={() => joinChallenge(challenge.id)}
@@ -359,7 +360,7 @@ const ChallengeSystem: React.FC<ChallengeSystemProps> = ({ currentUser }) => {
                   </button>
                 )}
               </div>
-              
+
               <div style={{ 
                 fontSize: '0.8rem', 
                 color: '#9ca3af',

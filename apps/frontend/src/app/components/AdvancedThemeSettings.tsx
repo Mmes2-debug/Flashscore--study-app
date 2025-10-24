@@ -6,7 +6,7 @@ import { useThemeScheduler } from '../hooks/useThemeScheduler';
 import { useColorBlindMode } from '../hooks/useColorBlindMode';
 import { ThemeSyncManager } from '../utils/themeSyncManager';
 
-export default function AdvancedThemeSettings() {
+export function AdvancedThemeSettings() {
   const { updateSchedule, toggleScheduler } = useThemeScheduler();
   const { mode, setColorBlindMode } = useColorBlindMode();
   const [schedulerEnabled, setSchedulerEnabled] = useState(false);
@@ -92,3 +92,5 @@ export default function AdvancedThemeSettings() {
     </div>
   );
 }
+
+export default AdvancedThemeSettings;

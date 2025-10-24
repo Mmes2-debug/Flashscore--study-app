@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { ProtectedGambling } from '../../../components/ProtectedGambling';
+import { useAuth } from '@hooks/useAuth';
 
 interface Payment {
   id: string;
@@ -14,7 +15,7 @@ interface Payment {
   method: 'card' | 'paypal' | 'crypto' | 'pi';
 }
 
-export default function PaymentsManager() {
+export function PaymentsManager() {
   const [payments, setPayments] = useState<Payment[]>([
     {
       id: '1',
@@ -200,3 +201,5 @@ export default function PaymentsManager() {
     </div>
   );
 }
+
+export default PaymentsManager;

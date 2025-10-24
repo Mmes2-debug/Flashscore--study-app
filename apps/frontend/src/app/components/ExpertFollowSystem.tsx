@@ -1,7 +1,7 @@
-
 "use client";
 import React, { useState, useEffect } from 'react';
 import { ClientStorage } from '../utils/clientStorage';
+import { useAuth } from '@hooks/useAuth';
 
 interface User {
   id: string;
@@ -178,7 +178,7 @@ const ExpertFollowSystem: React.FC<ExpertFollowSystemProps> = ({ currentUser }) 
       newFollowed.delete(expertId);
     } else {
       newFollowed.add(expertId);
-      
+
       // Create welcome notification
       const expert = experts.find(e => e.id === expertId);
       if (expert) {
@@ -214,7 +214,7 @@ const ExpertFollowSystem: React.FC<ExpertFollowSystemProps> = ({ currentUser }) 
   };
 
   const markNotificationAsRead = (notifId: string) => {
-    const updated = notifications.map(n => 
+    const updated = notifications.map(n =>
       n.id === notifId ? { ...n, read: true } : n
     );
     saveNotifications(updated);
@@ -248,7 +248,7 @@ const ExpertFollowSystem: React.FC<ExpertFollowSystemProps> = ({ currentUser }) 
   };
 
   const unreadCount = notifications.filter(n => !n.read).length;
-  const filteredExperts = filter === 'following' 
+  const filteredExperts = filter === 'following'
     ? experts.filter(e => followedExperts.has(e.id))
     : experts;
 

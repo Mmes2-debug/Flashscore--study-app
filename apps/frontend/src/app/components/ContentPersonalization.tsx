@@ -1,8 +1,8 @@
-
 "use client";
 import React, { useState, useEffect } from 'react';
 import { ClientStorage } from '../utils/clientStorage';
 import { UserManager } from '@magajico/shared/utils';
+import { useAuth } from '@hooks/useAuth';
 
 interface User {
   id: string;
@@ -110,7 +110,7 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
   const loadUserPreferences = () => {
     const saved = ClientStorage.getItem(`user_preferences_${currentUser?.id}`, preferences);
     setPreferences(saved);
-    
+
     // Check if user needs onboarding
     if (saved.sports.length === 0) {
       setShowSetup(true);
@@ -171,22 +171,22 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
         if (preferences.sports.length > 0 && !preferences.sports.includes(item.sport)) {
           return false;
         }
-        
+
         // Filter by content type
         if (!preferences.contentTypes.includes(item.type)) {
           return false;
         }
-        
+
         // Filter by difficulty
         const difficultyLevel = {
           'beginner': 1,
           'intermediate': 2,
           'expert': 3
         };
-        
+
         const userLevel = difficultyLevel[preferences.difficulty];
         const contentLevel = difficultyLevel[item.difficulty as keyof typeof difficultyLevel];
-        
+
         // Show content at user's level or one level below/above
         return Math.abs(userLevel - contentLevel) <= 1;
       })
@@ -199,7 +199,7 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
     const updatedSports = selected
       ? [...preferences.sports, sportId]
       : preferences.sports.filter(s => s !== sportId);
-    
+
     savePreferences({
       ...preferences,
       sports: updatedSports
@@ -210,7 +210,7 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
     const updatedTypes = selected
       ? [...preferences.contentTypes, typeId]
       : preferences.contentTypes.filter(t => t !== typeId);
-    
+
     savePreferences({
       ...preferences,
       contentTypes: updatedTypes
@@ -294,7 +294,7 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
         }}>
           🎯 Your Personalized Feed
         </h2>
-        
+
         <button
           onClick={() => setShowSetup(true)}
           style={{
@@ -324,8 +324,8 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
             style={{
               flex: 1,
               padding: '10px',
-              background: activeTab === 'feed' 
-                ? 'linear-gradient(135deg, #6366f1, #8b5cf6)' 
+              background: activeTab === 'feed'
+                ? 'linear-gradient(135deg, #6366f1, #8b5cf6)'
                 : 'rgba(255, 255, 255, 0.1)',
               color: 'white',
               border: 'none',
@@ -340,8 +340,8 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
             style={{
               flex: 1,
               padding: '10px',
-              background: activeTab === 'preferences' 
-                ? 'linear-gradient(135deg, #6366f1, #8b5cf6)' 
+              background: activeTab === 'preferences'
+                ? 'linear-gradient(135deg, #6366f1, #8b5cf6)'
                 : 'rgba(255, 255, 255, 0.1)',
               color: 'white',
               border: 'none',
@@ -433,7 +433,7 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
                       {Math.round(item.relevanceScore * 100)}% match
                     </span>
                   </div>
-                  
+
                   <span style={{
                     color: '#9ca3af',
                     fontSize: '0.8rem'
@@ -441,7 +441,7 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
                     {item.timestamp.toLocaleDateString()}
                   </span>
                 </div>
-                
+
                 <h3 style={{
                   color: '#fff',
                   fontSize: '1.1rem',
@@ -450,7 +450,7 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
                 }}>
                   {item.title}
                 </h3>
-                
+
                 <p style={{
                   color: '#d1fae5',
                   fontSize: '0.9rem',
@@ -459,7 +459,7 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
                 }}>
                   {item.content}
                 </p>
-                
+
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -504,7 +504,7 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
           }}>
             Quick Preferences
           </h3>
-          
+
           <div style={{
             display: 'grid',
             gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
@@ -526,8 +526,8 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
                   personalizedFeed: !preferences.personalizedFeed
                 })}
                 style={{
-                  background: preferences.personalizedFeed 
-                    ? 'linear-gradient(135deg, #22c55e, #16a34a)' 
+                  background: preferences.personalizedFeed
+                    ? 'linear-gradient(135deg, #22c55e, #16a34a)'
                     : 'rgba(255, 255, 255, 0.1)',
                   color: 'white',
                   border: 'none',
@@ -541,7 +541,7 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
                 {preferences.personalizedFeed ? '✅ Enabled' : '❌ Disabled'}
               </button>
             </div>
-            
+
             <div>
               <label style={{
                 color: '#fff',
@@ -641,7 +641,7 @@ const ContentPersonalization: React.FC<ContentPersonalizationProps> = ({
                   <button
                     key={sport.id}
                     onClick={() => updateSportPreference(
-                      sport.id, 
+                      sport.id,
                       !preferences.sports.includes(sport.id)
                     )}
                     style={{

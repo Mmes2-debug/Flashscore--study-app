@@ -15,11 +15,11 @@ export const useAIAnalysis = () => {
     try {
       const analysisResult = await analyzeMatch(matchData, useCache, enableAI);
       setResult(analysisResult);
-      
+
       if (enableAI && analysisResult.aiInsights) {
         setAiInsights(analysisResult.aiInsights);
       }
-      
+
       return analysisResult;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Analysis failed';

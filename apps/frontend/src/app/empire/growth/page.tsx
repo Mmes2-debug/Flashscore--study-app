@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import GrowthDashboard from '../components/GrowthDashboard';
+import GrowthDashboard from '@/app/empire/components/GrowthDashboard';
 import EmpireLeaderboard from '../components/EmpireLeaderboard';
 import { foundationApi, Phase } from '@/lib/api/foundation';
 import Breadcrumbs from '../../components/Breadcrumbs';
 
-export default function GrowthPage() {
+export function GrowthPage() {
   const [userId, setUserId] = useState<string>('');
   const [totalPower, setTotalPower] = useState(0);
   const [phases, setPhases] = useState<Phase[]>([]);
@@ -104,3 +104,5 @@ export default function GrowthPage() {
     </div>
   );
 }
+
+export default GrowthPage;

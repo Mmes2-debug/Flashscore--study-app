@@ -89,7 +89,7 @@ export default function EnhancedMicroInteractions() {
             )}
           </div>
         </div>
-        
+
         <div className="swipe-actions">
           <div 
             className="swipe-action left"
@@ -464,7 +464,8 @@ export default function EnhancedMicroInteractions() {
             }
           }
         `}</style>
-      </div>
-    </PullToRefreshWrapper>
+    </div>
   );
 }
+
+export default EnhancedMicroInteractions;

@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -30,7 +29,7 @@ export default function TestNewsAuthorPage() {
         collaborationType: 'prediction',
         tags: ['test', 'first-news', 'prediction']
       });
-      
+
       setResult(`✅ News created successfully! ID: ${news.id}`);
     } catch (error) {
       setResult(`❌ Error: ${error}`);
@@ -54,7 +53,7 @@ export default function TestNewsAuthorPage() {
           }
         })
       });
-      
+
       const data = await response.json();
       setResult(data.success ? '✅ Auto news generated!' : `❌ ${data.message}`);
     } catch (error) {
@@ -78,10 +77,10 @@ export default function TestNewsAuthorPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-white mb-8">🧪 Test News Author Publishing</h1>
-        
+
         <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 p-6 mb-6">
           <h2 className="text-2xl font-bold text-white mb-4">Quick Actions</h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <button
               onClick={initializeAuthors}
@@ -90,7 +89,7 @@ export default function TestNewsAuthorPage() {
             >
               1️⃣ Initialize Default Authors
             </button>
-            
+
             <button
               onClick={createTestNews}
               disabled={loading}
@@ -98,7 +97,7 @@ export default function TestNewsAuthorPage() {
             >
               2️⃣ Create Test News
             </button>
-            
+
             <button
               onClick={() => generateAutoNews('prediction_success')}
               disabled={loading}
@@ -106,7 +105,7 @@ export default function TestNewsAuthorPage() {
             >
               🎯 Auto: Prediction Success
             </button>
-            
+
             <button
               onClick={() => generateAutoNews('community_milestone')}
               disabled={loading}
@@ -114,7 +113,7 @@ export default function TestNewsAuthorPage() {
             >
               🏆 Auto: Milestone
             </button>
-            
+
             <button
               onClick={() => generateAutoNews('analysis_update')}
               disabled={loading}
@@ -122,7 +121,7 @@ export default function TestNewsAuthorPage() {
             >
               📊 Auto: Analysis Update
             </button>
-            
+
             <button
               onClick={viewAllNews}
               disabled={loading}
@@ -131,14 +130,14 @@ export default function TestNewsAuthorPage() {
               📰 View All News
             </button>
           </div>
-          
+
           {loading && (
             <div className="text-center py-4">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
               <p className="text-white mt-2">Processing...</p>
             </div>
           )}
-          
+
           {result && (
             <div className="bg-black/30 rounded-lg p-4 mt-4">
               <h3 className="text-white font-semibold mb-2">Result:</h3>
@@ -148,7 +147,7 @@ export default function TestNewsAuthorPage() {
             </div>
           )}
         </div>
-        
+
         <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 p-6">
           <h2 className="text-xl font-bold text-white mb-4">📋 Testing Instructions</h2>
           <ol className="text-gray-300 space-y-2 list-decimal list-inside">

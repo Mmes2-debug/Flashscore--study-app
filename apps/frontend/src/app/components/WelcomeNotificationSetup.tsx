@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from 'react';
 import { ClientStorage } from '../utils/clientStorage';
@@ -22,7 +21,7 @@ const WelcomeNotificationSetup: React.FC<WelcomeNotificationSetupProps> = ({ onC
     if ('Notification' in window) {
       const permission = await Notification.requestPermission();
       const enabled = permission === 'granted';
-      
+
       // Mark welcome as seen
       ClientStorage.setItem('notification_welcome_seen', true);
       setShowWelcome(false);
@@ -39,7 +38,7 @@ const WelcomeNotificationSetup: React.FC<WelcomeNotificationSetupProps> = ({ onC
   if (!showWelcome) return null;
 
   return (
-    <div 
+    <div
       style={{
         position: 'fixed',
         top: 0,
@@ -100,30 +99,30 @@ const WelcomeNotificationSetup: React.FC<WelcomeNotificationSetupProps> = ({ onC
         >
           ✕
         </button>
-        
+
         <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🔔</div>
-        
-        <h2 style={{ 
-          margin: '0 0 16px 0', 
-          background: 'linear-gradient(135deg, #00ff88, #00a2ff)', 
-          WebkitBackgroundClip: 'text', 
-          WebkitTextFillColor: 'transparent' 
+
+        <h2 style={{
+          margin: '0 0 16px 0',
+          background: 'linear-gradient(135deg, #00ff88, #00a2ff)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent'
         }}>
           Stay Updated!
         </h2>
-        
-        <p style={{ 
-          margin: '0 0 24px 0', 
-          color: '#d1fae5', 
+
+        <p style={{
+          margin: '0 0 24px 0',
+          color: '#d1fae5',
           lineHeight: '1.5',
           fontSize: '0.95rem'
         }}>
-          Get notified about match updates, achievements, and important sports news. 
+          Get notified about match updates, achievements, and important sports news.
           You can customize your notification preferences anytime.
         </p>
 
-        <div style={{ 
-          background: 'rgba(34, 197, 94, 0.1)', 
+        <div style={{
+          background: 'rgba(34, 197, 94, 0.1)',
           border: '1px solid rgba(34, 197, 94, 0.3)',
           borderRadius: '12px',
           padding: '16px',
@@ -153,7 +152,7 @@ const WelcomeNotificationSetup: React.FC<WelcomeNotificationSetupProps> = ({ onC
           >
             🔔 Enable Notifications
           </button>
-          
+
           <button
             onClick={handleSkip}
             style={{
@@ -169,10 +168,10 @@ const WelcomeNotificationSetup: React.FC<WelcomeNotificationSetupProps> = ({ onC
             Maybe Later
           </button>
         </div>
-        
-        <p style={{ 
-          fontSize: '0.75rem', 
-          color: '#6b7280', 
+
+        <p style={{
+          fontSize: '0.75rem',
+          color: '#6b7280',
           marginTop: '16px',
           margin: '16px 0 0 0'
         }}>

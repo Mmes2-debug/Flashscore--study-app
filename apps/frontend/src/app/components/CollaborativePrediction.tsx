@@ -20,7 +20,7 @@ interface CollaborationRoom {
   status: 'active' | 'locked' | 'completed';
 }
 
-export default function CollaborativePrediction() {
+export function CollaborativePrediction() {
   const [rooms, setRooms] = useState<CollaborationRoom[]>([]);
   const [selectedRoom, setSelectedRoom] = useState<CollaborationRoom | null>(null);
   const [userPrediction, setUserPrediction] = useState('');
@@ -267,3 +267,5 @@ export default function CollaborativePrediction() {
     </div>
   );
 }
+
+export default CollaborativePrediction;

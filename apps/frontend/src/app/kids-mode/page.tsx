@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import KidsModeDashboard from '../components/KidsModeDashboard';
+import KidsModeDashboard from '@components/KidsModeDashboard';
 import { useKidsModeContext } from '../../context/KidsModeContext';
 
-export default function KidsModePage() {
+export function KidsModePage() {
   const { kidsMode, setKidsMode } = useKidsModeContext();
 
   return (
@@ -31,3 +31,5 @@ export default function KidsModePage() {
     </div>
   );
 }
+
+export default KidsModePage;

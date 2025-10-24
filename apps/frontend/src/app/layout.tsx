@@ -8,7 +8,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { KidsModeProvider } from "../context/KidsModeContext";
 import { UserPreferencesProvider } from "./providers/UserPreferencesProvider";
 import { SessionProvider } from './providers/SessionProvider';
-import './styles/globals.css';
+import '@/app/styles/globals.css';
 import './styles/mobile-optimizations.css';
 import PWAServiceWorker from "./components/PWAServiceWorker";
 import PushNotificationManager from "./components/PushNotificationManager";

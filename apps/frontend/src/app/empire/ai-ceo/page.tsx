@@ -6,7 +6,7 @@ import MagajiCoPredictionChat from '../../components/MagajiCoPredictionChat';
 import Link from 'next/link';
 import Breadcrumbs from '../../components/Breadcrumbs';
 
-export default function AICEOPage() {
+export function AICEOPage() {
   const [activeView, setActiveView] = useState<'classic' | 'chat'>('chat');
 
   return (
@@ -84,3 +84,5 @@ export default function AICEOPage() {
     </div>
   );
 }
+
+export default AICEOPage;

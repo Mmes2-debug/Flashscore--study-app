@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -6,7 +5,7 @@ import { useLocale } from 'next-intl';
 import { locales, localeNames, type Locale } from '@/i18n';
 import { useUserPreferences } from '../providers/UserPreferencesProvider';
 
-export default function VoiceLanguageControl() {
+export function VoiceLanguageControl() {
   const locale = useLocale() as Locale;
   const { updatePreferences } = useUserPreferences();
   const [isListening, setIsListening] = useState(false);
@@ -127,3 +126,5 @@ export default function VoiceLanguageControl() {
     </div>
   );
 }
+
+export default VoiceLanguageControl;

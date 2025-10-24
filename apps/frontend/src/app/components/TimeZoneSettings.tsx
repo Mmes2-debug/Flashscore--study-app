@@ -1,10 +1,9 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import timeZoneService from '../services/timeZoneService';
 
-export default function TimeZoneSettings() {
+export function TimeZoneSettings() {
   const [timezone, setTimezone] = useState('');
   const [format24h, setFormat24h] = useState(true);
   const [showLocalTime, setShowLocalTime] = useState(true);
@@ -196,3 +195,5 @@ export default function TimeZoneSettings() {
     </div>
   );
 }
+
+export default TimeZoneSettings;

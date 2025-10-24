@@ -1,7 +1,7 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { KidsModeToggle } from '../KidsModeToggle';
+import { KidsModeToggle } from '@/components/KidsModeToggle';
 import { ProtectedGambling } from '../ProtectedGambling';
 import { KidsModeProvider } from '../../context/KidsModeContext';
 

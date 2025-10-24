@@ -2,7 +2,7 @@ import MagajiCoFoundation from './MagajiCoFoundation/MagajiCoFoundation';
 import Link from 'next/link';
 import Breadcrumbs from '../components/Breadcrumbs';
 
-export default function Home() {
+export function Home() {
   return (
     <div>
       <div className="max-w-7xl mx-auto px-4 pt-6">
@@ -12,7 +12,7 @@ export default function Home() {
           ]}
         />
       </div>
-      
+
       {/* AI CEO Quick Access */}
       <div className="fixed top-20 right-4 z-50">
         <Link 
@@ -22,8 +22,10 @@ export default function Home() {
           🧠 AI CEO
         </Link>
       </div>
-      
+
       <MagajiCoFoundation />
     </div>
   );
 }
+
+export default Home;

@@ -1,7 +1,7 @@
-
 "use client";
 import React, { useState, useEffect } from 'react';
 import { ClientStorage } from '../utils/clientStorage';
+import { useAuth } from '@hooks/useAuth';
 
 interface UserFriendlyFeaturesProps {
   currentUser: any;
@@ -29,27 +29,27 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
 
   const applyAccessibilitySettings = (prefs: typeof userPreferences) => {
     const root = document.documentElement;
-    
+
     // Font size
     root.style.setProperty('--user-font-size', 
       prefs.fontSize === 'large' ? '1.2em' : 
       prefs.fontSize === 'small' ? '0.9em' : '1em'
     );
-    
+
     // High contrast
     if (prefs.highContrast) {
       root.classList.add('high-contrast');
     } else {
       root.classList.remove('high-contrast');
     }
-    
+
     // Reduced motion
     if (prefs.reducedMotion) {
       root.classList.add('reduced-motion');
     } else {
       root.classList.remove('reduced-motion');
     }
-    
+
     // One-hand mode for mobile
     if (prefs.oneHandMode && isMobile) {
       root.classList.add('one-hand-mode');
@@ -86,7 +86,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
         <h4 style={{ color: '#22c55e', margin: '0 0 12px 0', fontSize: '1rem' }}>
           ⚡ Quick Actions
         </h4>
-        
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -103,7 +103,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
           >
             🔝 Back to Top
           </button>
-          
+
           <button
             onClick={() => {
               const quizSection = document.querySelector('[data-section="quiz"]');
@@ -122,7 +122,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
           >
             🧠 Quick Quiz
           </button>
-          
+
           <button
             onClick={() => setActiveFeature('help')}
             style={{
@@ -147,7 +147,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
   const InteractiveTutorial = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [showTutorial, setShowTutorial] = useState(false);
-    
+
     const tutorialSteps = [
       {
         title: "Welcome to Sports Central! 🎉",
@@ -224,15 +224,15 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
           <div style={{ fontSize: '2rem', marginBottom: '16px' }}>
             {tutorialSteps[currentStep].title.split(' ')[0]}
           </div>
-          
+
           <h3 style={{ margin: '0 0 16px 0', color: '#22c55e' }}>
             {tutorialSteps[currentStep].title}
           </h3>
-          
+
           <p style={{ margin: '0 0 24px 0', lineHeight: '1.5', color: '#d1fae5' }}>
             {tutorialSteps[currentStep].content}
           </p>
-          
+
           <div style={{ 
             display: 'flex', 
             justifyContent: 'space-between', 
@@ -252,11 +252,11 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
             >
               Skip
             </button>
-            
+
             <div style={{ color: '#9ca3af', fontSize: '0.9rem' }}>
               {currentStep + 1} of {tutorialSteps.length}
             </div>
-            
+
             <button
               onClick={() => {
                 if (currentStep < tutorialSteps.length - 1) {
@@ -286,7 +286,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
   const SmartHelpSystem = () => {
     const [helpQuery, setHelpQuery] = useState('');
     const [suggestions, setSuggestions] = useState<string[]>([]);
-    
+
     const helpTopics = {
       'make prediction': 'To make a prediction, click on any match in the predictions table and select your choice.',
       'earn pi coins': 'Earn Pi coins by completing quizzes, making accurate predictions, and daily logins.',
@@ -431,7 +431,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
       <h3 style={{ color: '#8b5cf6', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
         ♿ Accessibility Settings
       </h3>
-      
+
       <div style={{ display: 'grid', gap: '16px' }}>
         {/* Font Size */}
         <div>
@@ -587,7 +587,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
         <h3 style={{ color: '#06b6d4', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           📊 Your Progress
         </h3>
-        
+
         <div style={{ display: 'grid', gap: '16px' }}>
           {/* Predictions Progress */}
           <div>
@@ -680,7 +680,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
       <h3 style={{ color: '#ef4444', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
         ⌨️ Keyboard Shortcuts
       </h3>
-      
+
       <div style={{ display: 'grid', gap: '8px', fontSize: '0.9rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', color: '#d1fae5' }}>
           <span>Quick Quiz</span>
@@ -693,7 +693,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
             Q
           </kbd>
         </div>
-        
+
         <div style={{ display: 'flex', justifyContent: 'space-between', color: '#d1fae5' }}>
           <span>Search</span>
           <kbd style={{ 
@@ -705,7 +705,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
             /
           </kbd>
         </div>
-        
+
         <div style={{ display: 'flex', justifyContent: 'space-between', color: '#d1fae5' }}>
           <span>Help</span>
           <kbd style={{ 
@@ -717,7 +717,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
             ?
           </kbd>
         </div>
-        
+
         <div style={{ display: 'flex', justifyContent: 'space-between', color: '#d1fae5' }}>
           <span>Toggle Theme</span>
           <kbd style={{ 
@@ -793,7 +793,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
           }}>
             {tips[currentTip].icon}
           </div>
-          
+
           <div style={{ flex: 1 }}>
             <h4 style={{ margin: '0 0 4px 0', color: '#22c55e', fontSize: '1rem' }}>
               {tips[currentTip].title}
@@ -803,7 +803,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
             </p>
           </div>
         </div>
-        
+
         {/* Progress dots */}
         <div style={{
           display: 'flex',
@@ -854,7 +854,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
         <h3 style={{ color: '#a855f7', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           🧠 Personalized Experience
         </h3>
-        
+
         <div style={{ display: 'grid', gap: '16px' }}>
           {/* AI Content Curation */}
           <div style={{
@@ -972,7 +972,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
         <h3 style={{ color: '#f59e0b', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           🔥 Streaks & Challenges
         </h3>
-        
+
         <div style={{ display: 'grid', gap: '16px' }}>
           {/* Current Streak */}
           <div style={{
@@ -1156,7 +1156,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
         <h3 style={{ color: '#3b82f6', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           📚 Educational Hub
         </h3>
-        
+
         <div style={{ display: 'grid', gap: '12px' }}>
           {educationalContent.map(course => (
             <div
@@ -1190,7 +1190,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
                 }}>
                   {course.icon}
                 </div>
-                
+
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
                     <h4 style={{ color: '#fff', margin: 0, fontSize: '1rem' }}>
@@ -1215,11 +1215,11 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
                       </span>
                     </div>
                   </div>
-                  
+
                   <p style={{ color: '#d1d5db', fontSize: '0.9rem', margin: '0 0 8px 0' }}>
                     {course.description}
                   </p>
-                  
+
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ color: '#9ca3af', fontSize: '0.8rem' }}>
                       {course.lessons} lessons
@@ -1228,7 +1228,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
                       {course.progress}% complete
                     </span>
                   </div>
-                  
+
                   {/* Progress bar */}
                   <div style={{
                     background: 'rgba(255, 255, 255, 0.1)',
@@ -1284,7 +1284,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
                       </div>
                     ))}
                   </div>
-                  
+
                   {course.certificate && completedLessons.has(course.id) && (
                     <div style={{
                       marginTop: '12px',
@@ -1393,7 +1393,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
         <h3 style={{ color: '#10b981', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           ❤️ Social Impact Hub
         </h3>
-        
+
         <div style={{ display: 'grid', gap: '16px' }}>
           {/* Community Impact Stats */}
           <div style={{
@@ -1455,7 +1455,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
                     URGENT
                   </div>
                 )}
-                
+
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                   <div style={{
                     fontSize: '2rem',
@@ -1469,7 +1469,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
                   }}>
                     {pool.icon}
                   </div>
-                  
+
                   <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
                       <h5 style={{ color: '#fff', margin: 0, fontSize: '1rem' }}>
@@ -1485,11 +1485,11 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
                         {pool.category}
                       </span>
                     </div>
-                    
+
                     <p style={{ color: '#d1d5db', fontSize: '0.9rem', margin: '0 0 8px 0' }}>
                       {pool.description}
                     </p>
-                    
+
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                       <span style={{ color: '#10b981', fontSize: '0.9rem', fontWeight: 'bold' }}>
                         ${pool.raised.toLocaleString()} / ${pool.goal.toLocaleString()}
@@ -1498,7 +1498,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
                         {pool.participants} participants
                       </span>
                     </div>
-                    
+
                     {/* Progress bar */}
                     <div style={{
                       background: 'rgba(255, 255, 255, 0.1)',
@@ -1537,7 +1537,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
                         10 Pi coins are automatically donated to this pool on your behalf.
                       </p>
                     </div>
-                    
+
                     <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
                       <button style={{
                         background: 'linear-gradient(135deg, #10b981, #059669)',
@@ -1576,7 +1576,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
             padding: '16px',
             border: '1px solid rgba(168, 85, 247, 0.3)'
           }}>
-            <h4 style={{ color: '#a855f7', margin: '0 0 12px 0', fontSize: '1rem' }}>
+            <h4 style={{ color: '#a855f7', margin: '0 0 12px 0', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
               🏆 Your Social Impact Score
             </h4>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -1630,7 +1630,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey) return; // Ignore system shortcuts
-      
+
       switch (e.key.toLowerCase()) {
         case 'q':
           const quizSection = document.querySelector('[data-section="quiz"]');
@@ -1710,7 +1710,7 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
         }}>
           🌟 Advanced User Experience Suite
         </h2>
-        
+
         <AdvancedPersonalization />
         <PredictionStreaksAndChallenges />
         <EducationalContentIntegration />
@@ -1722,21 +1722,21 @@ const UserFriendlyFeatures: React.FC<UserFriendlyFeaturesProps> = ({
         .high-contrast {
           filter: contrast(1.5) brightness(1.2);
         }
-        
+
         .reduced-motion * {
           animation-duration: 0.01ms !important;
           animation-iteration-count: 1 !important;
           transition-duration: 0.01ms !important;
         }
-        
+
         .one-hand-mode {
           --content-max-width: 100vw;
         }
-        
+
         .one-hand-mode .main-content {
           padding-bottom: 120px;
         }
-        
+
         body {
           font-size: var(--user-font-size, 1em);
         }

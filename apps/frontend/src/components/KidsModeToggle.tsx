@@ -1,5 +1,5 @@
 import React from "react";
-import { useKidsModeContext } from "../context/KidsModeContext";
+import { useKidsModeContext } from "@context/KidsModeContext";
 
 export const KidsModeToggle: React.FC = () => {
   const { kidsMode, setKidsMode } = useKidsModeContext();

@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from 'react';
 import { ClientStorage } from '../utils/clientStorage';
@@ -19,7 +18,7 @@ interface PersonalizedContent {
   insights: string[];
 }
 
-export default function EnhancedPersonalization() {
+function EnhancedPersonalization() {
   const [profile, setProfile] = useState<UserProfile>({
     favoriteTeams: [],
     favoriteSports: [],
@@ -57,7 +56,7 @@ export default function EnhancedPersonalization() {
   const loadUserProfile = () => {
     const savedProfile = ClientStorage.getItem('user_profile', profile);
     setProfile(savedProfile);
-    
+
     if (savedProfile.favoriteTeams.length === 0) {
       setShowOnboarding(true);
     }
@@ -67,7 +66,7 @@ export default function EnhancedPersonalization() {
     try {
       const response = await fetch('/api/predictions?limit=20');
       const data = await response.json();
-      
+
       if (data.success && data.predictions) {
         const filtered = data.predictions.filter((pred: any) => {
           if (profile.favoriteSports.length > 0) {
@@ -481,3 +480,5 @@ export default function EnhancedPersonalization() {
     </div>
   );
 }
+
+export default EnhancedPersonalization;

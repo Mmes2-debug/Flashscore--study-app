@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import { Plus, Star, Trophy, User, Newspaper } from 'lucide-react';
 import LiveScoreCard from '../components/LiveScoreCard';
 import BottomNavigation from '../components/BottomNavigation';
+import UserFavorites from '@components/UserFavorites';
 
 type FavTab = 'games' | 'teams' | 'players' | 'news';
 
-export default function FavoritesPage() {
+export function FavoritesPage() {
   const [activeTab, setActiveTab] = useState<FavTab>('games');
   const [filter, setFilter] = useState<'all' | 'live'>('all');
 
@@ -194,3 +195,5 @@ export default function FavoritesPage() {
     </div>
   );
 }
+
+export default FavoritesPage;

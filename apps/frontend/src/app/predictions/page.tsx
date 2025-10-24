@@ -5,6 +5,7 @@ import HorizontalCarousel from "../components/HorizontalCarousel";
 import PWAInstaller from "../components/PWAInstaller";
 import AdvancedPullToRefreshWrapper, { useRefreshListener } from "../components/AdvancedPullToRefreshWrapper";
 import Breadcrumbs from "../components/Breadcrumbs";
+import PredictionDashboard from '@components/PredictionDashboard';
 
 interface Prediction {
   id: string;
@@ -103,7 +104,7 @@ export default function PredictionsPage() {
             { label: "Predictions" }
           ]}
         />
-        
+
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-bold">Live Predictions</h1>

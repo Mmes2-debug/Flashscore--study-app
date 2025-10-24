@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Search, Star, ChevronRight } from 'lucide-react';
-import BottomNavigation from '../components/BottomNavigation';
+import BottomNavigation from '@components/BottomNavigation';
 
 interface Competition {
   id: string;
@@ -14,33 +14,33 @@ interface Competition {
   category: 'favorite' | 'other';
 }
 
-export default function LeaguesPage() {
+export function LeaguesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [competitions, setCompetitions] = useState<Competition[]>([
     // Favorites
     { id: '1', name: 'Copa Libertadores Women', country: 'SOUTH AMERICA', flag: '🌎', matchCount: 2, isFavorite: true, category: 'favorite' },
     { id: '2', name: 'World Cup U20', country: 'WORLD', flag: '🌍', matchCount: 2, isFavorite: true, category: 'favorite' },
-    
+
     // Africa
     { id: '3', name: 'World Cup', country: 'AFRICA', flag: '🇦🇴', matchCount: 7, isFavorite: false, category: 'other' },
-    
+
     // Andorra
     { id: '4', name: 'Primera Divisió', country: 'ANDORRA', flag: '🇦🇩', matchCount: 1, isFavorite: false, category: 'other' },
-    
+
     // Argentina
     { id: '5', name: 'Torneo Betano', country: 'ARGENTINA', flag: '🇦🇷', matchCount: 6, isFavorite: false, category: 'other' },
     { id: '6', name: 'Primera Nacional', country: 'ARGENTINA', flag: '🇦🇷', matchCount: 5, isFavorite: false, category: 'other' },
     { id: '7', name: 'Torneo Federal', country: 'ARGENTINA', flag: '🇦🇷', matchCount: 9, isFavorite: false, category: 'other' },
     { id: '8', name: 'Primera B', country: 'ARGENTINA', flag: '🇦🇷', matchCount: 4, isFavorite: false, category: 'other' },
     { id: '9', name: 'Primera C', country: 'ARGENTINA', flag: '🇦🇷', matchCount: 1, isFavorite: false, category: 'other' },
-    
+
     // Belarus
     { id: '10', name: 'Vysshaya Liga Women', country: 'BELARUS', flag: '🇧🇾', matchCount: 2, isFavorite: false, category: 'other' },
-    
+
     // Belgium
     { id: '11', name: 'National Division 1 - ACFF', country: 'BELGIUM', flag: '🇧🇪', matchCount: 3, isFavorite: false, category: 'other' },
     { id: '12', name: 'National Division 1 - VV', country: 'BELGIUM', flag: '🇧🇪', matchCount: 2, isFavorite: false, category: 'other' },
-    
+
     // Benin
     { id: '13', name: 'Ligue 1', country: 'BENIN', flag: '🇧🇯', matchCount: 4, isFavorite: false, category: 'other' },
   ]);
@@ -86,7 +86,7 @@ export default function LeaguesPage() {
           <h1 className="text-2xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
             Leagues & Competitions
           </h1>
-          
+
           {/* Search Bar */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-muted)' }} />
@@ -222,3 +222,5 @@ export default function LeaguesPage() {
     </div>
   );
 }
+
+export default LeaguesPage;

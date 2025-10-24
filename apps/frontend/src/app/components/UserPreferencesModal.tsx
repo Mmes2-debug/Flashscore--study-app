@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useUserPreferences } from '../providers/UserPreferencesProvider';
+import { useAuth } from '@hooks/useAuth';
 
 interface UserPreferencesModalProps {
   isOpen: boolean;
@@ -17,7 +18,7 @@ const AVAILABLE_SPORTS = [
   { id: 'tennis', name: 'Tennis', icon: '🎾' },
 ];
 
-export default function UserPreferencesModal({ isOpen, onClose }: UserPreferencesModalProps) {
+export function UserPreferencesModal({ isOpen, onClose }: UserPreferencesModalProps) {
   const { preferences, updatePreferences } = useUserPreferences();
   const [localPrefs, setLocalPrefs] = useState(preferences);
 
@@ -364,3 +365,5 @@ export default function UserPreferencesModal({ isOpen, onClose }: UserPreference
     </div>
   );
 }
+
+export default UserPreferencesModal;

@@ -6,7 +6,7 @@ import LiveScoreCard from '../components/LiveScoreCard';
 import BottomNavigation from '../components/BottomNavigation';
 import DateSelector from '../components/DateSelector';
 
-export default function LivePage() {
+export function LivePage() {
   const [liveMatches, setLiveMatches] = useState([
     {
       id: '1',
@@ -31,9 +31,9 @@ export default function LivePage() {
   ]);
 
   const handleToggleFavorite = (matchId: string) => {
-    setLiveMatches(prev => 
-      prev.map(match => 
-        match.id === matchId 
+    setLiveMatches(prev =>
+      prev.map(match =>
+        match.id === matchId
           ? { ...match, isFavorite: !match.isFavorite }
           : match
       )
@@ -43,7 +43,7 @@ export default function LivePage() {
   return (
     <div className="min-h-screen pb-20" style={{ backgroundColor: 'var(--bg-primary)', paddingTop: '60px' }}>
       {/* Header */}
-      <div 
+      <div
         className="fixed top-0 left-0 right-0 z-30 border-b"
         style={{
           backgroundColor: 'var(--bg-secondary)',
@@ -62,7 +62,7 @@ export default function LivePage() {
               </p>
             </div>
           </div>
-          <button 
+          <button
             className="p-2 rounded-lg transition-colors"
             style={{
               backgroundColor: 'var(--bg-tertiary)',
@@ -82,9 +82,9 @@ export default function LivePage() {
         {liveMatches.length > 0 ? (
           <div className="space-y-3">
             {liveMatches.map((match) => (
-              <LiveScoreCard 
-                key={match.id} 
-                match={match} 
+              <LiveScoreCard
+                key={match.id}
+                match={match}
                 onToggleFavorite={handleToggleFavorite}
                 showPrediction
               />
@@ -104,7 +104,7 @@ export default function LivePage() {
 
         {/* AI Insights Banner */}
         {liveMatches.length > 0 && (
-          <div 
+          <div
             className="mt-6 p-4 rounded-lg border"
             style={{
               backgroundColor: 'var(--bg-secondary)',
@@ -131,3 +131,5 @@ export default function LivePage() {
     </div>
   );
 }
+
+export default LivePage;

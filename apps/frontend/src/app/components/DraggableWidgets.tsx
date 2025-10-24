@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -72,7 +71,7 @@ const DraggableWidgets: React.FC = () => {
 
   const handleDragStart = (e: React.MouseEvent | React.TouchEvent, widgetId: string) => {
     if (!editMode) return;
-    
+
     const widget = widgets.find(w => w.id === widgetId);
     if (!widget) return;
 

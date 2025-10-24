@@ -1,4 +1,4 @@
-import { useKidsModeContext } from "../context/KidsModeContext";
+import { KidsModeContext } from '@/context/KidsModeContext';
 
 export const useKidsMode = () => {
   return useKidsModeContext();

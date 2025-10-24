@@ -1,8 +1,7 @@
-
 "use client";
 
 import React from 'react';
-import { useKidsMode } from '../../hooks/useKidsMode';
+import { useKidsMode } from '@hooks/useKidsMode';
 import { ProtectedGambling } from '../../components/ProtectedGambling';
 import { KidsModeToggle } from '../../components/KidsModeToggle';
 import AgeRestrictionGuard from '../components/AgeRestrictionGuard';
@@ -13,7 +12,7 @@ export default function TestKidsModeePage() {
   return (
     <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto' }}>
       <h1 style={{ marginBottom: '30px' }}>Kids Mode & Child Protection Test Page</h1>
-      
+
       <div style={{ marginBottom: '30px', padding: '20px', background: '#f5f5f5', borderRadius: '8px' }}>
         <h2>Current Status</h2>
         <p>Kids Mode: <strong>{kidsMode ? 'ENABLED ✓' : 'DISABLED'}</strong></p>

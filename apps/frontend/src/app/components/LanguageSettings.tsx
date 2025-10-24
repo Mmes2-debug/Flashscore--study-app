@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { locales, localeNames, type Locale } from '@/i18n';
 import { useUserPreferences } from '../providers/UserPreferencesProvider';
 
-export default function LanguageSettings() {
+export function LanguageSettings() {
   const locale = useLocale() as Locale;
   const router = useRouter();
   const { updatePreferences } = useUserPreferences();
@@ -201,3 +201,5 @@ export default function LanguageSettings() {
     </div>
   );
 }
+
+export default LanguageSettings;

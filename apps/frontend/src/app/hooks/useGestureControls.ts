@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { haptic } from '../components/HapticFeedback';
+import { useAuth } from '@hooks/useAuth';
 
 interface GestureConfig {
   onSwipeLeft?: () => void;
@@ -41,7 +42,7 @@ export function useGestureControls({
 
   const handleTouchMove = useCallback((e: TouchEvent) => {
     if (!touchStart.current) return;
-    
+
     touchEnd.current = {
       x: e.touches[0].clientX,
       y: e.touches[0].clientY,
@@ -58,10 +59,10 @@ export function useGestureControls({
     const deltaX = touchEnd.current.x - touchStart.current.x;
     const deltaY = touchEnd.current.y - touchStart.current.y;
     const deltaTime = touchEnd.current.time - touchStart.current.time;
-    
+
     const absX = Math.abs(deltaX);
     const absY = Math.abs(deltaY);
-    
+
     const velocity = Math.sqrt(deltaX * deltaX + deltaY * deltaY) / deltaTime;
 
     if (absX > threshold || absY > threshold) {
@@ -96,13 +97,13 @@ export function useGestureControls({
 
     const hasCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    
+
     if (!isTouchDevice || !hasCoarsePointer) {
       return;
     }
 
     const element = document.body;
-    
+
     element.addEventListener('touchstart', handleTouchStart, { passive: true });
     element.addEventListener('touchmove', handleTouchMove, { passive: true });
     element.addEventListener('touchend', handleTouchEnd);
@@ -138,13 +139,13 @@ export function useSwipeableItem(onSwipe: (direction: 'left' | 'right') => void)
   const handleTouchEnd = () => {
     setIsDragging(false);
     const threshold = 100;
-    
+
     if (Math.abs(offset) > threshold) {
       const direction = offset > 0 ? 'right' : 'left';
       haptic.swipeAction();
       onSwipe(direction);
     }
-    
+
     setOffset(0);
   };
 

@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -39,7 +38,7 @@ export default function SettingsPage() {
         {/* Language Settings Section */}
         <div style={{ marginBottom: '24px' }}>
           <LanguageSettings />
-        
+
         <TimeZoneSettings />
         </div>
 

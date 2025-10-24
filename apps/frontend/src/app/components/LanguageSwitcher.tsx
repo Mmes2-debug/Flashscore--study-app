@@ -7,7 +7,7 @@ import { Globe, ChevronDown, Search, Check } from 'lucide-react';
 import { locales, localeNames, type Locale } from '@/i18n';
 import { useUserPreferences } from '../providers/UserPreferencesProvider';
 
-export default function LanguageSwitcher() {
+function LanguageSwitcher() {
   const t = useTranslations('settings');
   const locale = useLocale() as Locale;
   const router = useRouter();
@@ -42,22 +42,22 @@ export default function LanguageSwitcher() {
 
   const handleLanguageChange = async (newLocale: Locale) => {
     setIsOpen(false);
-    
+
     if (newLocale === locale) return;
-    
+
     // Set the cookie with proper attributes
     document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
-    
+
     // Store in localStorage immediately
     localStorage.setItem('preferredLocale', newLocale);
-    
+
     // Update preferences
     try {
       await updatePreferences({ language: newLocale });
     } catch (error) {
       console.error('Failed to update preferences:', error);
     }
-    
+
     // Force reload to apply new locale
     window.location.reload();
   };
@@ -125,7 +125,7 @@ export default function LanguageSwitcher() {
               />
             </div>
           </div>
-          
+
           <div className="overflow-y-auto flex-1">
             {locales.map((loc) => (
               <button
@@ -160,7 +160,7 @@ export default function LanguageSwitcher() {
               </button>
             ))}
           </div>
-          
+
           <div className="p-3 md:p-2 border-t border-white/10 bg-white/5">
             <button 
               className="w-full text-left px-3 md:px-2 py-3 md:py-1 text-sm md:text-xs text-gray-400 hover:text-cyan-400 active:text-cyan-300 transition-colors rounded-lg hover:bg-white/5 touch-manipulation"
@@ -171,7 +171,7 @@ export default function LanguageSwitcher() {
           </div>
         </div>
       )}
-      
+
       {/* Mobile backdrop */}
       {isOpen && (
         <div 
@@ -182,3 +182,5 @@ export default function LanguageSwitcher() {
     </div>
   );
 }
+
+export default LanguageSwitcher;

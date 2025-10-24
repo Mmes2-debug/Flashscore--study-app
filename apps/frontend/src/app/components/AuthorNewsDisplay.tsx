@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { NewsItem, NewsAuthor } from '../services/newsService';
+import { NewsItem, NewsAuthor } from '@services/newsService';
 
 // Assuming ContentPaywall component is available and imported from './ContentPaywall'
 // For the purpose of this example, let's assume it exists and has the props mentioned in the changes.
@@ -53,8 +53,8 @@ const AuthorNewsDisplay: React.FC<AuthorNewsDisplayProps> = ({ news: newsData, c
       return;
     }
 
-    setExpandedItems(prev => 
-      prev.includes(newsId) 
+    setExpandedItems(prev =>
+      prev.includes(newsId)
         ? prev.filter(id => id !== newsId)
         : [...prev, newsId]
     );
@@ -95,7 +95,7 @@ const AuthorNewsDisplay: React.FC<AuthorNewsDisplayProps> = ({ news: newsData, c
           <div className="bg-gray-800 p-6 rounded-lg max-w-md mx-4">
             <h3 className="text-xl font-bold text-white mb-4">🔒 Member Access Required</h3>
             <p className="text-gray-300 mb-6">
-              To read the full content of news articles, please log in as a member. 
+              To read the full content of news articles, please log in as a member.
               Guests can view previews only.
             </p>
             <div className="flex gap-3">
@@ -252,13 +252,13 @@ const AuthorNewsDisplay: React.FC<AuthorNewsDisplayProps> = ({ news: newsData, c
           <div className="flex items-center gap-2">
             <span className="text-yellow-400">ℹ️</span>
             <p className="text-yellow-200">
-              <strong>Guest Access:</strong> You can read news previews. 
-              <button 
+              <strong>Guest Access:</strong> You can read news previews.
+              <button
                 onClick={() => alert('Login functionality would be triggered here')}
                 className="underline ml-1 hover:text-yellow-100"
               >
                 Login as a member
-              </button> 
+              </button>
               {' '}to access full articles.
             </p>
           </div>

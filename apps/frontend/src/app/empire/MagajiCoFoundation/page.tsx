@@ -7,7 +7,7 @@ import Leaderboard from "./Leaderboard";
 import { foundationApi, type Phase } from "@/lib/api/foundation";
 import Breadcrumbs from "../../components/Breadcrumbs";
 
-export default function MagajiCoFoundation() {
+export function MagajiCoFoundation() {
   const [userId] = useState(() => {
     if (typeof window !== 'undefined') {
       let id = localStorage.getItem('magajico-user-id');
@@ -40,13 +40,13 @@ export default function MagajiCoFoundation() {
       try {
         setLoading(true);
         const response = await fetch(`/api/backend/foundation/${userId}`);
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch foundation data');
         }
-        
+
         const result = await response.json();
-        
+
         if (result.success && result.data) {
           setPhases(result.data.phases);
           setTotalPower(result.data.totalPower);
@@ -231,7 +231,7 @@ export default function MagajiCoFoundation() {
           setTotalPower(result.data.totalPower);
         }
       }
-      
+
       showNotification(`Building ${phase.name}...`, 'info');
     } catch (err) {
       console.error('Failed to start building:', err);
@@ -258,11 +258,11 @@ export default function MagajiCoFoundation() {
           return;
         }
       }
-      
+
       throw new Error('Failed to complete phase');
     } catch (err) {
       console.error('Failed to complete phase:', err);
-      
+
       // Fallback to local state
       setPhases((prev) =>
         prev.map((p) => {
@@ -336,7 +336,7 @@ export default function MagajiCoFoundation() {
           { label: "Foundation" }
         ]}
       />
-      
+
       {notification && (
         <Notification
           message={notification.message}
@@ -411,3 +411,5 @@ export default function MagajiCoFoundation() {
     </div>
   );
 }
+
+export default MagajiCoFoundation;

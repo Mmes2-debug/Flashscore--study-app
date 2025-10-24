@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
 import { ClientStorage } from '../utils/clientStorage';
@@ -77,10 +76,10 @@ const LiveMatchChat: React.FC<LiveMatchChatProps> = ({ match, currentUser }) => 
   useEffect(() => {
     loadChatHistory();
     simulateConnection();
-    
+
     // Simulate expert commentary
     const expertInterval = setInterval(addExpertCommentary, 30000); // Every 30 seconds
-    
+
     // Simulate user activity updates
     const activityInterval = setInterval(updateActiveUsers, 10000); // Every 10 seconds
 
@@ -129,7 +128,7 @@ const LiveMatchChat: React.FC<LiveMatchChatProps> = ({ match, currentUser }) => 
       timestamp: new Date(),
       type: 'system'
     };
-    
+
     setMessages(prev => {
       const updated = [...prev, systemMessage];
       saveChatHistory(updated);
@@ -139,7 +138,7 @@ const LiveMatchChat: React.FC<LiveMatchChatProps> = ({ match, currentUser }) => 
 
   const addExpertCommentary = () => {
     if (!isConnected) return;
-    
+
     const comment = expertComments[Math.floor(Math.random() * expertComments.length)];
     const expertMessage: ChatMessage = {
       id: `expert_${Date.now()}`,
@@ -149,7 +148,7 @@ const LiveMatchChat: React.FC<LiveMatchChatProps> = ({ match, currentUser }) => 
       timestamp: new Date(),
       type: 'expert'
     };
-    
+
     setMessages(prev => {
       const updated = [...prev, expertMessage];
       saveChatHistory(updated);
@@ -177,7 +176,7 @@ const LiveMatchChat: React.FC<LiveMatchChatProps> = ({ match, currentUser }) => 
     });
 
     setNewMessage('');
-    
+
     // Auto-scroll on send
     setTimeout(scrollToBottom, 100);
   };
@@ -190,13 +189,13 @@ const LiveMatchChat: React.FC<LiveMatchChatProps> = ({ match, currentUser }) => 
         if (message.id === messageId) {
           const reactions = message.reactions ? { ...message.reactions } : {};
           if (!reactions[emoji]) reactions[emoji] = [];
-          
+
           if (reactions[emoji].includes(currentUser.id)) {
             reactions[emoji] = reactions[emoji].filter(id => id !== currentUser.id);
           } else {
             reactions[emoji].push(currentUser.id);
           }
-          
+
           return { ...message, reactions };
         }
         return message;
@@ -204,7 +203,7 @@ const LiveMatchChat: React.FC<LiveMatchChatProps> = ({ match, currentUser }) => 
       saveChatHistory(updated);
       return updated;
     });
-    
+
     setShowEmojiPicker('');
   };
 
@@ -290,7 +289,7 @@ const LiveMatchChat: React.FC<LiveMatchChatProps> = ({ match, currentUser }) => 
             {isConnected ? 'Connected' : 'Connecting...'}
           </div>
         </div>
-        
+
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -317,7 +316,7 @@ const LiveMatchChat: React.FC<LiveMatchChatProps> = ({ match, currentUser }) => 
             🌐 {autoTranslate ? 'ON' : 'OFF'}
           </button>
         </div>
-        
+
         <div style={{
           fontSize: '0.7rem',
           color: '#9ca3af',
@@ -377,7 +376,7 @@ const LiveMatchChat: React.FC<LiveMatchChatProps> = ({ match, currentUser }) => 
                   </span>
                 )}
               </div>
-              
+
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -392,7 +391,7 @@ const LiveMatchChat: React.FC<LiveMatchChatProps> = ({ match, currentUser }) => 
                     minute: '2-digit' 
                   })}
                 </span>
-                
+
                 {message.type === 'user' && currentUser && (
                   <button
                     onClick={() => setShowEmojiPicker(
@@ -411,7 +410,7 @@ const LiveMatchChat: React.FC<LiveMatchChatProps> = ({ match, currentUser }) => 
                 )}
               </div>
             </div>
-            
+
             <div style={{
               fontSize: '0.9rem',
               lineHeight: '1.4',
@@ -419,7 +418,7 @@ const LiveMatchChat: React.FC<LiveMatchChatProps> = ({ match, currentUser }) => 
             }}>
               {message.message}
             </div>
-            
+
             {/* Reactions */}
             {message.reactions && Object.keys(message.reactions).length > 0 && (
               <div style={{
@@ -450,7 +449,7 @@ const LiveMatchChat: React.FC<LiveMatchChatProps> = ({ match, currentUser }) => 
                   ))}
               </div>
             )}
-            
+
             {/* Emoji Picker */}
             {showEmojiPicker === message.id && (
               <div style={{
