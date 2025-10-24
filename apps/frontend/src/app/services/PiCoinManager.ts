@@ -68,4 +68,5 @@ class PiCoinManagerClass {
 }
 
 const PiCoinManager = new PiCoinManagerClass();
+export { PiCoinManager };
 export default PiCoinManager;
