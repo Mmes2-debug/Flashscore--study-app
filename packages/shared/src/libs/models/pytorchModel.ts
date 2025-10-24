@@ -1,14 +1,18 @@
-// src/libs/models/pytorchModel.ts
-// Note: onnxruntime-node is optional - install if needed for production ML features
-// import * as ort from 'onnxruntime-node';
 
-// Type stub for ONNX runtime
-type InferenceSession = any;
-type Tensor = any;
+import type { InferenceSession, Tensor } from 'onnxruntime-node';
 
-const ort = {
+// Type stubs for ONNX runtime when package is not installed
+interface OrtModule {
   InferenceSession: {
-    create: async (path: string): Promise<InferenceSession> => {
+    create(path: string): Promise<any>;
+  };
+  Tensor: new (type: string, data: any, dims: number[]) => any;
+}
+
+// Fallback implementation when onnxruntime-node is not available
+const createOrtFallback = (): OrtModule => ({
+  InferenceSession: {
+    create: async (path: string) => {
       throw new Error('onnxruntime-node not installed. Install with: npm install onnxruntime-node');
     }
   },
@@ -17,7 +21,15 @@ const ort = {
       throw new Error('onnxruntime-node not installed');
     }
   }
-};
+});
+
+// Attempt to load onnxruntime-node, fallback to stub if not available
+let ort: OrtModule;
+try {
+  ort = require('onnxruntime-node');
+} catch {
+  ort = createOrtFallback();
+}
 
 export interface ModelConfig {
   modelPath: string;
@@ -38,7 +50,7 @@ export interface PredictionOutput {
 }
 
 export class PytorchModel {
-  private session: ort.InferenceSession | null = null;
+  private session: any = null;
   private config: ModelConfig | null = null;
 
   async loadModel(config: ModelConfig): Promise<void> {
@@ -86,7 +98,6 @@ export class PytorchModel {
   }
 
   private preprocessInput(input: PredictionInput): number[] {
-    // Convert input data to numerical features
     if (input.features) {
       return input.features;
     }
@@ -103,7 +114,6 @@ export class PytorchModel {
   }
 
   private extractTeamFeatures(stats: any): number[] {
-    // Extract and normalize team statistics
     return [
       stats.wins || 0,
       stats.losses || 0,
@@ -124,7 +134,6 @@ export class PytorchModel {
 
   async unload(): Promise<void> {
     if (this.session) {
-      // ONNX Runtime doesn't have explicit cleanup, but we can null the reference
       this.session = null;
       this.config = null;
       console.log('Model unloaded');
@@ -136,10 +145,8 @@ export class PytorchModel {
   }
 }
 
-// Create a singleton instance
 export const pytorchModelInstance = new PytorchModel();
 
-// Helper function to initialize the model
 export async function initializePytorchModel(modelPath: string): Promise<PytorchModel> {
   const model = new PytorchModel();
   await model.loadModel({ modelPath });
