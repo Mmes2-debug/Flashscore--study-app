@@ -3,11 +3,9 @@
 import { useState } from 'react';
 import { ConfidenceSlider } from './ConfidenceSlider';
 import { LiveOddsUpdater } from './LiveOddsUpdater';
-import PullToRefreshWrapper from './PullToRefreshWrapper';
+// PullToRefreshWrapper import removed - using native pull-to-refresh
 import { useGestureControls, useSwipeableItem } from '../hooks/useGestureControls';
 import { haptic } from './HapticFeedback';
-
-const haptic = HapticFeedback;
 
 function EnhancedMicroInteractions() {
   const [selectedTab, setSelectedTab] = useState(0);

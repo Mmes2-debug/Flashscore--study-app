@@ -14,7 +14,9 @@ export { LiveOddsUpdater } from './LiveOddsUpdater';
 export { ConfidenceSlider } from './ConfidenceSlider';
 export { PullToRefreshWrapper } from './PullToRefreshWrapper';
 export { EnhancedMicroInteractions } from './EnhancedMicroInteractions';
-export { HapticFeedback } from './HapticFeedback';
+
+// Haptic & Feedback
+export { HapticManager, haptic, useHapticFeedback } from './HapticFeedback';
 
 // PWA
 export { InstallPrompt } from './InstallPrompt';
@@ -24,14 +26,6 @@ export { PWAServiceWorker } from './PWAServiceWorker';
 export { FeatureShowcase } from './FeatureShowcase';
 export { FeatureHub } from './FeatureHub';
 
-// Live Features
-export { LiveMatchTracker } from './LiveMatchTracker';
-export { default as LiveScoreCard } from './LiveScoreCard';
-
-// Error Handling
-export { ErrorMonitor } from './ErrorMonitor';
-export { BackendHealthMonitor } from './BackendHealthMonitor';
-
 // Additional Components
 export { AppDrawer } from './AppDrawer';
 export { AuthorCard } from './AuthorCard';
@@ -40,7 +34,6 @@ export { AuthorsLeaderboard } from './AuthorsLeaderboard';
 export { AuthorsSidebar } from './AuthorsSidebar';
 export { Breadcrumbs } from './Breadcrumbs';
 export { DateSelector } from './DateSelector';
-export { FloatingAlert } from './FloatingAlert';
 export { LatestNews } from './LatestNews';
 export { LiveScoreCard } from './LiveScoreCard';
 export { LoginModal } from './LoginModal';
@@ -48,7 +41,7 @@ export { MobileInstallPrompter } from './MobileInstallPrompter';
 export { ThemeToggle } from './ThemeToggle';
 
 // Alerts & Notifications
-export { default as FloatingAlert, triggerFloatingAlert } from './FloatingAlert';
+export { FloatingAlert, triggerFloatingAlert } from './FloatingAlert';
 
 // Type exports
 export type { Achievement } from './AchievementCelebration';
