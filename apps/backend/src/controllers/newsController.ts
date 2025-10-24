@@ -1,4 +1,4 @@
-// src/controllers/newsController.ts
+// apps/backend/src/controllers/newsController.ts
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { News, INews } from '@/models/News'; // Named import with interface
 

@@ -48,7 +48,7 @@ interface FeaturePreview {
   color: string;
 }
 
-export default function HomePage(): JSX.Element {
+export function HomePage(): JSX.Element {
   const isMobile: boolean = useMobile();
   const [liveStats, setLiveStats] = useState<LiveStats>({
     activeUsers: 2341,
@@ -244,3 +244,5 @@ export default function HomePage(): JSX.Element {
     </div>
   );
 }
+
+export default HomePage;
