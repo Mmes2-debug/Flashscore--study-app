@@ -87,7 +87,6 @@ export { ChallengeFriends } from './ChallengeFriends';
 
 // Loading & Error States
 export { LoadingSpinner } from './LoadingSpinner';
-export { LoadingSkeleton } from './LoadingSkeleton';
 export { AppErrorBoundary } from './AppErrorBoundary';
 
 // Re-export from nested directories for convenience

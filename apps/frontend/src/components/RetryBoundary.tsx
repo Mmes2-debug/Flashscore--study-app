@@ -1,74 +1,57 @@
 "use client";
-import React, { useState } from "react";
 
-type RetryBoundaryProps = {
-  children: React.ReactNode;
-  fallback?: (error: Error | null, onRetry: () => void) => React.ReactNode;
-};
+import React, { Component, ReactNode } from 'react';
 
-class ErrorBoundary extends React.Component<{ 
-  resetKey: number;
-  fallbackRender?: (error: Error | null, onRetry: () => void) => React.ReactNode;
-  onRetry?: () => void;
-}> {
-  state = { hasError: false, error: null as Error | null };
+interface RetryBoundaryProps {
+  children: ReactNode;
+  fallback?: ReactNode;
+  maxRetries?: number;
+}
 
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
+interface RetryBoundaryState {
+  hasError: boolean;
+  retryCount: number;
+}
+
+export class RetryBoundary extends Component<RetryBoundaryProps, RetryBoundaryState> {
+  constructor(props: RetryBoundaryProps) {
+    super(props);
+    this.state = { hasError: false, retryCount: 0 };
   }
 
-  componentDidCatch(error: Error, info: any) {
-    // Log the error for diagnostics
-    // You can hook this into your logging service here
-    // eslint-disable-next-line no-console
-    console.error("RetryBoundary caught an error:", error, info);
+  static getDerivedStateFromError(): RetryBoundaryState {
+    return { hasError: true, retryCount: 0 };
   }
 
-  componentDidUpdate(prevProps: any) {
-    // When resetKey changes, clear the error state so children remount
-    if (prevProps.resetKey !== this.props.resetKey && this.state.hasError) {
-      this.setState({ hasError: false, error: null });
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('RetryBoundary caught error:', error, errorInfo);
+  }
+
+  handleRetry = () => {
+    const { maxRetries = 3 } = this.props;
+    if (this.state.retryCount < maxRetries) {
+      this.setState(prev => ({ 
+        hasError: false, 
+        retryCount: prev.retryCount + 1 
+      }));
     }
-  }
+  };
 
   render() {
     if (this.state.hasError) {
-      const onRetry = () => {
-        // call parent's onRetry to update resetKey
-        this.props.onRetry?.();
-      };
-
-      if (this.props.fallbackRender) {
-        return this.props.fallbackRender(this.state.error, onRetry);
-      }
-
-      return (
-        <div role="alert" className="p-4 bg-red-900 text-white rounded">
-          <p className="font-semibold">Something went wrong.</p>
-          <pre className="text-xs my-2">{String(this.state.error)}</pre>
-          <div className="mt-2">
-            <button
-              onClick={onRetry}
-              className="px-3 py-1 rounded bg-green-400 text-black hover:opacity-90"
-            >
-              Retry
-            </button>
-          </div>
+      return this.props.fallback || (
+        <div className="flex flex-col items-center justify-center p-8">
+          <p className="text-red-600 mb-4">Something went wrong</p>
+          <button 
+            onClick={this.handleRetry}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Retry ({this.state.retryCount}/{this.props.maxRetries || 3})
+          </button>
         </div>
       );
     }
 
-    return this.props.children as React.ReactElement;
+    return this.props.children;
   }
-}
-
-export default function RetryBoundary({ children, fallback }: RetryBoundaryProps) {
-  const [resetKey, setResetKey] = useState(0);
-  const handleRetry = () => setResetKey((k) => k + 1);
-
-  return (
-    <ErrorBoundary resetKey={resetKey} fallbackRender={fallback} onRetry={handleRetry}>
-      {children}
-    </ErrorBoundary>
-  );
 }

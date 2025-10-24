@@ -1,48 +1,32 @@
-import type { Metadata, Viewport } from "next";
-import type { ReactNode } from "react";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import React from 'react';
+import type { Metadata, Viewport } from 'next';
+import { Inter } from 'next/font/google';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
+import { SessionProvider } from '@providers/SessionProvider';
+import { UserPreferencesProvider } from '@providers/UserPreferencesProvider';
+import { Header } from '@components/Header';
+import { BottomNavigation } from '@components/BottomNavigation';
+import { AppErrorBoundary } from '@components/AppErrorBoundary';
+import { MobileInstallPrompter } from '@components/MobileInstallPrompter';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import '@styles/globals.css';
 
-import { KidsModeProvider } from "@/context/KidsModeContext";
-import { UserPreferencesProvider } from "@/app/providers/UserPreferencesProvider";
-import { SessionProvider } from '@/app/providers/SessionProvider';
-import { PWAServiceWorker } from './components/PWAServiceWorker';
-import { PushNotificationManager } from './components/PushNotificationManager';
-import { MobilePerformanceOptimizer } from './components/MobilePerformanceOptimizer';
-import { MobileMetaOptimizer } from './components/MobileMetaOptimizer';
-import '@/app/styles/globals.css';
-import '@/app/styles/mobile-optimizations.css';
-import { ErrorBoundaryWithPerformance } from "./components/ErrorBoundary/ErrorBoundaryWithPerformance";
-import { ErrorMonitor } from './components/ErrorMonitor';
-import { BackendStatusIndicator } from './components/BackendStatusIndicator';
-import { ThemeToggle } from './components/ThemeToggle';
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Sports Central - AI-Powered Predictions',
-  description: 'Get AI-powered sports predictions, live scores, and real-time odds',
+  title: 'MajajiCo - AI-Powered Sports Predictions',
+  description: 'Professional sports predictions powered by machine learning',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'black-translucent',
-    title: 'Sports Central',
+    statusBarStyle: 'default',
+    title: 'MajajiCo'
   },
   formatDetection: {
-    telephone: false,
-    date: false,
-    address: false,
-    email: false,
-  },
-  other: {
-    'mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-status-bar-style': 'black-translucent',
-    'apple-mobile-web-app-title': 'Sports Central',
-    'application-name': 'Sports Central',
-    'msapplication-TileColor': '#1a1f3a',
-    'msapplication-tap-highlight': 'no',
-  },
+    telephone: false
+  }
 };
 
 export const viewport: Viewport = {
@@ -50,55 +34,38 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  viewportFit: 'cover',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#1a1f3a' }
-  ],
+    { media: '(prefers-color-scheme: dark)', color: '#000000' }
+  ]
 };
 
 export default async function RootLayout({
   children,
-  params,
+  params: { locale }
 }: {
   children: React.ReactNode;
-  params?: { locale?: string };
+  params: { locale: string };
 }) {
   const messages = await getMessages();
-  const locale = params?.locale || "en";
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://api.sportsdata.io" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
-        />
-        {/* Theme is now handled in ThemeToggle component to prevent SSR hydration errors */}
-      </head>
-      <body className="antialiased">
-        <ErrorBoundaryWithPerformance>
+    <html lang={locale || 'en'} suppressHydrationWarning>
+      <body className={inter.className}>
+        <NextIntlClientProvider messages={messages}>
           <SessionProvider>
-            <NextIntlClientProvider messages={messages} locale={locale}>
-              <KidsModeProvider>
-                <UserPreferencesProvider>
-                  <PWAServiceWorker />
-                  <PushNotificationManager />
-                  <MobileMetaOptimizer />
-                  <MobilePerformanceOptimizer />
-                  <ThemeToggle />
-                  {children}
-                  <Analytics />
-                  <SpeedInsights />
-                  <ErrorMonitor />
-                  <BackendStatusIndicator />
-                </UserPreferencesProvider>
-              </KidsModeProvider>
-            </NextIntlClientProvider>
+            <UserPreferencesProvider>
+              <AppErrorBoundary>
+                <Header />
+                {children}
+                <BottomNavigation />
+                <MobileInstallPrompter />
+              </AppErrorBoundary>
+            </UserPreferencesProvider>
           </SessionProvider>
-        </ErrorBoundaryWithPerformance>
+        </NextIntlClientProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

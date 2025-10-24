@@ -9,11 +9,11 @@ interface LazyComponentProps {
   children?: React.ReactNode;
 }
 
-export const LazyComponent: React.FC<LazyComponentProps> = ({ 
+export function LazyComponent({ 
   importFunc, 
   fallback = <div className="animate-pulse bg-gray-200 rounded h-32 w-full"></div>,
   children
-}) => {
+}: LazyComponentProps) {
   const Component = lazy(importFunc);
 
   return (
@@ -21,4 +21,4 @@ export const LazyComponent: React.FC<LazyComponentProps> = ({
       <Component>{children}</Component>
     </Suspense>
   );
-};
+}

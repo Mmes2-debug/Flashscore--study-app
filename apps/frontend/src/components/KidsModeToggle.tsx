@@ -1,30 +1,23 @@
-import React from "react";
-import { useKidsModeContext } from "@context/KidsModeContext";
 
-export const KidsModeToggle: React.FC = () => {
-  const { kidsMode, setKidsMode } = useKidsModeContext();
+"use client";
 
-  const handle = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.checked;
-    setKidsMode(newValue);
+import React from 'react';
+import { useKidsMode } from '@hooks/useKidsMode';
 
-    // Persist to backend if user authenticated (optional)
-    try {
-      await fetch("/api/user/settings/kids-mode", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ kidsMode: newValue }),
-      });
-    } catch (err) {
-      // swallow; local state still applied
-      console.error("Failed to persist kidsMode", err);
-    }
-  };
+export function KidsModeToggle() {
+  const { isKidsModeEnabled, toggleKidsMode } = useKidsMode();
 
   return (
-    <label style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-      <input type="checkbox" checked={kidsMode} onChange={handle} />
-      <span>Kids Mode</span>
-    </label>
+    <button
+      onClick={toggleKidsMode}
+      className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+        isKidsModeEnabled
+          ? 'bg-green-500 text-white hover:bg-green-600'
+          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+      }`}
+      aria-label="Toggle Kids Mode"
+    >
+      {isKidsModeEnabled ? '👶 Kids Mode ON' : '👨 Kids Mode OFF'}
+    </button>
   );
-};
+}
