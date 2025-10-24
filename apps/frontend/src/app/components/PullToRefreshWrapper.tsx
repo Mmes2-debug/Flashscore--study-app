@@ -229,5 +229,3 @@ export function PullToRefreshWrapper({
     </div>
   );
 }
-
-export { PullToRefreshWrapper };
