@@ -1,5 +1,7 @@
-
 import React from 'react';
+import SimpleHeader from './components/SimpleHeader';
+import SimpleFooter from './components/SimpleFooter';
+import '@styles/globals.css';
 
 export default function SimpleLayout({
   children,
@@ -12,7 +14,9 @@ export default function SimpleLayout({
       backgroundColor: '#ffffff',
       minHeight: '100vh'
     }}>
+      <SimpleHeader />
       {children}
+      <SimpleFooter />
     </div>
   );
 }
