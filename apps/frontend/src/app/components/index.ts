@@ -6,7 +6,7 @@ export { BackendStatusIndicator } from './BackendStatusIndicator';
 
 // Loading States
 export { SmartLoadingState } from './SmartLoadingState';
-export { NewsLoadingSkeleton, QuizLoadingSkeleton, CardLoadingSkeleton, ListLoadingSkeleton } from './LoadingSkeleton';
+export { LoadingSkeleton, NewsLoadingSkeleton, QuizLoadingSkeleton, CardLoadingSkeleton, ListLoadingSkeleton } from './LoadingSkeleton';
 
 // Navigation & Layout
 export { NavBar } from './NavBar';

@@ -14,7 +14,7 @@ import {
   SmartNewsFeed,
   LiveMatchTracker,
   PredictionInterface
-} from '@components';
+} from '@components/index';
 
 export default function HomePage() {
   const t = useTranslations('home');

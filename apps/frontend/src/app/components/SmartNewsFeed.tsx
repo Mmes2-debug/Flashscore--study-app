@@ -13,7 +13,7 @@ interface NewsItem {
   imageUrl?: string;
 }
 
-export default function SmartNewsFeed() {
+export function SmartNewsFeed() {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>(['all']);
   const [loading, setLoading] = useState(false);
