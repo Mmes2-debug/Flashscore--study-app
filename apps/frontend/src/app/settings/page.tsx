@@ -6,7 +6,7 @@ import SmartNotifications from '../components/SmartNotifications';
 import LanguageSettings from '../components/LanguageSettings';
 import TimeZoneSettings from '../components/TimeZoneSettings';
 
-export default function SettingsPage() {
+export function SettingsPage() {
   return (
     <div style={{
       minHeight: '100vh',
@@ -76,3 +76,5 @@ export default function SettingsPage() {
     </div>
   );
 }
+
+export default SettingsPage;

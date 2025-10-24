@@ -20,3 +20,5 @@ export default function MatchesPage() {
     </div>
   );
 }
+
+export default MatchesPage;

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { NewsAuthorService } from '../services/newsAuthorService';
 import { NewsService } from '../services/newsService';
 
-export default function TestNewsAuthorPage() {
+export function TestNewsAuthorPage() {
   const [result, setResult] = useState<string>('');
   const [loading, setLoading] = useState(false);
 
@@ -162,3 +162,5 @@ export default function TestNewsAuthorPage() {
     </div>
   );
 }
+
+export default TestNewsAuthorPage;

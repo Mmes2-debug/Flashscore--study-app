@@ -6,7 +6,7 @@ import { ProtectedGambling } from '../../components/ProtectedGambling';
 import { KidsModeToggle } from '../../components/KidsModeToggle';
 import AgeRestrictionGuard from '../components/AgeRestrictionGuard';
 
-export default function TestKidsModeePage() {
+export function TestKidsModeePage() {
   const { kidsMode } = useKidsMode();
 
   return (
@@ -87,3 +87,5 @@ export default function TestKidsModeePage() {
     </div>
   );
 }
+
+export default TestKidsModeePage;

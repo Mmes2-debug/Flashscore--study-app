@@ -15,7 +15,7 @@ interface Prediction {
   confidence: number;
 }
 
-export default function PredictionsPage() {
+export function PredictionsPage() {
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -176,3 +176,5 @@ export default function PredictionsPage() {
     </AdvancedPullToRefreshWrapper>
   );
 }
+
+export default PredictionsPage;
