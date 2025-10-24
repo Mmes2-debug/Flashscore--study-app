@@ -104,7 +104,7 @@ export function PullToRefreshWrapper({
 
   return (
     <div className="pull-to-refresh-container">
-      <div 
+      <div
         className="refresh-indicator"
         style={{
           height: `${isRefreshing ? pullThreshold : pullDistance}px`,
@@ -112,7 +112,7 @@ export function PullToRefreshWrapper({
         }}
       >
         <div className="refresh-content">
-          <div 
+          <div
             className={`refresh-spinner ${isRefreshing ? 'spinning' : ''}`}
             style={{
               transform: `rotate(${isRefreshing ? 0 : getRefreshIndicatorRotation()}deg)`

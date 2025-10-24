@@ -41,8 +41,6 @@ export { LatestNews } from './LatestNews';
 export { LiveScoreCard } from './LiveScoreCard';
 export { LoginModal } from './LoginModal';
 export { MobileInstallPrompter } from './MobileInstallPrompter';
-export { NewsCard } from './NewsCard';
-export { PredictionCard } from './PredictionCard';
 export { ThemeToggle } from './ThemeToggle';
 
 // Management Components
@@ -64,7 +62,6 @@ export { ContentPaywall } from './ContentPaywall';
 export { CrossPlatformSync } from './CrossPlatformSync';
 export { ExpertFollowSystem } from './ExpertFollowSystem';
 export { MicroPredictions } from './MicroPredictions';
-export { VoiceCommands } from './VoiceCommands';
 
 // Type exports
 export type { Achievement } from './AchievementCelebration';
