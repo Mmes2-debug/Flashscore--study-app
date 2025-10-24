@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import { newsAuthorService } from '@bservices/index.js';
+import { newsAuthorService } from '@/services';
 
 interface AuthorEventBody {
   authorId: string;

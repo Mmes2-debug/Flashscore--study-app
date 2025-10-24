@@ -156,4 +156,4 @@ const paymentsRoutes: FastifyPluginAsync = async (fastify) => {
   );
 };
 
-export default paymentsRoutes;
+export { paymentsRoutes };

@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { newsAuthorService } from '@bservices/index.js';
+import { newsAuthorService } from '@/services';
 
-export default async function authorsRoutes(fastify: FastifyInstance) {
+export async function authorsRoutes(fastify: FastifyInstance) {
   fastify.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       // TODO: Fetch from database

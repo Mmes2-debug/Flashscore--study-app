@@ -1,4 +1,4 @@
-import { NewsAuthor, News } from '@bmodels/index.js';
+import { NewsAuthor, News, type INewsAuthor, type INews } from '@/models';
 
 export class NewsAuthorService {
   // Create or update a news author

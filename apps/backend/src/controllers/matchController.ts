@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { Match } from '@bmodels/index.js';
+import { Match } from '@/models';
 
 // GET all matches
 export const getMatches = async (request: FastifyRequest, reply: FastifyReply) => {
