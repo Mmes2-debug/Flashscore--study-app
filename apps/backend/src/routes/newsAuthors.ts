@@ -1,4 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
+import { newsAuthorService } from '@bservices/index.js';
 
 interface AuthorEventBody {
   authorId: string;
@@ -13,6 +14,8 @@ export async function newsAuthorsRoutes(fastify: FastifyInstance) {
       try {
         const { authorId, eventType, eventData } = req.body;
         // handle event...
+        // Example of using the service:
+        // await newsAuthorService.handleAuthorEvent(authorId, eventType, eventData);
         return reply.status(200).send({ success: true });
       } catch (err: unknown) {
         const message = err instanceof Error ? err.message : "Unknown error";

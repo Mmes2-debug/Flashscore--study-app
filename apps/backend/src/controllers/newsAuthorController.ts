@@ -1,6 +1,6 @@
 // apps/backend/src/controllers/newsAuthorController.ts
 import { FastifyRequest, FastifyReply } from "fastify";
-import { NewsAuthorService } from "../services/newsAuthorService.js";
+import { newsAuthorService } from "@bservices/index.js";
 
 // REMOVED: const newsAuthorService = new NewsAuthorService();
 // All methods are called statically on the class

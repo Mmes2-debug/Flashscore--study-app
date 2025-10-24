@@ -1,9 +1,9 @@
-import { FastifyPluginAsync, FastifyRequest, FastifyReply } from 'fastify';
+import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import Stripe from 'stripe';
-import Payment from '../models/Payment';
+import { Payment } from '@bmodels/index.js';
 import User from '../models/User';
 import { authenticateToken } from '../middleware/authMiddleware';
-import { validateStripeEnv, getStripeMode } from '../utils/validateStripeEnv';
+import { validateStripeEnv, getStripeMode } from '../utils/validateStripeEnv.js';
 
 const MINIMUM_AGE_FOR_PAYMENTS = 18;
 const MINIMUM_AGE_WITH_CONSENT = 13;
@@ -37,7 +37,7 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
   /**
    * POST /create-payment-intent
    * Create a Stripe Payment Intent (Authenticated)
-   * 
+   *
    * NOTE: To complete payments, integrate Stripe.js/Elements on the frontend:
    * 1. Use the returned clientSecret with Stripe Elements
    * 2. Collect card details securely on the frontend
@@ -167,7 +167,7 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
   /**
    * POST /confirm-payment
    * Retrieve payment status (Authenticated)
-   * 
+   *
    * NOTE: This endpoint checks the status of a payment intent.
    * In production, payment confirmation happens via Stripe.js on the frontend,
    * and webhooks update the database automatically.
@@ -262,7 +262,7 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
     async (request, reply) => {
       try {
         const userId = request.user?.userId;
-        
+
         if (!userId) {
           return reply.status(401).send({
             success: false,
@@ -300,10 +300,10 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
   /**
    * POST /webhook
    * Handle Stripe webhooks
-   * 
+   *
    * IMPORTANT: For production use, configure Fastify to preserve raw request bodies
    * for webhook signature verification. Options:
-   * 
+   *
    * 1. Use fastify-raw-body plugin:
    *    npm install fastify-raw-body
    *    await fastify.register(require('fastify-raw-body'), {
@@ -311,9 +311,9 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
    *      global: false,
    *      routes: ['/api/stripe/webhook']
    *    })
-   * 
+   *
    * 2. Or configure specific routes with addContentTypeParser
-   * 
+   *
    * Without raw body access, signature verification will fail and webhooks won't work.
    * For now, this endpoint will log errors but won't process webhooks correctly.
    */

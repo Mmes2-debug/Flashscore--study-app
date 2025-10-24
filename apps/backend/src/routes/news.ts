@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import { News } from "../models/News.js";
+import { News } from "@bmodels/index.js";
 
 // Define body type for creating news
 interface CreateNewsBody {

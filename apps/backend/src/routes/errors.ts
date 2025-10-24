@@ -1,4 +1,3 @@
-
 import { FastifyPluginAsync } from 'fastify';
 import { ErrorLog } from '@/models/ErrorLog.js';
 
@@ -7,7 +6,7 @@ const errorsRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.get('/errors', async (request, reply) => {
     try {
       const { type, severity, resolved, limit = 50 } = request.query as any;
-      
+
       const filter: any = {};
       if (type) filter.type = type;
       if (severity) filter.severity = severity;

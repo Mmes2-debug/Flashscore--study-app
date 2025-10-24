@@ -1,5 +1,5 @@
 // apps/backend/src/routes/health.ts
-import { FastifyInstance } from 'fastify';
+import { FastifyInstance, RouteHandlerMethod } from 'fastify';
 import mongoose from 'mongoose';
 
 export async function healthRoutes(fastify: FastifyInstance) {

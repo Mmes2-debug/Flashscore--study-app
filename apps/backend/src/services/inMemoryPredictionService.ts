@@ -135,7 +135,7 @@ class InMemoryPredictionService {
   private calculateHeadToHeadScore(h2h: Match['headToHead']): number {
     const totalGames = h2h.homeWins + h2h.draws + h2h.awayWins;
     if (totalGames === 0) return 0.5;
-    
+
     const homeScore = (h2h.homeWins * 3 + h2h.draws * 1) / (totalGames * 3);
     return homeScore;
   }
@@ -143,7 +143,7 @@ class InMemoryPredictionService {
   private generatePrediction(match: Match): Prediction {
     const homeAdvantage = this.calculateHomeAdvantage(match.homeForm);
     const h2hScore = this.calculateHeadToHeadScore(match.headToHead);
-    
+
     // Advanced feature engineering
     const homeStrength = (
       match.homeForm * 0.35 +

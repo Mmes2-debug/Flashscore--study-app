@@ -30,7 +30,7 @@ export async function predictionsRoutes(fastify: FastifyInstance) {
       const predictions = await Prediction.find()
         .sort({ createdAt: -1 })
         .limit(Math.min(limit, 100));
-      
+
       return {
         success: true,
         data: predictions,
@@ -49,14 +49,14 @@ export async function predictionsRoutes(fastify: FastifyInstance) {
   fastify.get('/:id', async (req: FastifyRequest<{ Params: { id: string } }>, rep: FastifyReply) => {
     try {
       const prediction = await Prediction.findById(req.params.id);
-      
+
       if (!prediction) {
         return rep.status(404).send({
           success: false,
           error: 'Prediction not found'
         });
       }
-      
+
       return {
         success: true,
         data: prediction

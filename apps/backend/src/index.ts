@@ -1,18 +1,20 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
-import { connectDB } from "./config/db.js";
-
-// Import all route handlers
-import { healthRoutes } from "./routes/health.js";
-import { predictionsRoutes } from "./routes/prediction.js";
-import { matchRoutes } from "./routes/matches.js";
-import { newsRoutes } from "./routes/news.js";
-import { newsAuthorsRoutes } from "./routes/newsAuthors.js";
-import { foundationRoutes } from "./routes/foundation.js";
-import errorsRoutes from "./routes/errors.js";
-import { authRoutes } from "./routes/auth.js";
-import stripeRoutes from "./routes/stripe.js";
-import paymentsRoutes from "./routes/payment.js";
+import fastifyStatic from "@fastify/static";
+import path from "path";
+import { connectDB } from "@bconfig/db.js";
+import matchRoutes from "@broutes/matches.js";
+import newsRoutes from "@broutes/news.js";
+import predictionRoutes from "@broutes/prediction.js";
+import healthRoutes from "@broutes/health.js";
+import authRoutes from "@broutes/auth.js";
+import stripeRoutes from "@broutes/stripe.js";
+import paymentRoutes from "@broutes/payment.js";
+import foundationRoutes from "@broutes/foundation.js";
+import errorRoutes from "@broutes/errors.js";
+import newsAuthorRoutes from "@broutes/newsAuthors.js";
+import authorRoutes from "@broutes/authors.js";
+import { validateEnv, validateStripeEnv } from "@butils/index.js";
 
 const fastify = Fastify({ logger: true });
 
@@ -34,14 +36,14 @@ const startServer = async () => {
     // Register routes
     await fastify.register(healthRoutes);
     await fastify.register(authRoutes, { prefix: "/api/auth" });
-    await fastify.register(predictionsRoutes, { prefix: "/api/predictions" });
+    await fastify.register(predictionRoutes, { prefix: "/api/predictions" });
     await fastify.register(matchRoutes, { prefix: "/api" });
     await fastify.register(newsRoutes, { prefix: "/api/news" });
-    await fastify.register(newsAuthorsRoutes, { prefix: "/api/news-authors" });
+    await fastify.register(newsAuthorRoutes, { prefix: "/api/news-authors" });
     await fastify.register(foundationRoutes, { prefix: "/api" });
-    await fastify.register(errorsRoutes, { prefix: "/api" });
+    await fastify.register(errorRoutes, { prefix: "/api" });
     await fastify.register(stripeRoutes, { prefix: "/api/stripe" });
-    await fastify.register(paymentsRoutes, { prefix: "/api/payments" });
+    await fastify.register(paymentRoutes, { prefix: "/api/payments" });
 
     const PORT = Number(process.env.PORT) || 3001;
     await fastify.listen({ port: PORT, host: "0.0.0.0" });

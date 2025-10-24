@@ -1,3 +1,4 @@
-export * from './authorHelpers';
-export * from './jwtUtils';
-export * from './validateEnv';
+export * from './validateEnv.js';
+export * from './validateStripeEnv.js';
+export * from './jwtUtils.js';
+export * from './authorHelpers.js';
