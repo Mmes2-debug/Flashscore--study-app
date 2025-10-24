@@ -11,6 +11,27 @@ export function MobileHomeOptimizer() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }, []);
 
+  useEffect(() => {
+    if (!isMobile) return;
+
+    // Add mobile-specific meta tags
+    const metaTags = [
+      { name: 'mobile-web-app-capable', content: 'yes' },
+      { name: 'apple-touch-fullscreen', content: 'yes' },
+      { name: 'format-detection', content: 'telephone=no' }
+    ];
+
+    metaTags.forEach(({ name, content }) => {
+      let meta = document.querySelector(`meta[name="${name}"]`);
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', name);
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', content);
+    });
+  }, [isMobile]);
+
   const optimizeForMobile = useCallback(() => {
     if (!isMobile) return;
 

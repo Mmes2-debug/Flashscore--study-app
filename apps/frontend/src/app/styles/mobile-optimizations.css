@@ -5,6 +5,13 @@
 * {
   -webkit-tap-highlight-color: rgba(200, 16, 46, 0.1);
   -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+input, textarea {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 html {
@@ -83,6 +90,21 @@ body {
   .hover-lift, .transition-all {
     transform: translateZ(0);
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    perspective: 1000px;
+    -webkit-perspective: 1000px;
+  }
+
+  /* Optimize scrolling performance */
+  * {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Reduce repaints */
+  img, video {
+    will-change: transform;
+    contain: layout;
   }
 
   /* Liverpool accent colors */

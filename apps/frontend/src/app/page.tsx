@@ -2,33 +2,27 @@
 
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import dynamic from 'next/dynamic';
-import { useMobile } from './hooks/useMobile';
-import { LoadingSkeleton } from './components/LoadingSkeleton';
-import { LanguageSwitcher } from './components/LanguageSwitcher';
-import { NavBar } from './components/NavBar';
-import { MobileHomeOptimizer } from './components/MobileHomeOptimizer';
 import Link from 'next/link';
+import { useMobile } from './hooks/useMobile';
+import { LoadingSkeleton, LanguageSwitcher, NavBar, MobileHomeOptimizer } from './components';
 
-// Dynamically import HorizontalCarousel and use its named export
-const HorizontalCarousel = dynamic(() => import('./components/HorizontalCarousel').then(mod => mod.HorizontalCarousel), {
+// Dynamically import components
+const HorizontalCarousel = dynamic(() => import('./components').then(mod => ({ default: mod.HorizontalCarousel })), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
 
-// Dynamically import ComprehensiveSportsHub and use its named export
-const ComprehensiveSportsHub = dynamic(() => import('./components/ComprehensiveSportsHub').then(mod => mod.ComprehensiveSportsHub), {
+const ComprehensiveSportsHub = dynamic(() => import('./components').then(mod => ({ default: mod.ComprehensiveSportsHub })), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
 
-// Dynamically import AuthorsSidebar and use its named export
-const AuthorsSidebar = dynamic(() => import('./components/AuthorsSidebar').then(mod => mod.AuthorsSidebar), {
+const AuthorsSidebar = dynamic(() => import('./components').then(mod => ({ default: mod.AuthorsSidebar })), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
 
-// Dynamically import ChessboardCompetitiveAnalysis and use its named export
-const ChessboardCompetitiveAnalysis = dynamic(() => import('./components/ChessboardCompetitiveAnalysis').then(mod => mod.ChessboardCompetitiveAnalysis), {
+const ChessboardCompetitiveAnalysis = dynamic(() => import('./components').then(mod => ({ default: mod.ChessboardCompetitiveAnalysis })), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });

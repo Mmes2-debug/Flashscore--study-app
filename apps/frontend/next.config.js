@@ -16,6 +16,12 @@ const nextConfig = {
   poweredByHeader: false,
   swcMinify: true,
   generateEtags: true,
+  
+  // Mobile optimizations
+  output: 'standalone',
+  
+  // Enable React strict mode for better mobile performance
+  reactStrictMode: true,
 
   // For monorepo setup with shared packages
   transpilePackages: ["@magajico/shared"],
