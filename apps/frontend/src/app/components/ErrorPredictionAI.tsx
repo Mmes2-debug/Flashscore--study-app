@@ -3,6 +3,8 @@
 
 import React, { useEffect, useState } from 'react';
 
+import { useState, useEffect } from 'react';
+
 interface ErrorPattern {
   pattern: string;
   frequency: number;
@@ -12,7 +14,7 @@ interface ErrorPattern {
   preventionTip: string;
 }
 
-export default function ErrorPredictionAI() {
+export function ErrorPredictionAI() {
   const [patterns, setPatterns] = useState<ErrorPattern[]>([]);
   const [predictions, setPredictions] = useState<string[]>([]);
 
@@ -73,6 +75,7 @@ export default function ErrorPredictionAI() {
       .replace(/\s+/g, ' ')
       .substring(0, 100);
   };
+  };
 
   const predictNextOccurrence = (errors: any[]): string => {
     if (errors.length < 2) return 'soon';
@@ -108,6 +111,30 @@ export default function ErrorPredictionAI() {
   };
 
   if (patterns.length === 0) return null;
+
+  return (
+    <div style={{ padding: '20px', background: '#1f2937', borderRadius: '12px', color: 'white' }}>
+      <h3 style={{ marginBottom: '16px' }}>🔮 Error Prediction AI</h3>
+      <div style={{ marginBottom: '16px' }}>
+        <h4>Predicted Issues:</h4>
+        {predictions.map((pred, idx) => (
+          <div key={idx} style={{ padding: '8px', background: 'rgba(255,0,0,0.1)', borderRadius: '8px', margin: '8px 0' }}>
+            {pred}
+          </div>
+        ))}
+      </div>
+      <div>
+        <h4>Error Patterns:</h4>
+        {patterns.map((p, idx) => (
+          <div key={idx} style={{ padding: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', margin: '8px 0' }}>
+            <div><strong>{p.pattern}</strong></div>
+            <div>Frequency: {p.frequency} | Severity: {p.severity}</div>
+            <div style={{ color: '#10b981', marginTop: '4px' }}>💡 {p.preventionTip}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );ull;
 
   return (
     <div className="fixed top-20 right-4 max-w-md z-40">
