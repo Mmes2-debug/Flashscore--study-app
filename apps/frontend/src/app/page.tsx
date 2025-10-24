@@ -9,22 +9,26 @@ import { NavBar } from './components/NavBar';
 import { MobileHomeOptimizer } from './components/MobileHomeOptimizer';
 import Link from 'next/link';
 
-const HorizontalCarousel = dynamic(() => import('./components/HorizontalCarousel').then(mod => ({ default: mod.HorizontalCarousel })), {
+// Dynamically import HorizontalCarousel and use its named export
+const HorizontalCarousel = dynamic(() => import('./components/HorizontalCarousel').then(mod => mod.HorizontalCarousel), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
 
-const ComprehensiveSportsHub = dynamic(() => import('./components/ComprehensiveSportsHub').then(mod => ({ default: mod.ComprehensiveSportsHub })), {
+// Dynamically import ComprehensiveSportsHub and use its named export
+const ComprehensiveSportsHub = dynamic(() => import('./components/ComprehensiveSportsHub').then(mod => mod.ComprehensiveSportsHub), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
 
-const AuthorsSidebar = dynamic(() => import('./components/AuthorsSidebar').then(mod => ({ default: mod.AuthorsSidebar })), {
+// Dynamically import AuthorsSidebar and use its named export
+const AuthorsSidebar = dynamic(() => import('./components/AuthorsSidebar').then(mod => mod.AuthorsSidebar), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
 
-const ChessboardCompetitiveAnalysis = dynamic(() => import('./components/ChessboardCompetitiveAnalysis').then(mod => ({ default: mod.ChessboardCompetitiveAnalysis })), {
+// Dynamically import ChessboardCompetitiveAnalysis and use its named export
+const ChessboardCompetitiveAnalysis = dynamic(() => import('./components/ChessboardCompetitiveAnalysis').then(mod => mod.ChessboardCompetitiveAnalysis), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
@@ -60,7 +64,7 @@ export default function HomePage(): JSX.Element {
     if (isMobile) {
       const images = document.querySelectorAll('img');
       let loadedCount = 0;
-      
+
       images.forEach(img => {
         if (img.complete) {
           loadedCount++;
@@ -226,21 +230,15 @@ export default function HomePage(): JSX.Element {
         </section>
 
         {!isMobile && (
-          <Suspense fallback={<LoadingSkeleton />}>
-            <ComprehensiveSportsHub />
-          </Suspense>
+          <Suspense fallback={<LoadingSkeleton />}><ComprehensiveSportsHub /></Suspense>
         )}
 
         {isMobile && (
-          <Suspense fallback={<LoadingSkeleton />}>
-            <HorizontalCarousel />
-          </Suspense>
+          <Suspense fallback={<LoadingSkeleton />}><HorizontalCarousel /></Suspense>
         )}
 
         {!isMobile && (
-          <Suspense fallback={<LoadingSkeleton />}>
-            <ChessboardCompetitiveAnalysis />
-          </Suspense>
+          <Suspense fallback={<LoadingSkeleton />}><ChessboardCompetitiveAnalysis /></Suspense>
         )}
       </div>
     </div>

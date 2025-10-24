@@ -5,7 +5,7 @@ import { useMobile } from '../hooks/useMobile';
 import dynamic from 'next/dynamic';
 
 // Lazy load heavy components
-const LiveMatchTracker = dynamic(() => import('./LiveMatchTracker'), { 
+const LiveMatchTracker = dynamic(() => import('./LiveMatchTracker').then(mod => mod), { 
   loading: () => <div>Loading tracker...</div>,
   ssr: false 
 });
@@ -472,7 +472,7 @@ export const ComprehensiveSportsHub: React.FC = () => {
             ))}
             {/* Render the dynamically imported LiveMatchTracker component here */}
             <Suspense fallback={<div>Loading tracker...</div>}>
-              <LiveMatchTracker />
+              <LiveMatchTracker.LiveMatchTracker />
             </Suspense>
           </div>
         )}

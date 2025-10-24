@@ -32,7 +32,7 @@ interface MatchStats {
   fouls: { home: number; away: number };
 }
 
-export default function LiveMatchTracker() {
+export function LiveMatchTracker() {
   const [liveMatches, setLiveMatches] = useState<LiveMatch[]>([]);
   const [selectedMatch, setSelectedMatch] = useState<string | null>(null);
   const [inMatchPrediction, setInMatchPrediction] = useState<string>('');

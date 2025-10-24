@@ -16,8 +16,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useSession, signOut } from 'next-auth/react';
-import LanguageSwitcher from "./LanguageSwitcher";
-import GoogleStyleMenu from "./GoogleStyleMenu";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { GoogleStyleMenu } from "./GoogleStyleMenu";
 
 interface SubItem {
   label: string;

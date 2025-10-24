@@ -24,7 +24,7 @@ const appMenuItems: AppMenuItem[] = [
   { name: 'Analytics', icon: '📈', href: '/management/analytics', description: 'Data Analytics', color: 'bg-indigo-500' },
 ];
 
-export default function GoogleStyleMenu() {
+export function GoogleStyleMenu() {
   const [isOpen, setIsOpen] = useState(false);
 
   React.useEffect(() => {
