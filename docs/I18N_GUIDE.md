@@ -50,21 +50,34 @@ export default function MyComponent() {
 
 ## Adding New Languages
 
-1. Create new translation file: `src/messages/{locale}.json`
-2. Add locale to `src/i18n.ts`:
+1. Create new translation file: `apps/frontend/src/messages/{locale}.json`
+   - Replace `{locale}` with the language code (e.g., `de.json`, `it.json`)
+   - Copy structure from `apps/frontend/src/messages/en.json`
+2. Add locale to `apps/frontend/src/i18n.ts`:
    ```ts
-   export const locales = ['en', 'es', 'fr', 'de'] as const;
+   export const locales = ['en', 'es', 'fr', 'de', 'pt', 'it'] as const;
    export const localeNames = {
-     // ... existing
-     de: 'Deutsch'
+     en: 'English',
+     es: 'Español',
+     fr: 'Français',
+     de: 'Deutsch',
+     pt: 'Português',
+     it: 'Italiano' // new language
    };
    ```
 3. Add flag emoji to LanguageSwitcher component
 
 ## Adding New Translations
 
-1. Add key to all language files in `src/messages/`
+1. Add key to all language files in `apps/frontend/src/messages/`
+   - Update: `en.json`, `es.json`, `fr.json`, `de.json`, `pt.json`
 2. Use in component: `t('newKey')`
+   ```tsx
+   import { useTranslations } from 'next-intl';
+   
+   const t = useTranslations('common');
+   return <button>{t('newKey')}</button>;
+   ```
 
 ## Language Detection
 
