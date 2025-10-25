@@ -19,7 +19,7 @@ const nextConfig = withNextIntl({
         'localhost:5000',
         '*.replit.dev',
         '*.replit.app',
-        'flashstudy-debug.vercel.app', // Add your Vercel domain if deploying there
+        '*.vercel.app', // Allow all Vercel preview and production deployments
       ],
     },
   },
