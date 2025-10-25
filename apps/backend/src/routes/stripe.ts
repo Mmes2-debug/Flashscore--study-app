@@ -12,12 +12,16 @@ const MAX_MINOR_TRANSACTION = 50;
 // Validate environment variables
 const stripeConfig = validateStripeEnv();
 
-// Initialize Stripe
-const stripe = new Stripe(stripeConfig.secretKey, {
-  apiVersion: '2025-09-30.clover',
-});
-
-console.log(`✅ Stripe initialized in ${getStripeMode()} mode`);
+// Initialize Stripe only if config is available
+let stripe: Stripe | null = null;
+if (stripeConfig) {
+  stripe = new Stripe(stripeConfig.secretKey, {
+    apiVersion: '2025-09-30.clover',
+  });
+  console.log(`✅ Stripe initialized in ${getStripeMode()} mode`);
+} else {
+  console.log('⚠️  Stripe not initialized - payment features disabled');
+}
 
 interface CreatePaymentIntentBody {
   amount: number;
@@ -51,6 +55,14 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
     },
     async (request, reply) => {
       try {
+        // Check if Stripe is configured
+        if (!stripe) {
+          return reply.status(503).send({
+            success: false,
+            error: 'Payment service is not configured. Please contact support.',
+          });
+        }
+
         const { amount, currency = 'USD', description } = request.body;
         const userId = request.user?.userId;
 
@@ -179,6 +191,14 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
     },
     async (request, reply) => {
       try {
+        // Check if Stripe is configured
+        if (!stripe) {
+          return reply.status(503).send({
+            success: false,
+            error: 'Payment service is not configured. Please contact support.',
+          });
+        }
+
         const { paymentIntentId } = request.body;
         const userId = request.user?.userId;
 
@@ -321,6 +341,14 @@ const stripeRoutes: FastifyPluginAsync = async (fastify) => {
     '/webhook',
     async (request: WebhookRequest, reply: FastifyReply) => {
       try {
+        // Check if Stripe is configured
+        if (!stripe) {
+          return reply.status(503).send({
+            success: false,
+            error: 'Payment service is not configured. Please contact support.',
+          });
+        }
+
         const sig = request.headers['stripe-signature'] as string;
         const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 

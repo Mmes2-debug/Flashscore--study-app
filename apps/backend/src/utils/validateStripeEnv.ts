@@ -10,15 +10,19 @@ interface StripeEnvConfig {
   webhookSecret?: string;
 }
 
-export function validateStripeEnv(): StripeEnvConfig {
+export function validateStripeEnv(): StripeEnvConfig | null {
   const secretKey = process.env.STRIPE_SECRET_KEY;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-  // Secret key is required
+  // Secret key is optional in development
   if (!secretKey) {
-    throw new Error(
-      'STRIPE_SECRET_KEY is required. Get it from https://dashboard.stripe.com/apikeys'
-    );
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error(
+        'STRIPE_SECRET_KEY is required in production. Get it from https://dashboard.stripe.com/apikeys'
+      );
+    }
+    console.warn('⚠️  STRIPE_SECRET_KEY not set. Payment features will be disabled.');
+    return null;
   }
 
   // Validate key format

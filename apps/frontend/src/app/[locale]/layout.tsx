@@ -2,8 +2,8 @@
 import React from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
-import './globals.css';
-import { AppWrapper } from '@components/AppWrapper';
+import '../styles/globals.css';
+import { AppWrapper } from '@/components/AppWrapper';
 import { locales } from '@/i18n';
 
 interface RootLayoutProps {
