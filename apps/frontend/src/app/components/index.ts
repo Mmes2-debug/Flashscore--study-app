@@ -50,6 +50,10 @@ export { EnhancedLiveTracker } from './EnhancedLiveTracker';
 export { MLPredictionInterface } from './MLPredictionInterface';
 export { PlatformShowcase } from './PlatformShowcase';
 
+// iOS Components - lazy loaded to prevent hook conflicts
+export { IOSInterface } from './iOSInterface';
+export { IOSStyleFeatures } from './IOSStyleFeatures';
+
 // Type exports
 export type { Achievement } from './AchievementCelebration';
 export { MLPredictionInterface } from './MLPredictionInterface';

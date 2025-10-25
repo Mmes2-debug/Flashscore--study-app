@@ -1,26 +1,25 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { ChevronDown, Sun, Moon, Smartphone, Zap, Heart, Bell } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Sun, Moon, Smartphone, Zap, Heart, Bell } from 'lucide-react';
 
 interface IOSStyleFeaturesProps {
   children?: React.ReactNode;
 }
 
 export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
+  const [mounted, setMounted] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   // Initialize theme on mount - client-side only
   useEffect(() => {
-    setMounted(true);
-
+    if (typeof window === 'undefined') return;
+    
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
     const shouldBeDark = savedTheme === 'dark' || (savedTheme === 'auto' && prefersDark) || (!savedTheme && prefersDark);
 
     setIsDarkMode(shouldBeDark);
@@ -29,6 +28,8 @@ export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
     } else {
       document.documentElement.classList.remove('dark');
     }
+    
+    setMounted(true);
   }, []);
 
   // Haptic Feedback Simulation

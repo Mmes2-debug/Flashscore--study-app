@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 interface IOSInterfaceProps {
   children: React.ReactNode;
@@ -13,13 +13,15 @@ function IOSInterface({
   showStatusBar = true,
   enableHapticFeedback = true,
 }: IOSInterfaceProps) {
+  const [mounted, setMounted] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [batteryLevel, setBatteryLevel] = useState(85);
   const [signalStrength, setSignalStrength] = useState(4);
-  const [mounted, setMounted] = useState(false);
 
   // Apply theme on mount
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
