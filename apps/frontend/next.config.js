@@ -15,7 +15,12 @@ const nextConfig = withNextIntl({
   },
   experimental: {
     serverActions: {
-      allowedOrigins: ['*'],
+      allowedOrigins: [
+        'localhost:5000',
+        '*.replit.dev',
+        '*.replit.app',
+        'beee13418-fla.vercel.app', // Add your Vercel domain if deploying there
+      ],
     },
   },
 });
