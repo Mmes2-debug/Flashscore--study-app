@@ -43,5 +43,12 @@ export { ThemeToggle } from './ThemeToggle';
 // Alerts & Notifications
 export { FloatingAlert, triggerFloatingAlert } from './FloatingAlert';
 
+// New Features
+export { SecurePaymentHandler } from './SecurePaymentHandler';
+export { ConnectedNewsFeed } from './ConnectedNewsFeed';
+export { EnhancedLiveTracker } from './EnhancedLiveTracker';
+export { MLPredictionInterface } from './MLPredictionInterface';
+export { PlatformShowcase } from './PlatformShowcase';
+
 // Type exports
 export type { Achievement } from './AchievementCelebration';
