@@ -1,9 +1,8 @@
-
 "use client";
 
 import Link from "next/link";
 import { useState } from "react";
-import { AuthorsSidebar } from "@components/AuthorsSidebar";
+import { AuthorsSidebar } from "@/components/AuthorsSidebar"; // ✅ Correct alias
 
 // Mock data (replace with MongoDB later)
 const myArticles = [
@@ -22,10 +21,9 @@ export default function AuthorPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <AuthorsSidebar />
-      
+
       {/* Main Content */}
       <div className="ml-80">
-        {/* Hover Menu */}
         <div
           className="relative bg-white shadow p-4"
           onMouseEnter={() => setHover(true)}
@@ -43,11 +41,8 @@ export default function AuthorPage() {
           )}
         </div>
 
-        {/* Author Tools */}
         <div className="p-6">
           <h2 className="text-xl font-semibold mb-4">✍️ Manage Your Articles</h2>
-
-          {/* Search bar */}
           <input
             type="text"
             placeholder="Search your articles..."
@@ -55,15 +50,12 @@ export default function AuthorPage() {
             onChange={(e) => setSearch(e.target.value)}
             className="w-full p-2 border rounded mb-4"
           />
-
-          {/* Publish button */}
           <Link href="/author/new">
             <button className="bg-blue-600 text-white px-4 py-2 rounded mb-4">
               ➕ Publish New Article
             </button>
           </Link>
 
-          {/* List of articles */}
           <div className="space-y-3">
             {filteredArticles.map((a) => (
               <div
