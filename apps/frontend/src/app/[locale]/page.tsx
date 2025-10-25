@@ -35,24 +35,24 @@ const CleanSkeleton = ({ height = 'h-64' }: { height?: string }) => (
   <div className={`${height} bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-lg animate-pulse`} />
 );
 
-// Lazy load components with retry logic
+// Lazy load components with intelligent preloading
 const ErrorMonitor = React.lazy(() => 
-  import('@components/ErrorMonitor').then(m => ({ default: m.ErrorMonitor })).catch(() => ({ default: () => null }))
+  import('@components/ErrorMonitor').then(m => ({ default: m.ErrorMonitor }))
 );
 const BackendHealthMonitor = React.lazy(() => 
-  import('@components').then(m => ({ default: m.BackendHealthMonitor })).catch(() => ({ default: () => null }))
+  import('@components/BackendHealthMonitor').then(m => ({ default: m.BackendHealthMonitor }))
 );
 const FeatureShowcase = React.lazy(() => 
-  import('@components/FeatureShowcase').then(m => ({ default: m.FeatureShowcase })).catch(() => ({ default: () => null }))
+  import('@components/FeatureShowcase').then(m => ({ default: m.FeatureShowcase }))
 );
 const SmartNewsFeed = React.lazy(() => 
-  import('@components/SmartNewsFeed').then(m => ({ default: m.SmartNewsFeed })).catch(() => ({ default: () => null }))
+  import('@components/SmartNewsFeed').then(m => ({ default: m.SmartNewsFeed }))
 );
 const LiveMatchTracker = React.lazy(() => 
-  import('@components/LiveMatchTracker').then(m => ({ default: m.LiveMatchTracker })).catch(() => ({ default: () => null }))
+  import('@components/LiveMatchTracker').then(m => ({ default: m.LiveMatchTracker }))
 );
 const PredictionInterface = React.lazy(() => 
-  import('@components/PredictionInterface').then(m => ({ default: m.PredictionInterface })).catch(() => ({ default: () => null }))
+  import('@components/PredictionInterface').then(m => ({ default: m.PredictionInterface }))
 );
 
 export default function HomePage() {

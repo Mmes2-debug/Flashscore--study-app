@@ -1,33 +1,42 @@
-'use client';
 
 import React from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 import './globals.css';
 import { AppWrapper } from '@components/AppWrapper';
+import { locales } from '@/i18n';
 
 interface RootLayoutProps {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
 export default async function RootLayout({ children, params }: RootLayoutProps) {
-  let messages;
+  const { locale } = await params;
+  
+  // Validate locale
+  if (!locales.includes(locale as any)) {
+    notFound();
+  }
 
+  let messages;
   try {
-    messages = (await import(`../../messages/${params.locale}.json`)).default;
+    messages = (await import(`../../messages/${locale}.json`)).default;
   } catch (error) {
+    console.error(`Failed to load messages for locale: ${locale}`, error);
     notFound();
   }
 
   return (
-    <html lang={params.locale} suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="theme-color" content="#1a1a1a" />
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body suppressHydrationWarning>
-        <NextIntlClientProvider locale={params.locale} messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <AppWrapper>
             {children}
           </AppWrapper>
@@ -35,4 +44,8 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
       </body>
     </html>
   );
+}
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
 }
