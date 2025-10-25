@@ -1,6 +1,7 @@
 
-export * from './aiSuggestions';
-export * from './gamificationEngine';
-export * from './sportsIntegration';
+// Services barrel export
 export * from './timeZoneService';
 export * from './translationService';
+export * from './gamificationEngine';
+export * from './sportsIntegration';
+export * from './aiSuggestions';

@@ -1,6 +1,7 @@
 
-export * from './author';
-export * from './match';
-export * from './pytorchModel';
-export * from './team';
+// Models barrel export
 export * from './user';
+export * from './match';
+export * from './team';
+export * from './author';
+export * from './pytorchModel';
