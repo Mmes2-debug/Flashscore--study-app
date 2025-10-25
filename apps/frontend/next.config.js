@@ -10,7 +10,13 @@ const nextConfig = {
     esmExternals: 'loose',
   },
   assetPrefix: undefined,
-  
+
+  // Disable static optimization for all pages to reduce build memory
+  output: 'standalone',
+
+  // Internationalization
+  i18n: undefined, // Using next-intl instead
+
   // Suppress hydration warnings in production
   onDemandEntries: {
     maxInactiveAge: 25 * 1000,
@@ -22,10 +28,10 @@ const nextConfig = {
   poweredByHeader: false,
   swcMinify: true,
   generateEtags: true,
-  
+
   // Mobile optimizations
-  output: process.env.VERCEL ? 'standalone' : undefined,
-  
+  // output: process.env.VERCEL ? 'standalone' : undefined,
+
   // Environment-specific settings
   env: {
     NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL || 'http://0.0.0.0:3001',
@@ -54,7 +60,7 @@ const nextConfig = {
     config.resolve.extensionAlias = {
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
     };
-    
+
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
@@ -86,7 +92,7 @@ const nextConfig = {
         },
       };
     }
-    
+
     return config;
   },
 
