@@ -27,7 +27,7 @@
       "@/app/*": ["./src/app/*"],
       "@/lib/*": ["./src/lib/*"],
       "@/hooks/*": ["./src/hooks/*"],
-      "@/utils/*": ["./src/utils/*"],
+      "@/providers/*": ["./src/providers/*"],
       "@magajico/shared": ["../../packages/shared/src/index.ts"],
       "@magajico/shared/*": ["../../packages/shared/src/*"],
       "@shared": ["../../packages/shared/src/index.ts"],
