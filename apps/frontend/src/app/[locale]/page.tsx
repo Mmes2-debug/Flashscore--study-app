@@ -127,39 +127,43 @@ export default function HomePage() {
           </div>
         </EnhancedErrorBoundary>
 
-        {/* Feature Showcase */}
-        <EnhancedErrorBoundary sectionName="Feature Showcase" fallback={<CleanSkeleton />}>
-          <Suspense fallback={<CleanSkeleton />}>
-            <FeatureShowcase />
-          </Suspense>
-        </EnhancedErrorBoundary>
-
-        {/* News & Matches Grid */}
+        {/* Priority: Live Matches & News (Dynamic Content First) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <EnhancedErrorBoundary sectionName="News Feed" fallback={<CleanSkeleton height="h-96" />}>
-            <Suspense fallback={<CleanSkeleton height="h-96" />}>
-              <SmartNewsFeed />
-            </Suspense>
-          </EnhancedErrorBoundary>
-
           <EnhancedErrorBoundary sectionName="Live Matches" fallback={<CleanSkeleton height="h-96" />}>
             <Suspense fallback={<CleanSkeleton height="h-96" />}>
               <LiveMatchTracker />
             </Suspense>
           </EnhancedErrorBoundary>
+
+          <EnhancedErrorBoundary sectionName="News Feed" fallback={<CleanSkeleton height="h-96" />}>
+            <Suspense fallback={<CleanSkeleton height="h-96" />}>
+              <SmartNewsFeed />
+            </Suspense>
+          </EnhancedErrorBoundary>
         </div>
 
-        {/* Predictions */}
+        {/* Predictions - High Priority */}
         <EnhancedErrorBoundary sectionName="Predictions" fallback={<CleanSkeleton height="h-96" />}>
           <Suspense fallback={<CleanSkeleton height="h-96" />}>
             <PredictionInterface />
           </Suspense>
         </EnhancedErrorBoundary>
 
-        {/* Status Footer - Always visible */}
-        <div className="text-center py-4 text-gray-500 dark:text-gray-400 text-sm" suppressHydrationWarning>
-          <p>✅ MagajiCo - Progressive Loading Architecture</p>
-        </div>
+        {/* Static Features - Load Last (Low Priority) */}
+        {themeLoaded && (
+          <EnhancedErrorBoundary sectionName="Feature Showcase" fallback={null} showErrorUI={false}>
+            <Suspense fallback={null}>
+              <FeatureShowcase />
+            </Suspense>
+          </EnhancedErrorBoundary>
+        )}
+
+        {/* Minimal Status Footer */}
+        {themeLoaded && (
+          <div className="text-center py-4 text-gray-500 dark:text-gray-400 text-sm" suppressHydrationWarning>
+            <p>✅ MagajiCo Sports</p>
+          </div>
+        )}
 
       </div>
     </main>

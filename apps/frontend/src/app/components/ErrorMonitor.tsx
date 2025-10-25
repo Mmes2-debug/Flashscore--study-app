@@ -10,8 +10,14 @@ interface ErrorData {
 
 export function ErrorMonitor() {
   const [errors, setErrors] = useState<ErrorData[]>([]);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted || process.env.NODE_ENV !== 'development') return;
     const handleError = (event: ErrorEvent) => {
       const errorData: ErrorData = {
         message: event.message,
@@ -39,7 +45,7 @@ export function ErrorMonitor() {
     };
   }, []);
 
-  if (errors.length === 0) return null;
+  if (!mounted || errors.length === 0 || process.env.NODE_ENV !== 'development') return null;
 
   return (
     <div style={{
@@ -47,8 +53,7 @@ export function ErrorMonitor() {
       bottom: 20,
       right: 20,
       maxWidth: 400,
-      zIndex: 9999,
-      display: process.env.NODE_ENV === 'development' ? 'block' : 'none'
+      zIndex: 9999
     }}>
       {errors.map((error) => (
         <div

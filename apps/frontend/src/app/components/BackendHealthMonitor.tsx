@@ -66,9 +66,16 @@ export function BackendHealthMonitor() {
   };
 
   useEffect(() => {
-    checkHealth();
+    // Delay initial health check to avoid hydration issues
+    const initialTimer = setTimeout(() => {
+      checkHealth();
+    }, 2000);
+
     const interval = setInterval(checkHealth, 60000); // Check every 60s
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(interval);
+    };
   }, []);
 
   const getStatusColor = (status: string) => {
