@@ -28,8 +28,10 @@
       "@/lib/*": ["./src/lib/*"],
       "@/hooks/*": ["./src/hooks/*"],
       "@/utils/*": ["./src/utils/*"],
-      "@magajico/shared": ["../../packages/shared/src"],
-      "@magajico/shared/*": ["../../packages/shared/src/*"]
+      "@magajico/shared": ["../../packages/shared/src/index.ts"],
+      "@magajico/shared/*": ["../../packages/shared/src/*"],
+      "@shared": ["../../packages/shared/src/index.ts"],
+      "@shared/*": ["../../packages/shared/src/*"]
     }
   },
   "include": [

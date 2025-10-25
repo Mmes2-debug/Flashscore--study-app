@@ -1,15 +1,15 @@
 // Barrel exports for shared package
 // Models
-export * from './libs/models/index';
+export * from './libs/models';
 
 // Services
-export * from './libs/services/index';
+export * from './libs/services';
 
 // Utils
-export * from './libs/utils/index';
+export * from './libs/utils';
 
 // Types
-export * from './libs/types/index';
+export * from './libs/types';
 
 // API Client
-export * from './libs/api/client';
+export * from './libs/api';
