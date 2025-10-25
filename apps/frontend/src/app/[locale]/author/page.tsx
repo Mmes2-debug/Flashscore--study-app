@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { AuthorsSidebar } from "@/components/AuthorsSidebar"; // ✅ Correct alias
+import { AuthorsSidebar } from "@/app/components/AuthorsSidebar"; 
 
 // Mock data (replace with MongoDB later)
 const myArticles = [
