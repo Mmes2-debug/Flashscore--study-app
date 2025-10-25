@@ -335,6 +335,10 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
+localPort = 8000
+externalPort = 8000
+
+[[ports]]
 localPort = 34351
 externalPort = 6000
 
@@ -367,6 +371,10 @@ localPort = 42087
 externalPort = 3003
 
 [[ports]]
+localPort = 43283
+externalPort = 3000
+
+[[ports]]
 localPort = 45099
 externalPort = 8099
 
@@ -381,10 +389,6 @@ externalPort = 9000
 [[ports]]
 localPort = 45655
 externalPort = 3002
-
-[[ports]]
-localPort = 8000
-externalPort = 8000
 
 [env]
 REPLIT_KEEP_PACKAGE_DEV_DEPENDENCIES = "1"
