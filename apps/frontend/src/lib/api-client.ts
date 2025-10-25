@@ -1,3 +1,5 @@
+import { backendCircuit, mlCircuit } from './circuit-breaker';
+import { retryWithBackoff } from './retry';
 
 class APIError extends Error {
   constructor(
@@ -26,37 +28,60 @@ class APIClient {
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
-    
+    const serviceName = endpoint.includes('/ml/') ? 'ML Service' : 'Backend API';
+    const circuit = endpoint.includes('/ml/') ? mlCircuit : backendCircuit;
+
+    let success = false;
+
     try {
-      const response = await fetch(url, {
-        ...options,
-        headers: {
-          ...this.defaultHeaders,
-          ...options.headers,
-        },
-      });
+      const result = await circuit.execute(() => 
+        retryWithBackoff(async () => {
+          try {
+            const response = await fetch(url, {
+              ...options,
+              headers: {
+                ...this.defaultHeaders,
+                ...options.headers,
+              },
+            });
 
-      if (!response.ok) {
-        const error = await response.json().catch(() => ({
-          message: response.statusText,
-        }));
-        throw new APIError(
-          error.message || 'Request failed',
-          response.status,
-          error.code
-        );
-      }
+            if (!response.ok) {
+              const error = await response.json().catch(() => ({
+                message: response.statusText,
+              }));
+              throw new APIError(
+                error.message || 'Request failed',
+                response.status,
+                error.code
+              );
+            }
 
-      return response.json();
-    } catch (error) {
-      if (error instanceof APIError) throw error;
-      
-      console.error('API request failed:', error);
-      throw new APIError(
-        'Network error occurred',
-        0,
-        'NETWORK_ERROR'
+            return response.json();
+          } catch (error) {
+            if (error instanceof APIError) throw error;
+
+            console.error('API request failed:', error);
+            throw new APIError(
+              'Network error occurred',
+              0,
+              'NETWORK_ERROR'
+            );
+          }
+        }, {
+          maxAttempts: 3,
+          initialDelay: 1000,
+          maxDelay: 5000,
+        })
       );
+
+      success = true;
+      return result;
+    } finally {
+      // Track error budget (imported at top of file)
+      if (typeof window !== 'undefined') {
+        const { errorBudget } = await import('./error-budget');
+        errorBudget.track(serviceName, success);
+      }
     }
   }
 
