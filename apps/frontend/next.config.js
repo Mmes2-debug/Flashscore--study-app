@@ -40,13 +40,21 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === "production",
   },
 
-  // Webpack configuration
+  // Webpack configuration optimized for Replit memory constraints
   webpack: (config, { isServer }) => {
+    // Reduce memory usage
+    config.optimization = {
+      ...config.optimization,
+      minimize: process.env.NODE_ENV === 'production',
+      removeAvailableModules: true,
+      removeEmptyChunks: true,
+      mergeDuplicateChunks: true,
+    };
+
     config.resolve.extensionAlias = {
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
     };
     
-    // Handle module resolution errors
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
@@ -54,52 +62,31 @@ const nextConfig = {
       tls: false,
     };
 
+    // Simplified chunk splitting to reduce memory
     if (!isServer) {
       config.optimization.splitChunks = {
         chunks: 'all',
+        maxInitialRequests: 25,
+        maxAsyncRequests: 25,
         cacheGroups: {
           default: false,
           vendors: false,
           framework: {
             name: 'framework',
-            chunks: 'all',
-            test: /(?<!node_modules.*)[\\/]node_modules[\\/](react|react-dom|scheduler|prop-types|use-subscription)[\\/]/,
+            test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
             priority: 40,
             enforce: true,
           },
           lib: {
             test: /[\\/]node_modules[\\/]/,
-            name(module) {
-              if (!module.context) return 'npm.vendor';
-              const match = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/);
-              if (!match || !match[1]) return 'npm.vendor';
-              const packageName = match[1];
-              return `npm.${packageName.replace('@', '')}`;
-            },
+            name: 'vendors',
             priority: 30,
-            minChunks: 1,
-            reuseExistingChunk: true,
-          },
-          commons: {
-            name: 'commons',
-            minChunks: 2,
-            priority: 20,
-          },
-          shared: {
-            name(module, chunks) {
-              const chunkNames = chunks
-                .map(chunk => chunk.name)
-                .filter(name => name)
-                .join('.');
-              return chunkNames ? `shared.${chunkNames}` : 'shared';
-            },
-            priority: 10,
-            minChunks: 2,
             reuseExistingChunk: true,
           },
         },
       };
     }
+    
     return config;
   },
 
