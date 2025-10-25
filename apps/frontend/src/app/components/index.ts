@@ -62,3 +62,38 @@ export { ConfidenceSlider } from './ConfidenceSlider';
 export { PredictionHub } from './PredictionHub';
 export { PredictionPreview } from './PredictionPreview';
 export { ConfidenceCalibration } from './ConfidenceCalibration';
+// Core Components
+export { AppWrapper } from './AppWrapper';
+export { Header } from './Header';
+export { NavBar } from './NavBar';
+export { BottomNavigation } from './BottomNavigation';
+export { AppDrawer } from './AppDrawer';
+
+// Features
+export { LiveMatchTracker } from './LiveMatchTracker';
+export { LiveOddsUpdater } from './LiveOddsUpdater';
+export { ConfidenceSlider } from './ConfidenceSlider';
+export { PullToRefreshWrapper } from './PullToRefreshWrapper';
+export { EnhancedMicroInteractions } from './EnhancedMicroInteractions';
+export { HapticFeedback } from './HapticFeedback';
+export { FeatureShowcase } from './FeatureShowcase';
+export { SmartNewsFeed } from './SmartNewsFeed';
+export { PredictionInterface } from './PredictionInterface';
+
+// PWA
+export { InstallPrompt } from './InstallPrompt';
+
+// Loading States
+export { SmartLoadingState } from './SmartLoadingState';
+export { LoadingSkeleton } from './LoadingSkeleton';
+
+// Error Handling
+export { ErrorMonitor } from './ErrorMonitor';
+export { BackendHealthMonitor } from './BackendHealthMonitor';
+export { EnhancedErrorBoundary } from './EnhancedErrorBoundary';
+
+// Mobile Optimization
+export { MobileOptimizationWrapper } from './MobileOptimizationWrapper';
+
+// Language & Settings
+export { LanguageSwitcher } from './LanguageSwitcher';

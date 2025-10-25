@@ -67,7 +67,6 @@ import { UserPreferencesProvider } from '@/app/providers/UserPreferencesProvider
 import { NavBar } from './NavBar';
 import { BottomNavigation } from './BottomNavigation';
 import { AppDrawer } from './AppDrawer';
-import { ThemeSwitcher } from './ThemeSwitcher';
 import { MobileOptimizationWrapper } from './MobileOptimizationWrapper';
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
@@ -81,7 +80,6 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
             {children}
           </div>
           <BottomNavigation />
-          <ThemeSwitcher />
         </UserPreferencesProvider>
       </SessionProvider>
     </MobileOptimizationWrapper>
