@@ -1,6 +1,6 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
-import '../styles/globals.css';
+import '@/app/styles/globals.css';
 import { AppWrapper } from '@/app/components/AppWrapper';
 import { locales } from '@/i18n';
 
