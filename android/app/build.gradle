@@ -58,8 +58,8 @@ android {
     }
 
     // Security hardening
-    aaptOptions {
-        cruncherEnabled = true
+    androidResources {
+        noCompress 'pkl'
     }
 
     lintOptions {
@@ -70,6 +70,9 @@ android {
 }
 
 dependencies {
+    // Capacitor (required for BridgeActivity)
+    implementation 'com.capacitorjs:core:6.0.0'
+    
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

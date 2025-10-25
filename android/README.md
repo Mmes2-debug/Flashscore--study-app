@@ -1,6 +1,31 @@
 # Android Build Configuration Guide
 
-This directory contains all necessary files for building Sports Central as an Android app for Google Play Store.
+**⚠️ IMPORTANT: These are configuration templates for Android build setup.**
+
+This directory contains configuration files for building Sports Central as an Android app for Google Play Store. Before you can build, you need to initialize Capacitor to generate the actual Android project.
+
+## 🚀 Initial Setup (REQUIRED)
+
+First, you must initialize Capacitor:
+
+```bash
+# Install Capacitor CLI
+npm install -g @capacitor/cli
+
+# Install Capacitor dependencies
+npm install @capacitor/core @capacitor/cli @capacitor/android
+
+# Initialize Capacitor (if not done)
+npx cap init
+
+# Add Android platform (this generates the full Android project)
+npx cap add android
+
+# Sync web assets to Android
+npx cap sync android
+```
+
+**Note**: The configuration files in this directory (build.gradle, AndroidManifest.xml, etc.) serve as templates/reference. When you run `npx cap add android`, Capacitor will generate its own Android project structure which you can then customize using these templates as a guide.
 
 ## 📋 Prerequisites
 
@@ -10,6 +35,7 @@ Before building, ensure you have:
 - Android SDK with API 35 installed
 - Gradle 8.2 or later
 - Node.js 20+ (for frontend build)
+- Capacitor CLI installed
 
 ## 🏗️ Build Steps
 

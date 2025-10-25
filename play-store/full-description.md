@@ -20,8 +20,8 @@
 
 ## 🤖 AI-POWERED INTELLIGENCE
 
-**87% Prediction Accuracy**
-- Advanced machine learning models
+**Machine Learning Predictions**
+- Advanced machine learning models in development
 - Real-time analysis of team statistics
 - Historical data and trend analysis
 - Transparent AI explanations (no "black box")
@@ -80,20 +80,20 @@
 - Skill development metrics
 - Performance analytics dashboard
 
-## 🪙 REWARDS & INCENTIVES
+## 🏆 REWARDS & INCENTIVES
 
-**Pi Cryptocurrency Integration**
-- Earn Pi Coins for participation and learning
-- Integrated digital wallet
-- Transparent reward system
-- Parental controls for all transactions
-- Age-appropriate spending limits
+**Achievement-Based Rewards**
+- Earn points for participation and learning
+- Virtual rewards system
+- Transparent progression tracking
+- Parental controls for all features
+- Age-appropriate content
 
-**Financial Literacy**
-- Learn budgeting and money management
+**Financial Literacy (Educational)**
+- Learn budgeting concepts
 - Understand needs vs. wants
-- Practice saving and goal-setting
-- Transaction history and analytics
+- Practice decision-making skills
+- Track your learning progress
 
 ## 🔒 PRIVACY & SAFETY FIRST
 
