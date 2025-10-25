@@ -29,9 +29,6 @@ const BackendHealthMonitor = lazyLoadComponent(() =>
 const ComprehensiveSportsHub = lazyLoadComponent(() => 
   import('@/app/components/ComprehensiveSportsHub').then(m => ({ default: m.ComprehensiveSportsHub }))
 );
-const FeatureShowcase = lazyLoadComponent(() => 
-  import('@/app/components/FeatureShowcase').then(m => ({ default: m.FeatureShowcase }))
-);
 const SmartNewsFeed = lazyLoadComponent(() => 
   import('@/app/components/SmartNewsFeed').then(m => ({ default: m.SmartNewsFeed }))
 );
@@ -191,15 +188,6 @@ export default function HomePage() {
             <PredictionInterface />
           </Suspense>
         </EnhancedErrorBoundary>
-
-        {/* PRIORITY 5: Static Features - Load Last */}
-        {themeLoaded && (
-          <EnhancedErrorBoundary sectionName="Feature Showcase" fallback={null} showErrorUI={false}>
-            <Suspense fallback={null}>
-              <FeatureShowcase />
-            </Suspense>
-          </EnhancedErrorBoundary>
-        )}
 
         {/* Minimal Status Footer */}
         {themeLoaded && (
