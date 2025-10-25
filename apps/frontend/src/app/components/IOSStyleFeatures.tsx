@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sun, Moon, Smartphone, Zap, Heart, Bell } from 'lucide-react';
 
 interface IOSStyleFeaturesProps {
