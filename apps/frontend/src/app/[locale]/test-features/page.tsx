@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -9,16 +8,19 @@ import {
   MLPredictionInterface, 
   PlatformShowcase 
 } from '@components';
+import { PredictionHub } from '@components/PredictionHub';
+
 
 export default function TestFeaturesPage() {
-  const [activeTab, setActiveTab] = useState<'payment' | 'news' | 'live' | 'ml' | 'showcase'>('showcase');
+  const [activeTab, setActiveTab] = useState<'payment' | 'news' | 'live' | 'ml' | 'showcase' | 'prediction-hub'>('showcase');
 
   const tabs = [
     { id: 'showcase', label: 'Platform Showcase' },
     { id: 'payment', label: 'Secure Payments' },
     { id: 'news', label: 'News Feed' },
     { id: 'live', label: 'Live Tracker' },
-    { id: 'ml', label: 'ML Predictions' }
+    { id: 'ml', label: 'ML Predictions' },
+    { id: 'prediction-hub', label: 'Prediction Hub' }
   ];
 
   return (
@@ -48,7 +50,12 @@ export default function TestFeaturesPage() {
 
         {/* Feature Display */}
         <div className="animate-in fade-in duration-500">
-          {activeTab === 'showcase' && <PlatformShowcase />}
+          {activeTab === 'showcase' && (
+            <div className="fade-in">
+              <PlatformShowcase />
+            </div>
+          )}
+
           {activeTab === 'payment' && (
             <div className="max-w-2xl mx-auto">
               <SecurePaymentHandler 
@@ -60,6 +67,15 @@ export default function TestFeaturesPage() {
           {activeTab === 'news' && <ConnectedNewsFeed />}
           {activeTab === 'live' && <EnhancedLiveTracker />}
           {activeTab === 'ml' && <MLPredictionInterface />}
+          {activeTab === 'prediction-hub' && (
+            <div className="fade-in">
+              <PredictionHub 
+                showMLInterface={true}
+                showModelDashboard={true}
+                showLivePredictions={true}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

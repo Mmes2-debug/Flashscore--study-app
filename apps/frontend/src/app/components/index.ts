@@ -52,3 +52,9 @@ export { PlatformShowcase } from './PlatformShowcase';
 
 // Type exports
 export type { Achievement } from './AchievementCelebration';
+export { MLPredictionInterface } from './MLPredictionInterface';
+export { MLModelDashboard } from './MLModelDashboard';
+export { ConfidenceSlider } from './ConfidenceSlider';
+export { PredictionHub } from './PredictionHub';
+export { PredictionPreview } from './PredictionPreview';
+export { ConfidenceCalibration } from './ConfidenceCalibration';

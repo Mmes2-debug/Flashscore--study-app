@@ -6,6 +6,9 @@ import PWAInstaller from '@components/PWAInstaller';
 import { AdvancedPullToRefreshWrapper, useRefreshListener } from '@components/AdvancedPullToRefreshWrapper';
 import { Breadcrumbs } from '@components/Breadcrumbs';
 import PredictionDashboard from '@components/PredictionDashboard';
+import { MLPredictionInterface } from '@components/MLPredictionInterface';
+import { MLModelDashboard } from '@components/MLModelDashboard';
+import { ConfidenceSlider } from '@components/ConfidenceSlider';
 
 interface Prediction {
   id: string;
@@ -151,16 +154,40 @@ export default function PredictionsPage() {
           </div>
         )}
 
+        {/* ML Prediction Interface */}
+        <div className="mb-8">
+          <MLPredictionInterface />
+        </div>
+
+        {/* ML Model Dashboard */}
+        <div className="mb-8">
+          <MLModelDashboard />
+        </div>
+
         <ul className="space-y-3">
           {predictions.map((p) => (
-            <li key={p.id} className="p-4 bg-white shadow rounded-lg">
-              <p className="font-semibold">
+            <li key={p.id} className="p-4 bg-white dark:bg-gray-800 shadow rounded-lg">
+              <p className="font-semibold text-gray-900 dark:text-white">
                 {p.homeTeam} vs {p.awayTeam}
               </p>
-              <p>
+              <p className="text-gray-700 dark:text-gray-300">
                 Prediction: <span className="font-medium">{p.prediction}</span>
               </p>
-              <p className="text-sm text-gray-500">Confidence: {p.confidence}%</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Confidence: {p.confidence}%</p>
+              
+              {/* Add Confidence Slider for interactive adjustment */}
+              {p.confidence && (
+                <div className="mt-4">
+                  <ConfidenceSlider
+                    baseConfidence={p.confidence}
+                    factors={[
+                      { name: 'Recent Form', impact: 5, description: 'Team has won last 3 matches' },
+                      { name: 'Home Advantage', impact: 3, description: 'Strong home record' }
+                    ]}
+                    showFactors={false}
+                  />
+                </div>
+              )}
             </li>
           ))}
         </ul>
