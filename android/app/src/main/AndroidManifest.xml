@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Required Permissions (Minimal for Privacy) -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
+    <!-- Optional: Only if using notifications -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    
+    <!-- Declare that app doesn't require these (for Google Play transparency) -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" 
+        tools:node="remove" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" 
+        tools:node="remove" />
+    <uses-permission android:name="android.permission.CAMERA" 
+        tools:node="remove" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" 
+        tools:node="remove" />
+
+    <application
+        android:name=".SportsCentralApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.SportsCentral"
+        android:usesCleartextTraffic="false"
+        android:hardwareAccelerated="true"
+        android:largeHeap="false"
+        tools:targetApi="35">
+        
+        <!-- Main Activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            
+            <!-- Deep linking support -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="sportscentral.app" />
+            </intent-filter>
+        </activity>
+
+        <!-- Privacy Policy Activity -->
+        <activity
+            android:name=".PrivacyPolicyActivity"
+            android:label="Privacy Policy"
+            android:exported="false" />
+
+        <!-- Parental Consent Activity -->
+        <activity
+            android:name=".ParentalConsentActivity"
+            android:label="Parental Consent"
+            android:exported="false" />
+
+        <!-- Content Provider for secure data sharing (if needed) -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- Metadata -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        
+        <!-- Declare that this app is a kids app (COPPA) -->
+        <meta-data
+            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+            android:value="false" />
+        
+        <meta-data
+            android:name="com.sportscentral.KIDS_MODE_ENABLED"
+            android:value="true" />
+
+    </application>
+
+</manifest>
