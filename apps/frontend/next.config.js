@@ -1,18 +1,13 @@
-
-const createNextIntlPlugin = require("next-intl/plugin");
-const withNextIntl = createNextIntlPlugin("./src/i18n.ts");
+// Temporarily disabled to debug compilation hang
+// const createNextIntlPlugin = require("next-intl/plugin");
+// const withNextIntl = createNextIntlPlugin("./src/i18n.ts");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
     externalDir: true,
-    optimizeCss: true,
-    webpackBuildWorker: true,
     esmExternals: 'loose',
-    optimisticClientCache: false,
-    adjustFontFallbacks: true,
-    adjustFontFallbacksWithSizeAdjust: true,
   },
   assetPrefix: undefined,
   
@@ -142,4 +137,6 @@ const nextConfig = {
   },
 };
 
-module.exports = withNextIntl(nextConfig);
+// Temporarily disabled to debug compilation hang
+// module.exports = withNextIntl(nextConfig);
+module.exports = nextConfig;
