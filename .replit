@@ -8,6 +8,7 @@ channel = "stable-25_05"
 packages = ["glibcLocales", "libxcrypt", "libyaml", "gir-rs", "speech-tools"]
 
 [workflows]
+runButton = "Project"
 
 [[workflows.workflow]]
 name = "Start All Services"
@@ -254,6 +255,59 @@ args = "cd apps/frontend && npm run build"
 task = "shell.exec"
 args = "echo \"✅ Build complete!\""
 
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Backend"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Frontend"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "ML Service"
+
+[[workflows.workflow]]
+name = "Backend"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd apps/backend && npm run dev"
+waitForPort = 3001
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow]]
+name = "Frontend"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd apps/frontend && npm run dev"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow]]
+name = "ML Service"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd apps/backend/ml && uv run python api.py"
+waitForPort = 8000
+
+[workflows.workflow.metadata]
+outputType = "console"
+
 [deployment]
 build = ["sh", "-c", "npm ci && npm run build --workspace=packages/shared && npm run build --workspace=apps/backend"]
 run = ["sh", "-c", "node apps/backend/dist/src/index.js"]
@@ -277,16 +331,8 @@ localPort = 3001
 externalPort = 3001
 
 [[ports]]
-localPort = 4113
-externalPort = 3000
-
-[[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 33411
-externalPort = 5000
 
 [[ports]]
 localPort = 34351
@@ -335,6 +381,10 @@ externalPort = 9000
 [[ports]]
 localPort = 45655
 externalPort = 3002
+
+[[ports]]
+localPort = 8000
+externalPort = 8000
 
 [env]
 REPLIT_KEEP_PACKAGE_DEV_DEPENDENCIES = "1"
