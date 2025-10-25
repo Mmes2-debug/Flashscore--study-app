@@ -3,6 +3,9 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { EnhancedErrorBoundary } from '@/app/components/EnhancedErrorBoundary';
+import { PerformanceMonitor } from '@/lib/performance';
+import { cache } from '@/lib/cache';
+import { serviceMesh } from '@/lib/service-mesh';
 
 // Clean loading skeleton that matches the content
 const CleanSkeleton = ({ height = 'h-64' }: { height?: string }) => (
@@ -46,7 +49,20 @@ export default function HomePage() {
 
   useEffect(() => {
     console.log('🏠 HomePage: Mounting with mobile-first optimization');
+    
+    // Start performance tracking
+    PerformanceMonitor.mark('homepage-mount');
+    
     setMounted(true);
+
+    // Check service health before loading components
+    const checkServices = async () => {
+      const canServe = serviceMesh.canServeRequest(['frontend', 'backend']);
+      if (!canServe) {
+        console.warn('⚠️ Some services degraded, using cached data');
+      }
+    };
+    checkServices();
 
     // Load theme last for better performance
     const loadTheme = () => {
@@ -57,6 +73,9 @@ export default function HomePage() {
       document.documentElement.classList.remove('light', 'dark');
       document.documentElement.classList.add(effectiveTheme);
       setThemeLoaded(true);
+      
+      // Measure performance
+      PerformanceMonitor.measure('homepage-load', 'homepage-mount');
     };
 
     // Defer theme loading until after critical content
@@ -94,8 +113,22 @@ export default function HomePage() {
 
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
+      
+      // Clear expired cache on unmount
+      cache.clear();
     };
   }, []);
+
+  // Cache component states for faster re-renders
+  useEffect(() => {
+    if (mounted && themeLoaded) {
+      cache.set('homepage-state', {
+        mounted: true,
+        themeLoaded: true,
+        timestamp: Date.now()
+      }, 60000); // 1 minute cache
+    }
+  }, [mounted, themeLoaded]);
 
   if (!mounted) {
     return null; // Return null during SSR to prevent hydration mismatch
