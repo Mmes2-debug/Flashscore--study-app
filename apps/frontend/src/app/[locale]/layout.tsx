@@ -30,8 +30,45 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
     <html lang={locale} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <meta name="theme-color" content="#1a1a1a" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+        
+        {/* Dynamic Theme Color - Preference Based */}
+        <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+        <meta name="color-scheme" content="dark light" />
+        
+        {/* Enhanced SEO & Social Meta Tags */}
+        <meta name="application-name" content="MagajiCo Sports" />
+        <meta name="apple-mobile-web-app-title" content="MagajiCo" />
+        <meta name="description" content="AI-Powered Sports Predictions & Analytics - Live Matches, News, and Intelligent Forecasting" />
+        <meta name="keywords" content="sports predictions, AI analytics, live scores, sports betting, football predictions" />
+        
+        {/* Google / Search Engine Tags */}
+        <meta itemProp="name" content="MagajiCo - AI Sports Predictions" />
+        <meta itemProp="description" content="AI-Powered Sports Predictions & Analytics - Live Matches, News, and Intelligent Forecasting" />
+        <meta itemProp="image" content="/og-image.png" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="MagajiCo - AI Sports Predictions" />
+        <meta property="og:description" content="AI-Powered Sports Predictions & Analytics - Live Matches, News, and Intelligent Forecasting" />
+        <meta property="og:image" content="/og-image.png" />
+        <meta property="og:url" content="https://magajico.com" />
+        <meta property="og:site_name" content="MagajiCo Sports" />
+        
+        {/* Twitter / X */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="MagajiCo - AI Sports Predictions" />
+        <meta name="twitter:description" content="AI-Powered Sports Predictions & Analytics - Live Matches, News, and Intelligent Forecasting" />
+        <meta name="twitter:image" content="/og-image.png" />
+        <meta name="twitter:creator" content="@magajico" />
+        
+        {/* Mobile Optimizations */}
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="format-detection" content="telephone=no" />
+        
         <link rel="manifest" href="/manifest.json" />
         
         {/* Preconnect to Google Fonts for performance */}

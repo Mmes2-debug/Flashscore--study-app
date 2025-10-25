@@ -1,4 +1,3 @@
-
 "use client";
 import React from "react";
 
@@ -31,7 +30,7 @@ class ResilientErrorBoundary extends React.Component<
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">MagajiCo</h2>
               <p className="text-gray-500 mb-4 text-sm">AI-Powered Sports Predictions</p>
-              
+
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
                 <h3 className="font-bold text-red-600 mb-2">Application Error</h3>
                 <p className="text-red-700 text-sm">
@@ -63,10 +62,28 @@ class ResilientErrorBoundary extends React.Component<
   }
 }
 
+import { SessionProvider } from '@/app/providers/SessionProvider';
+import { UserPreferencesProvider } from '@/app/providers/UserPreferencesProvider';
+import { NavBar } from './NavBar';
+import { BottomNavigation } from './BottomNavigation';
+import { AppDrawer } from './AppDrawer';
+import { ThemeSwitcher } from './ThemeSwitcher';
+import { MobileOptimizationWrapper } from './MobileOptimizationWrapper';
+
 export function AppWrapper({ children }: { children: React.ReactNode }) {
   return (
-    <ResilientErrorBoundary>
-      {children}
-    </ResilientErrorBoundary>
+    <MobileOptimizationWrapper>
+      <SessionProvider>
+        <UserPreferencesProvider>
+          <NavBar />
+          <AppDrawer />
+          <div className="pt-16 pb-20 md:pb-0" style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}>
+            {children}
+          </div>
+          <BottomNavigation />
+          <ThemeSwitcher />
+        </UserPreferencesProvider>
+      </SessionProvider>
+    </MobileOptimizationWrapper>
   );
 }

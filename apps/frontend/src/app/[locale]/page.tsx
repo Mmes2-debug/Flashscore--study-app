@@ -39,10 +39,59 @@ const PredictionInterface = lazyLoadComponent(() =>
 export default function HomePage() {
   const t = useTranslations('home');
   const [mounted, setMounted] = useState(false);
+  const [themeLoaded, setThemeLoaded] = useState(false);
 
   useEffect(() => {
-    console.log('🏠 HomePage: Mounting with pie-chart workload division');
+    console.log('🏠 HomePage: Mounting with mobile-first optimization');
     setMounted(true);
+
+    // Load theme last for better performance
+    const loadTheme = () => {
+      const savedTheme = localStorage.getItem('theme') || 'auto';
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const effectiveTheme = savedTheme === 'auto' ? (prefersDark ? 'dark' : 'light') : savedTheme;
+      
+      document.documentElement.classList.remove('light', 'dark');
+      document.documentElement.classList.add(effectiveTheme);
+      setThemeLoaded(true);
+    };
+
+    // Defer theme loading until after critical content
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(loadTheme);
+    } else {
+      setTimeout(loadTheme, 100);
+    }
+
+    // Graceful shutdown handler for mobile
+    const handleBeforeUnload = () => {
+      // Save scroll position
+      sessionStorage.setItem('scrollPosition', window.scrollY.toString());
+      
+      // Clear temporary caches
+      if ('caches' in window) {
+        caches.keys().then(keys => {
+          keys.forEach(key => {
+            if (key.includes('temp')) {
+              caches.delete(key);
+            }
+          });
+        });
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    // Restore scroll position
+    const savedScroll = sessionStorage.getItem('scrollPosition');
+    if (savedScroll) {
+      window.scrollTo(0, parseInt(savedScroll, 10));
+      sessionStorage.removeItem('scrollPosition');
+    }
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
   }, []);
 
   if (!mounted) {
@@ -50,8 +99,11 @@ export default function HomePage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="container mx-auto px-4 py-8 space-y-8">
+    <main 
+      className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"
+      style={{ opacity: themeLoaded ? 1 : 0.95, transition: 'opacity 0.3s ease-in-out' }}
+    >
+      <div className="container mx-auto px-4 py-8 space-y-8" style={{ maxWidth: '100%', overflowX: 'hidden' }}>
 
         {/* Hero Section - Always renders cleanly */}
         <section className="text-center py-12">
