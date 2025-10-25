@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
@@ -13,7 +12,7 @@ interface RootLayoutProps {
 
 export default async function RootLayout({ children, params }: RootLayoutProps) {
   const { locale } = await params;
-  
+
   // Validate locale
   if (!locales.includes(locale as any)) {
     notFound();

@@ -17,6 +17,16 @@ function IOSInterface({
   const [batteryLevel, setBatteryLevel] = useState(85);
   const [signalStrength, setSignalStrength] = useState(4);
 
+  // Apply theme on mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (savedTheme === 'dark' || (savedTheme === 'auto' && prefersDark) || (!savedTheme && prefersDark)) {
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());

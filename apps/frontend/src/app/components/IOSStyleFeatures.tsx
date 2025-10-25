@@ -13,6 +13,22 @@ export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
   const [pullDistance, setPullDistance] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  // Initialize theme on mount
+  useEffect(() => {
+    // Check localStorage for saved theme
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    const shouldBeDark = savedTheme === 'dark' || (savedTheme === 'auto' && prefersDark) || (!savedTheme && prefersDark);
+    
+    setIsDarkMode(shouldBeDark);
+    if (shouldBeDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
   // Haptic Feedback Simulation
   const triggerHaptic = (type: 'light' | 'medium' | 'heavy' = 'light') => {
     if ('vibrate' in navigator) {
@@ -28,8 +44,16 @@ export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
   // Dark Mode Toggle with iOS-style animation
   const toggleDarkMode = () => {
     triggerHaptic('light');
-    setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle('dark');
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    
+    if (newMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
   };
 
   // Pull to Refresh Implementation
