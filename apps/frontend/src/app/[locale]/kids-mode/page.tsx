@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { KidsModeDashboard } from '@components/KidsModeDashboard';
+import { KidsModeDashboard } from '@/app/components/KidsModeDashboard';
 import { useKidsModeContext } from '../../context/KidsModeContext';
 
 export default function KidsModePage() {

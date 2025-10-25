@@ -40,7 +40,7 @@ export class SharedAPIClient {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        return await response.json();
+        return (await response.json()) as T;
       } catch (error) {
         lastError = error as Error;
         clearTimeout(timeoutId);

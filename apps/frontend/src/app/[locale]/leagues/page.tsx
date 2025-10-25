@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Search, Star, ChevronRight } from 'lucide-react';
-import { BottomNavigation } from '@components/BottomNavigation';
+import { BottomNavigation } from '@/app/components/BottomNavigation';
 
 interface Competition {
   id: string;

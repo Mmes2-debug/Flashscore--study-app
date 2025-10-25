@@ -44,22 +44,22 @@ const lazyLoadComponent = (importFn: () => Promise<any>) => {
 };
 
 const ErrorMonitor = lazyLoadComponent(() => 
-  import('@/components/ErrorMonitor').then(m => ({ default: m.ErrorMonitor }))
+  import('@/app/components/ErrorMonitor').then(m => ({ default: m.ErrorMonitor }))
 );
 const BackendHealthMonitor = lazyLoadComponent(() => 
-  import('@/components/BackendHealthMonitor').then(m => ({ default: m.BackendHealthMonitor }))
+  import('@/app/components/BackendHealthMonitor').then(m => ({ default: m.BackendHealthMonitor }))
 );
 const FeatureShowcase = lazyLoadComponent(() => 
-  import('@/components/FeatureShowcase').then(m => ({ default: m.FeatureShowcase }))
+  import('@/app/components/FeatureShowcase').then(m => ({ default: m.FeatureShowcase }))
 );
 const SmartNewsFeed = lazyLoadComponent(() => 
-  import('@/components/SmartNewsFeed').then(m => ({ default: m.SmartNewsFeed }))
+  import('@/app/components/SmartNewsFeed').then(m => ({ default: m.SmartNewsFeed }))
 );
 const LiveMatchTracker = lazyLoadComponent(() => 
-  import('@/components/LiveMatchTracker').then(m => ({ default: m.LiveMatchTracker }))
+  import('@/app/components/LiveMatchTracker').then(m => ({ default: m.LiveMatchTracker }))
 );
 const PredictionInterface = lazyLoadComponent(() => 
-  import('@/components/PredictionInterface').then(m => ({ default: m.PredictionInterface }))
+  import('@/app/components/PredictionInterface').then(m => ({ default: m.PredictionInterface }))
 );
 
 export default function HomePage() {

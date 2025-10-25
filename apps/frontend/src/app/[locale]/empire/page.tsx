@@ -5,7 +5,7 @@ import PowerDisplay from "./MagajiCoFoundation/PowerDisplay";
 import Notification from "./MagajiCoFoundation/Notification";
 import Leaderboard from "./MagajiCoFoundation/Leaderboard";
 import { foundationApi, type Phase } from "@/lib/api/foundation";
-import { Breadcrumbs } from '@components/Breadcrumbs';
+import { Breadcrumbs } from '@/app/components/Breadcrumbs';
 
 export default function MagajiCoFoundation() {
   const [userId] = useState(() => {

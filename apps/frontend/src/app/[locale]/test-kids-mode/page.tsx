@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { useKidsMode } from '@hooks/useKidsMode';
-import { ProtectedContent } from '@components/ProtectedContent';
-import { KidsModeDashboard } from '@components/KidsModeDashboard';
-import { AgeRestrictionGuard } from '@components/AgeRestrictionGuard';
+import { ProtectedContent } from '@/app/components/ProtectedContent';
+import { KidsModeDashboard } from '@/app/components/KidsModeDashboard';
+import { AgeRestrictionGuard } from '@/app/components/AgeRestrictionGuard';
 
 export default function TestKidsModeePage() {
   const { kidsMode } = useKidsMode();

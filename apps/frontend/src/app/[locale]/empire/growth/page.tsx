@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import GrowthDashboard from '../components/GrowthDashboard';
 import EmpireLeaderboard from '../components/EmpireLeaderboard';
 import { foundationApi, Phase } from '@/lib/api/foundation';
-import { Breadcrumbs } from '@components/Breadcrumbs';
+import { Breadcrumbs } from '@/app/components/Breadcrumbs';
 
 export default function GrowthPage() {
   const [userId, setUserId] = useState<string>('');

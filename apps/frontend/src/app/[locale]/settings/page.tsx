@@ -1,10 +1,10 @@
 "use client";
 
 import React from 'react';
-import { CrossPlatformSync } from '@components/CrossPlatformSync';
-import { SmartNotifications } from '@components/SmartNotifications';
-import { LanguageSettings } from '@components/LanguageSettings';
-import TimeZoneSettings from '@components/TimeZoneSettings';
+import { CrossPlatformSync } from '@/app/components/CrossPlatformSync';
+import { SmartNotifications } from '@/app/components/SmartNotifications';
+import { LanguageSettings } from '@/app/components/LanguageSettings';
+import TimeZoneSettings from '@/app/components/TimeZoneSettings';
 
 export default function SettingsPage() {
   return (

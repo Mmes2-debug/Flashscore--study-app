@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { HorizontalCarousel } from '@components/HorizontalCarousel';
-import PWAInstaller from '@components/PWAInstaller';
-import { AdvancedPullToRefreshWrapper, useRefreshListener } from '@components/AdvancedPullToRefreshWrapper';
-import { Breadcrumbs } from '@components/Breadcrumbs';
-import PredictionDashboard from '@components/PredictionDashboard';
-import { MLPredictionInterface } from '@components/MLPredictionInterface';
-import { MLModelDashboard } from '@components/MLModelDashboard';
-import { ConfidenceSlider } from '@components/ConfidenceSlider';
+import { HorizontalCarousel } from '@/app/components/HorizontalCarousel';
+import PWAInstaller from '@/app/components/PWAInstaller';
+import { AdvancedPullToRefreshWrapper, useRefreshListener } from '@/app/components/AdvancedPullToRefreshWrapper';
+import { Breadcrumbs } from '@/app/components/Breadcrumbs';
+import PredictionDashboard from '@/app/components/PredictionDashboard';
+import { MLPredictionInterface } from '@/app/components/MLPredictionInterface';
+import { MLModelDashboard } from '@/app/components/MLModelDashboard';
+import { ConfidenceSlider } from '@/app/components/ConfidenceSlider';
 
 interface Prediction {
   id: string;

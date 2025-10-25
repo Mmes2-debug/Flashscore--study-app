@@ -1,7 +1,7 @@
 
 "use client";
 
-import { CrossPlatformSync } from '@components/CrossPlatformSync';
+import { CrossPlatformSync } from '@/app/components/CrossPlatformSync';
 
 export default function SyncManagementPage() {
   return (

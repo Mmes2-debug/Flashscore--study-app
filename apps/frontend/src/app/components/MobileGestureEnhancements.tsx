@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useGestureControls } from '@hooks/useGestureControls';
-import { haptic } from '@components/HapticFeedback';
+import { haptic } from '@/app/components/HapticFeedback';
 
 interface MobileGestureEnhancementsProps {
   onRefresh?: () => void;

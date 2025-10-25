@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { haptic } from '@components/HapticFeedback';
+import { haptic } from '@/app/components/HapticFeedback';
 
 interface ConfidenceFactor {
   name: string;

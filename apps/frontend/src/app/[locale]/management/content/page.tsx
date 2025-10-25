@@ -1,7 +1,7 @@
 "use client";
 
 import ContentManager from "./ContentManager";
-import ManagementNav from '@components/ManagementNav';
+import ManagementNav from '@/app/components/ManagementNav';
 
 export default function Page() {
   return <ContentManager />;

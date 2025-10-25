@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import PredictiveAlertSystem from '@components/PredictiveAlertSystem';
+import PredictiveAlertSystem from '@/app/components/PredictiveAlertSystem';
 
 describe('PredictiveAlertSystem', () => {
   it('renders alert button after mounting', async () => {

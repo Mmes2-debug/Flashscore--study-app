@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
-import { haptic } from '@components/HapticFeedback';
+import { haptic } from '@/app/components/HapticFeedback';
 
 interface OddsData {
   home: number;

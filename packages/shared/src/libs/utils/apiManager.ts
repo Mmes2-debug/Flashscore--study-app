@@ -78,7 +78,7 @@ export class APIManager {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        const data = await response.json();
+        const data = await response.json() as T;
         
         // Cache successful GET requests
         if (this.config.cache && (!options.method || options.method === 'GET')) {

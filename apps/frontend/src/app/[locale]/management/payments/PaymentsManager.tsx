@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { ProtectedContent } from '@components/ProtectedContent';
+import { ProtectedContent } from '@/app/components/ProtectedContent';
 import { useAuth } from '@hooks/useAuth';
 
 interface Payment {

@@ -7,8 +7,8 @@ import {
   EnhancedLiveTracker, 
   MLPredictionInterface, 
   PlatformShowcase 
-} from '@components';
-import { PredictionHub } from '@components/PredictionHub';
+} from '@/app/components';
+import { PredictionHub } from '@/app/components/PredictionHub';
 
 
 export default function TestFeaturesPage() {
