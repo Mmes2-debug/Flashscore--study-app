@@ -13,7 +13,8 @@ const nextConfig = {
   // Disable static optimization for all pages to reduce build memory
   output: 'standalone',
 
-  // Internationalization
+  // Disable i18n in favor of next-intl middleware approach
+  // This prevents config loading errors
   i18n: undefined, // Using next-intl instead
 
   // Suppress hydration warnings in production
@@ -64,7 +65,7 @@ const nextConfig = {
       mergeDuplicateChunks: true,
       moduleIds: 'deterministic',
     };
-    
+
     config.parallelism = 1;
 
     config.resolve.extensionAlias = {
@@ -135,6 +136,22 @@ const nextConfig = {
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "X-XSS-Protection", value: "1; mode=block" },
         ],
+      },
+    ];
+  },
+
+  async rewrites() {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://0.0.0.0:3001';
+    const mlUrl = process.env.ML_SERVICE_URL || 'http://0.0.0.0:8000';
+
+    return [
+      {
+        source: '/api/backend/:path*',
+        destination: `${backendUrl}/:path*`,
+      },
+      {
+        source: '/api/ml/:path*',
+        destination: `${mlUrl}/:path*`,
       },
     ];
   },
