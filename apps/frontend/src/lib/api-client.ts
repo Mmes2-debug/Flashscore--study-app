@@ -1,5 +1,7 @@
 import { backendCircuit, mlCircuit } from './circuit-breaker';
 import { retryWithBackoff } from './retry';
+import { loadBalancer } from './load-balancer';
+import { serviceMesh } from './service-mesh';
 
 class APIError extends Error {
   constructor(
@@ -27,9 +29,25 @@ class APIClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
+    // Use load balancer to select backend instance
+    const instance = endpoint.includes('/ml/') 
+      ? null // ML service doesn't use load balancing yet
+      : loadBalancer.selectInstance();
+    
+    const baseUrl = instance?.url || this.baseURL;
+    const url = `${baseUrl}${endpoint}`;
+    
     const serviceName = endpoint.includes('/ml/') ? 'ML Service' : 'Backend API';
     const circuit = endpoint.includes('/ml/') ? mlCircuit : backendCircuit;
+    
+    // Check service mesh health
+    if (!serviceMesh.canServeRequest([serviceName.toLowerCase().replace(' ', '')])) {
+      console.warn(`⚠️ Service ${serviceName} is degraded, attempting anyway...`);
+    }
+    
+    if (instance) {
+      loadBalancer.incrementConnections(instance.url);
+    }
 
     let success = false;
 
@@ -75,9 +93,27 @@ class APIClient {
       );
 
       success = true;
+      
+      // Mark instance as healthy
+      if (instance) {
+        const responseTime = Date.now() - (options as any).startTime || 0;
+        loadBalancer.markHealthy(instance.url, responseTime);
+      }
+      
       return result;
+    } catch (error) {
+      // Mark instance as unhealthy on failure
+      if (instance) {
+        loadBalancer.markUnhealthy(instance.url);
+      }
+      throw error;
     } finally {
-      // Track error budget (imported at top of file)
+      // Decrement connections
+      if (instance) {
+        loadBalancer.decrementConnections(instance.url);
+      }
+      
+      // Track error budget
       if (typeof window !== 'undefined') {
         const { errorBudget } = await import('./error-budget');
         errorBudget.track(serviceName, success);
