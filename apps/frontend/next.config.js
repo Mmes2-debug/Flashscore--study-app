@@ -1,6 +1,5 @@
-// Temporarily disabled to debug compilation hang
-// const createNextIntlPlugin = require("next-intl/plugin");
-// const withNextIntl = createNextIntlPlugin("./src/i18n.ts");
+const createNextIntlPlugin = require("next-intl/plugin");
+const withNextIntl = createNextIntlPlugin("./src/i18n.ts");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -48,14 +47,19 @@ const nextConfig = {
 
   // Webpack configuration optimized for Replit memory constraints
   webpack: (config, { isServer }) => {
-    // Reduce memory usage
+    // Reduce memory usage with aggressive optimization
     config.optimization = {
       ...config.optimization,
       minimize: process.env.NODE_ENV === 'production',
       removeAvailableModules: true,
       removeEmptyChunks: true,
       mergeDuplicateChunks: true,
+      // Limit concurrent processing to reduce memory spikes
+      moduleIds: 'deterministic',
     };
+    
+    // Reduce parallel processing to prevent memory issues
+    config.parallelism = 1;
 
     config.resolve.extensionAlias = {
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
@@ -130,6 +134,4 @@ const nextConfig = {
   },
 };
 
-// Temporarily disabled to debug compilation hang
-// module.exports = withNextIntl(nextConfig);
-module.exports = nextConfig;
+module.exports = withNextIntl(nextConfig);
