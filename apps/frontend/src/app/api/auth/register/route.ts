@@ -1,15 +1,7 @@
 //apps/frontend/../register/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { MongoClient } from 'mongodb';
-import bcrypt from 'bcryptjs';
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('MONGODB_URI environment variable is required for registration');
-}
-
-if (!process.env.MONGODB_URI.startsWith('mongodb://') && !process.env.MONGODB_URI.startsWith('mongodb+srv://')) {
-  throw new Error('MONGODB_URI must start with mongodb:// or mongodb+srv://');
-}
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://0.0.0.0:3001';
 
 const client = new MongoClient(process.env.MONGODB_URI);
 

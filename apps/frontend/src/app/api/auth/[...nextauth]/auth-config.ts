@@ -1,21 +1,11 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
-import { MongoClient } from 'mongodb';
-import bcrypt from 'bcryptjs';
 
 if (!process.env.NEXTAUTH_SECRET) {
   throw new Error('NEXTAUTH_SECRET environment variable is required for authentication');
 }
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('MONGODB_URI environment variable is required for authentication');
-}
-
-if (!process.env.MONGODB_URI.startsWith('mongodb://') && !process.env.MONGODB_URI.startsWith('mongodb+srv://')) {
-  throw new Error('MONGODB_URI must start with mongodb:// or mongodb+srv://');
-}
-
-const client = new MongoClient(process.env.MONGODB_URI);
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://0.0.0.0:3001';
 
 export const authOptions = {
   providers: [
@@ -35,24 +25,25 @@ export const authOptions = {
         }
 
         try {
-          await client.connect();
-          const db = client.db();
-          
-          const user = await db.collection('users').findOne({
-            email: credentials.email
+          // Use backend API for authentication instead of direct DB access
+          const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: credentials.email,
+              password: credentials.password
+            })
           });
+
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Authentication failed');
+          }
+
+          const user = await response.json();
 
           if (!user) {
             throw new Error('No user found with this email');
-          }
-
-          const passwordMatch = await bcrypt.compare(
-            credentials.password,
-            user.password
-          );
-
-          if (!passwordMatch) {
-            throw new Error('Incorrect password');
           }
 
           return {
