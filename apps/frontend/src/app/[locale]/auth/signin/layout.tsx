@@ -1,18 +1,4 @@
-# 🚀 
-```
-
-**✅ What changed:**
-- Added `usePathname()` hook
-- Added check for `/auth/` pages
-- Auth pages skip NavBar, AppDrawer, BottomNavigation
-
----
-
-## 📋 Step 2: Create Auth Layout
-
-**File:** `app/[locale]/auth/layout.tsx` (NEW FILE - create this)
-
-```typescript
+//app/[locale]/auth/layout.tsx
 export default function AuthLayout({
   children,
 }: {
