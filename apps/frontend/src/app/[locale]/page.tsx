@@ -29,9 +29,6 @@ const BackendHealthMonitor = lazyLoadComponent(() =>
 const ComprehensiveSportsHub = lazyLoadComponent(() => 
   import('@/app/components/ComprehensiveSportsHub').then(m => ({ default: m.ComprehensiveSportsHub }))
 );
-const SmartNewsFeed = lazyLoadComponent(() => 
-  import('@/app/components/SmartNewsFeed').then(m => ({ default: m.SmartNewsFeed }))
-);
 const LiveMatchTracker = lazyLoadComponent(() => 
   import('@/app/components/LiveMatchTracker').then(m => ({ default: m.LiveMatchTracker }))
 );
@@ -167,20 +164,12 @@ export default function HomePage() {
           </div>
         </EnhancedErrorBoundary>
 
-        {/* PRIORITY 3: Live Matches & News (Dynamic Content) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <EnhancedErrorBoundary sectionName="Live Matches" fallback={<CleanSkeleton height="h-96" />}>
-            <Suspense fallback={<CleanSkeleton height="h-96" />}>
-              <LiveMatchTracker />
-            </Suspense>
-          </EnhancedErrorBoundary>
-
-          <EnhancedErrorBoundary sectionName="News Feed" fallback={<CleanSkeleton height="h-96" />}>
-            <Suspense fallback={<CleanSkeleton height="h-96" />}>
-              <SmartNewsFeed />
-            </Suspense>
-          </EnhancedErrorBoundary>
-        </div>
+        {/* PRIORITY 3: Live Matches (Dynamic Content) */}
+        <EnhancedErrorBoundary sectionName="Live Matches" fallback={<CleanSkeleton height="h-96" />}>
+          <Suspense fallback={<CleanSkeleton height="h-96" />}>
+            <LiveMatchTracker />
+          </Suspense>
+        </EnhancedErrorBoundary>
 
         {/* PRIORITY 4: Predictions */}
         <EnhancedErrorBoundary sectionName="Predictions" fallback={<CleanSkeleton height="h-96" />}>

@@ -5,6 +5,7 @@ import { CrossPlatformSync } from '@/app/components/CrossPlatformSync';
 import { SmartNotifications } from '@/app/components/SmartNotifications';
 import { LanguageSettings } from '@/app/components/LanguageSettings';
 import TimeZoneSettings from '@/app/components/TimeZoneSettings';
+import { SmartNewsFeed } from '@/app/components/SmartNewsFeed';
 
 export default function SettingsPage() {
   return (
@@ -69,6 +70,35 @@ export default function SettingsPage() {
             Customize how and when you receive alerts about matches, predictions, and achievements
           </p>
           <SmartNotifications />
+        </div>
+
+        {/* Smart News Feed Section */}
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.05)',
+          borderRadius: '16px',
+          padding: '24px',
+          marginBottom: '24px',
+          border: '1px solid rgba(255, 255, 255, 0.1)'
+        }}>
+          <h2 style={{
+            color: '#fff',
+            fontSize: '1.5rem',
+            marginBottom: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
+          }}>
+            <span>📰</span>
+            Personalized News Feed
+          </h2>
+          <p style={{
+            color: '#9ca3af',
+            fontSize: '0.95rem',
+            marginBottom: '20px'
+          }}>
+            Customize your news preferences and stay updated with sports content that matters to you
+          </p>
+          <SmartNewsFeed />
         </div>
 
         <CrossPlatformSync />
