@@ -13,22 +13,18 @@ function IOSInterface({
   showStatusBar = true,
   enableHapticFeedback = true,
 }: IOSInterfaceProps) {
-  const [mounted, setMounted] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [batteryLevel, setBatteryLevel] = useState(85);
   const [signalStrength, setSignalStrength] = useState(4);
 
   // Apply theme on mount
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     if (savedTheme === 'dark' || (savedTheme === 'auto' && prefersDark) || (!savedTheme && prefersDark)) {
       document.documentElement.classList.add('dark');
     }
-    setMounted(true);
   }, []);
 
   useEffect(() => {
@@ -53,19 +49,16 @@ function IOSInterface({
     });
   };
 
-  if (!mounted) {
-    return null;
-  }
-
   return (
     <div className="ios-interface"
       data-show-status-bar={showStatusBar}
       data-enable-haptic-feedback={enableHapticFeedback}
+      suppressHydrationWarning
     >
       {showStatusBar && (
-        <div className="ios-status-bar">
+        <div className="ios-status-bar" suppressHydrationWarning>
           <div className="ios-status-left">
-            <span className="ios-time">{formatTime(currentTime)}</span>
+            <span className="ios-time" suppressHydrationWarning>{formatTime(currentTime)}</span>
           </div>
 
           <div className="ios-status-center">

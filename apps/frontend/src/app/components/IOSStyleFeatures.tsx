@@ -8,7 +8,6 @@ interface IOSStyleFeaturesProps {
 }
 
 export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
-  const [mounted, setMounted] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
@@ -16,8 +15,6 @@ export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
 
   // Initialize theme on mount - client-side only
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const shouldBeDark = savedTheme === 'dark' || (savedTheme === 'auto' && prefersDark) || (!savedTheme && prefersDark);
@@ -28,8 +25,6 @@ export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
     } else {
       document.documentElement.classList.remove('dark');
     }
-    
-    setMounted(true);
   }, []);
 
   // Haptic Feedback Simulation
@@ -89,16 +84,13 @@ export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
     }
   };
 
-  if (!mounted) {
-    return <div className="min-h-screen bg-gray-50" />;
-  }
-
   return (
     <div 
       className={`ios-wrapper ${isDarkMode ? 'dark' : ''}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      suppressHydrationWarning
     >
       {/* Pull to Refresh Indicator */}
       {pullDistance > 0 && (

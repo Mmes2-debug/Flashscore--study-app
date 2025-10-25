@@ -23,14 +23,13 @@ const nextConfig = withNextIntl({
       ],
     },
   },
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        'react': require.resolve('react'),
-        'react-dom': require.resolve('react-dom'),
-      };
-    }
+  webpack: (config) => {
+    // Dedupe React to prevent multiple instances
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      react: require.resolve('react'),
+      'react-dom': require.resolve('react-dom'),
+    };
     return config;
   },
 });
