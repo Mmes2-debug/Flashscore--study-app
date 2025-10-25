@@ -1,8 +1,12 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+import traceback
+import sys
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
 from predictionModel import MagajiCoMLPredictor
+from contextlib import asynccontextmanager
 import uvicorn
 import os
 import asyncio
@@ -14,16 +18,27 @@ from datetime import datetime
 request_queue = deque(maxlen=1000)
 processing_semaphore = asyncio.Semaphore(10)  # Max 10 concurrent predictions
 
+# Lifespan context manager for startup/shutdown events
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    app.state.start_time = time.time()
+    print("🚀 ML Service started successfully")
+    yield
+    # Shutdown
+    print("👋 ML Service shutting down")
+
 app = FastAPI(
     title="MagajiCo ML Prediction API",
     description="Advanced sports prediction using Machine Learning",
-    version="3.0.0"
+    version="3.0.0",
+    lifespan=lifespan
 )
 
 # Rate limiting middleware
 @app.middleware("http")
 async def rate_limit_middleware(request: Request, call_next):
-    client_ip = request.client.host
+    client_ip = request.client.host if request.client else "unknown"
     current_time = time.time()
 
     # Simple in-memory rate limiting (100 requests per minute per IP)
@@ -112,12 +127,6 @@ async def health_check():
         "model_loaded": predictor is not None,
         "timestamp": datetime.now().isoformat()
     }
-
-@app.on_event("startup")
-async def startup_event():
-    import time
-    app.state.start_time = time.time()
-    print("🚀 ML Service started successfully")
 
 @app.get("/model/info")
 async def get_model_info():
@@ -258,6 +267,39 @@ ml_latency_avg {stats['avg_latency_ms']}
 ml_uptime_seconds {stats['uptime_seconds']}
 """
     return metrics
+
+# Global Error Boundary - keeps ML service alive
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    error_details = {
+        "service": "MagajiCo ML Service",
+        "error": str(exc),
+        "type": type(exc).__name__,
+        "path": request.url.path,
+        "timestamp": str(__import__('datetime').datetime.now()),
+        "message": "ML service encountered an error but is still running"
+    }
+
+    print(f"🚨 ML Error Boundary caught: {exc}", file=sys.stderr)
+    print(f"Traceback: {traceback.format_exc()}", file=sys.stderr)
+
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content=error_details
+    )
+
+# Process-level error handling
+def setup_error_handlers():
+    """Setup process-level error handlers to prevent crashes"""
+    def exception_handler(exc_type, exc_value, exc_traceback):
+        print(f"🚨 UNCAUGHT EXCEPTION - ML Service Still Running", file=sys.stderr)
+        print(f"Type: {exc_type}", file=sys.stderr)
+        print(f"Value: {exc_value}", file=sys.stderr)
+        traceback.print_tb(exc_traceback, file=sys.stderr)
+
+    sys.excepthook = exception_handler
+
+setup_error_handlers()
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", os.getenv("ML_PORT", 8000)))
