@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, lazy, Suspense, useRef } from 'react';
-import { useMobile } from '@hooks/useMobile';
+import { useMobile } from '@hooks';
 import dynamic from 'next/dynamic';
 
 // Lazy load heavy components
@@ -48,6 +48,7 @@ interface SocialComment {
 
 export const ComprehensiveSportsHub: React.FC = () => {
   const isMobile = useMobile();
+  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState('live');
   const [matches, setMatches] = useState<EnhancedMatch[]>([]);
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -60,13 +61,19 @@ export const ComprehensiveSportsHub: React.FC = () => {
   const notificationRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    
     loadInitialData();
     setupLiveUpdates();
 
     return () => {
       // Cleanup intervals
     };
-  }, []);
+  }, [mounted]);
 
   const loadInitialData = async () => {
     try {
@@ -409,6 +416,14 @@ export const ComprehensiveSportsHub: React.FC = () => {
   );
 
   const filteredMatches = matches.filter(match => match.status === 'Live');
+
+  if (!mounted) {
+    return (
+      <div className="sports" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ color: '#fff', fontSize: '18px' }}>Loading Sports Hub...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="sports" style={{ minHeight: '100vh' }}>
