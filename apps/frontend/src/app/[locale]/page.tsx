@@ -23,6 +23,9 @@ const ErrorMonitor = lazyLoadComponent(() =>
 const BackendHealthMonitor = lazyLoadComponent(() => 
   import('@/app/components/BackendHealthMonitor').then(m => ({ default: m.BackendHealthMonitor }))
 );
+const ComprehensiveSportsHub = lazyLoadComponent(() => 
+  import('@/app/components/ComprehensiveSportsHub').then(m => ({ default: m.ComprehensiveSportsHub }))
+);
 const FeatureShowcase = lazyLoadComponent(() => 
   import('@/app/components/FeatureShowcase').then(m => ({ default: m.FeatureShowcase }))
 );
@@ -105,8 +108,8 @@ export default function HomePage() {
     >
       <div className="container mx-auto px-4 py-8 space-y-8" style={{ maxWidth: '100%', overflowX: 'hidden' }}>
 
-        {/* Hero Section - Always renders cleanly */}
-        <section className="text-center py-12">
+        {/* PRIORITY 1: Welcome Framework - Always First */}
+        <section className="text-center py-12 animate-fade-in">
           <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 mb-4">
             {t('welcome', { defaultValue: 'Welcome to MagajiCo' })}
           </h1>
@@ -114,6 +117,13 @@ export default function HomePage() {
             {t('tagline', { defaultValue: 'AI-Powered Sports Predictions & Analytics' })}
           </p>
         </section>
+
+        {/* PRIORITY 2: Comprehensive Sports Hub - Before Menu */}
+        <EnhancedErrorBoundary sectionName="Sports Hub" fallback={<CleanSkeleton height="h-screen" />}>
+          <Suspense fallback={<CleanSkeleton height="h-screen" />}>
+            <ComprehensiveSportsHub />
+          </Suspense>
+        </EnhancedErrorBoundary>
 
         {/* Background Services - Hidden */}
         <EnhancedErrorBoundary sectionName="Background Services" showErrorUI={false}>
@@ -127,7 +137,7 @@ export default function HomePage() {
           </div>
         </EnhancedErrorBoundary>
 
-        {/* Priority: Live Matches & News (Dynamic Content First) */}
+        {/* PRIORITY 3: Live Matches & News (Dynamic Content) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <EnhancedErrorBoundary sectionName="Live Matches" fallback={<CleanSkeleton height="h-96" />}>
             <Suspense fallback={<CleanSkeleton height="h-96" />}>
@@ -142,14 +152,14 @@ export default function HomePage() {
           </EnhancedErrorBoundary>
         </div>
 
-        {/* Predictions - High Priority */}
+        {/* PRIORITY 4: Predictions */}
         <EnhancedErrorBoundary sectionName="Predictions" fallback={<CleanSkeleton height="h-96" />}>
           <Suspense fallback={<CleanSkeleton height="h-96" />}>
             <PredictionInterface />
           </Suspense>
         </EnhancedErrorBoundary>
 
-        {/* Static Features - Load Last (Low Priority) */}
+        {/* PRIORITY 5: Static Features - Load Last */}
         {themeLoaded && (
           <EnhancedErrorBoundary sectionName="Feature Showcase" fallback={null} showErrorUI={false}>
             <Suspense fallback={null}>
