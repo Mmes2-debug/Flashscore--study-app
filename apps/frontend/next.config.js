@@ -2,7 +2,7 @@
 const withNextIntl = require('next-intl/plugin')();
 
 const nextConfig = withNextIntl({
-  reactStrictMode: true,
+  reactStrictMode: false,
   eslint: {
     ignoreDuringBuilds: true,
   },

@@ -12,15 +12,17 @@ export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // Initialize theme on mount
+  // Initialize theme on mount - client-side only
   useEffect(() => {
-    // Check localStorage for saved theme
+    setMounted(true);
+
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
+
     const shouldBeDark = savedTheme === 'dark' || (savedTheme === 'auto' && prefersDark) || (!savedTheme && prefersDark);
-    
+
     setIsDarkMode(shouldBeDark);
     if (shouldBeDark) {
       document.documentElement.classList.add('dark');
@@ -46,7 +48,7 @@ export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
     triggerHaptic('light');
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
-    
+
     if (newMode) {
       document.documentElement.classList.add('dark');
       localStorage.setItem('theme', 'dark');
@@ -65,7 +67,7 @@ export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
   const handleTouchMove = (e: React.TouchEvent) => {
     const currentY = e.touches[0].clientY;
     const distance = currentY - startY;
-    
+
     if (distance > 0 && window.scrollY === 0) {
       setPullDistance(Math.min(distance, 100));
     }
@@ -75,7 +77,7 @@ export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
     if (pullDistance > 80) {
       setIsRefreshing(true);
       triggerHaptic('medium');
-      
+
       setTimeout(() => {
         setIsRefreshing(false);
         setPullDistance(0);
@@ -85,6 +87,10 @@ export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
       setPullDistance(0);
     }
   };
+
+  if (!mounted) {
+    return <div className="min-h-screen bg-gray-50" />;
+  }
 
   return (
     <div 
@@ -158,11 +164,11 @@ export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
           } ${showBottomSheet ? 'translate-y-0' : 'translate-y-full'}`}>
             <div className="p-6">
               <div className={`w-12 h-1.5 ${isDarkMode ? 'bg-white/30' : 'bg-gray-300'} rounded-full mx-auto mb-6`} />
-              
+
               <h3 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                 Quick Actions
               </h3>
-              
+
               <div className="space-y-3">
                 <button className={`w-full p-4 rounded-2xl text-left transition-colors ${
                   isDarkMode ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
@@ -172,7 +178,7 @@ export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
                     <span className="font-semibold">Share App</span>
                   </div>
                 </button>
-                
+
                 <button className={`w-full p-4 rounded-2xl text-left transition-colors ${
                   isDarkMode ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
                 }`}>
@@ -181,7 +187,7 @@ export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
                     <span className="font-semibold">Notifications</span>
                   </div>
                 </button>
-                
+
                 <button className={`w-full p-4 rounded-2xl text-left transition-colors ${
                   isDarkMode ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
                 }`}>
@@ -191,7 +197,7 @@ export function IOSStyleFeatures({ children }: IOSStyleFeaturesProps) {
                   </div>
                 </button>
               </div>
-              
+
               <button 
                 onClick={() => setShowBottomSheet(false)}
                 className="w-full mt-6 p-4 bg-blue-500 text-white rounded-2xl font-semibold hover:bg-blue-600 transition-colors"

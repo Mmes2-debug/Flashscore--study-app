@@ -16,6 +16,7 @@ function IOSInterface({
   const [currentTime, setCurrentTime] = useState(new Date());
   const [batteryLevel, setBatteryLevel] = useState(85);
   const [signalStrength, setSignalStrength] = useState(4);
+  const [mounted, setMounted] = useState(false);
 
   // Apply theme on mount
   useEffect(() => {
@@ -25,6 +26,7 @@ function IOSInterface({
     if (savedTheme === 'dark' || (savedTheme === 'auto' && prefersDark) || (!savedTheme && prefersDark)) {
       document.documentElement.classList.add('dark');
     }
+    setMounted(true);
   }, []);
 
   useEffect(() => {
@@ -49,8 +51,12 @@ function IOSInterface({
     });
   };
 
+  if (!mounted) {
+    return null;
+  }
+
   return (
-    <div
+    <div className="ios-interface"
       data-show-status-bar={showStatusBar}
       data-enable-haptic-feedback={enableHapticFeedback}
     >
