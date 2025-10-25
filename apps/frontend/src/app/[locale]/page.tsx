@@ -2,33 +2,7 @@
 
 import React, { Suspense, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-
-// Pie-chart division: Each section is isolated with its own error boundary
-class SectionErrorBoundary extends React.Component<
-  { children: React.ReactNode; sectionName: string; fallback?: React.ReactNode },
-  { hasError: boolean; error?: Error }
-> {
-  constructor(props: any) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
-  }
-
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error(`❌ ${this.props.sectionName} section failed:`, error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      // Return null to hide broken sections completely
-      return null;
-    }
-    return this.props.children;
-  }
-}
+import { EnhancedErrorBoundary } from '@/app/components/EnhancedErrorBoundary';
 
 // Clean loading skeleton that matches the content
 const CleanSkeleton = ({ height = 'h-64' }: { height?: string }) => (
@@ -90,7 +64,7 @@ export default function HomePage() {
         </section>
 
         {/* Background Services - Hidden */}
-        <SectionErrorBoundary sectionName="Background Services">
+        <EnhancedErrorBoundary sectionName="Background Services" showErrorUI={false}>
           <div style={{ display: 'none' }}>
             <Suspense fallback={null}>
               <ErrorMonitor />
@@ -99,36 +73,36 @@ export default function HomePage() {
               <BackendHealthMonitor />
             </Suspense>
           </div>
-        </SectionErrorBoundary>
+        </EnhancedErrorBoundary>
 
         {/* Feature Showcase */}
-        <SectionErrorBoundary sectionName="Feature Showcase">
+        <EnhancedErrorBoundary sectionName="Feature Showcase" fallback={<CleanSkeleton />}>
           <Suspense fallback={<CleanSkeleton />}>
             <FeatureShowcase />
           </Suspense>
-        </SectionErrorBoundary>
+        </EnhancedErrorBoundary>
 
         {/* News & Matches Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <SectionErrorBoundary sectionName="News Feed">
+          <EnhancedErrorBoundary sectionName="News Feed" fallback={<CleanSkeleton height="h-96" />}>
             <Suspense fallback={<CleanSkeleton height="h-96" />}>
               <SmartNewsFeed />
             </Suspense>
-          </SectionErrorBoundary>
+          </EnhancedErrorBoundary>
 
-          <SectionErrorBoundary sectionName="Live Matches">
+          <EnhancedErrorBoundary sectionName="Live Matches" fallback={<CleanSkeleton height="h-96" />}>
             <Suspense fallback={<CleanSkeleton height="h-96" />}>
               <LiveMatchTracker />
             </Suspense>
-          </SectionErrorBoundary>
+          </EnhancedErrorBoundary>
         </div>
 
         {/* Predictions */}
-        <SectionErrorBoundary sectionName="Predictions">
+        <EnhancedErrorBoundary sectionName="Predictions" fallback={<CleanSkeleton height="h-96" />}>
           <Suspense fallback={<CleanSkeleton height="h-96" />}>
             <PredictionInterface />
           </Suspense>
-        </SectionErrorBoundary>
+        </EnhancedErrorBoundary>
 
         {/* Status Footer - Always visible */}
         <div className="text-center py-4 text-gray-500 dark:text-gray-400 text-sm" suppressHydrationWarning>
