@@ -47,6 +47,14 @@ const nextConfig = {
 
   // Webpack configuration optimized for Replit memory constraints
   webpack: (config, { isServer }) => {
+    // Enable persistent caching for faster rebuilds
+    config.cache = {
+      type: 'filesystem',
+      buildDependencies: {
+        config: [__filename],
+      },
+    };
+
     // Reduce memory usage with aggressive optimization
     config.optimization = {
       ...config.optimization,
@@ -54,11 +62,9 @@ const nextConfig = {
       removeAvailableModules: true,
       removeEmptyChunks: true,
       mergeDuplicateChunks: true,
-      // Limit concurrent processing to reduce memory spikes
       moduleIds: 'deterministic',
     };
     
-    // Reduce parallel processing to prevent memory issues
     config.parallelism = 1;
 
     config.resolve.extensionAlias = {

@@ -1,10 +1,13 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
+const locales = ['en', 'es', 'fr', 'de', 'pt'];
+const defaultLocale = 'en';
+
 export function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+  const { pathname } = request.nextUrl;
   
-  // Skip middleware for static files, API routes, and special Next.js paths
+  // Skip static assets and API routes
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
@@ -15,33 +18,35 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Get locale from cookie or accept-language header
-  const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value;
-  const acceptLanguage = request.headers.get('accept-language');
-  
-  // Determine locale (default to 'en')
-  let locale = 'en';
-  if (cookieLocale && ['en', 'es', 'fr', 'de', 'pt'].includes(cookieLocale)) {
-    locale = cookieLocale;
-  } else if (acceptLanguage) {
-    const browserLang = acceptLanguage.split(',')[0].split('-')[0];
-    if (['es', 'fr', 'de', 'pt'].includes(browserLang)) {
-      locale = browserLang;
-    }
-  }
-
-  // If pathname doesn't have locale, redirect to add it
-  const pathnameHasLocale = ['en', 'es', 'fr', 'de', 'pt'].some(
+  // Check if pathname already has a locale
+  const pathnameHasLocale = locales.some(
     (loc) => pathname === `/${loc}` || pathname.startsWith(`/${loc}/`)
   );
 
-  if (!pathnameHasLocale) {
-    const newUrl = new URL(`/${locale}${pathname}`, request.url);
-    newUrl.search = request.nextUrl.search;
-    return NextResponse.redirect(newUrl);
+  if (pathnameHasLocale) {
+    return NextResponse.next();
   }
 
-  return NextResponse.next();
+  // Detect locale: cookie > accept-language > default
+  let locale = defaultLocale;
+  const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value;
+  
+  if (cookieLocale && locales.includes(cookieLocale)) {
+    locale = cookieLocale;
+  } else {
+    const acceptLang = request.headers.get('accept-language');
+    if (acceptLang) {
+      const detected = acceptLang.split(',')[0].split('-')[0];
+      if (locales.includes(detected)) {
+        locale = detected;
+      }
+    }
+  }
+
+  // Redirect to localized path
+  const url = request.nextUrl.clone();
+  url.pathname = `/${locale}${pathname}`;
+  return NextResponse.redirect(url);
 }
 
 export const config = {

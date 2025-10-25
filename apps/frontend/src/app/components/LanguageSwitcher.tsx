@@ -42,24 +42,20 @@ export function LanguageSwitcher() {
 
   const handleLanguageChange = async (newLocale: Locale) => {
     setIsOpen(false);
-
     if (newLocale === locale) return;
 
-    // Set the cookie with proper attributes
+    // Set cookie
     document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
 
-    // Store in localStorage immediately
-    localStorage.setItem('preferredLocale', newLocale);
-
-    // Update preferences
-    try {
-      await updatePreferences({ language: newLocale });
-    } catch (error) {
-      console.error('Failed to update preferences:', error);
-    }
-
-    // Force reload to apply new locale
-    window.location.reload();
+    // Update path and navigate
+    const currentPath = pathname.split('/').slice(2).join('/') || '';
+    const newPath = `/${newLocale}/${currentPath}`;
+    
+    // Update preferences in background
+    updatePreferences({ language: newLocale }).catch(console.error);
+    
+    // Navigate to new locale path
+    window.location.href = newPath;
   };
 
   return (
