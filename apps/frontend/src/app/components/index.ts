@@ -48,7 +48,7 @@ export { UnifiedSportsHub } from './UnifiedSportsHub';
 export { SmartNewsFeed } from './SmartNewsFeed';
 export { ConnectedNewsFeed } from './ConnectedNewsFeed';
 export { FeatureShowcase } from './FeatureShowcase';
-export { FeatureHub } from './FeatureHub';
+// export { FeatureHub } from './FeatureHub'; // TODO: Restore with proper shared utils integration for production
 
 // User Interaction
 export { PullToRefreshWrapper } from './PullToRefreshWrapper';
