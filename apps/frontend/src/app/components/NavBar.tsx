@@ -1,16 +1,18 @@
-export const NavBar: React.FC = () => {
+import React, { useState, useEffect, useRef } from 'react';
+import { useSession } from 'next-auth/react';
+
+export const NavBar: React.FC = React.memo(() => {
   const { data: session, status } = useSession();
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [quickMenuOpen, setQuickMenuOpen] = useState<boolean>(false);
   const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
-  const dropdownRefs = React.useRef<{ [key: string]: HTMLButtonElement | null }>({});
-  const quickMenuButtonRef = React.useRef<HTMLButtonElement | null>(null);
 
-  // ... all your handlers
+  const dropdownRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const quickMenuButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  // ✅ Moved inside the component
-  React.useEffect(() => {
+  // ✅ Handle click outside quick menu
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         quickMenuOpen &&
@@ -24,11 +26,27 @@ export const NavBar: React.FC = () => {
     if (quickMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [quickMenuOpen]);
 
-  // ... your return (
-};
+  // ... all your handlers (toggle menus, dropdowns, etc.)
+
+  return (
+    <nav className="flex justify-between items-center p-4 shadow-md bg-white">
+      <div className="text-lg font-bold">MyApp</div>
+      {/* Example Menu Button */}
+      <button
+        ref={quickMenuButtonRef}
+        onClick={() => setQuickMenuOpen(!quickMenuOpen)}
+        className="px-3 py-2 rounded-md bg-gray-100 hover:bg-gray-200"
+      >
+        Menu
+      </button>
+      {quickMenuOpen && (
+        <div className="absolute top-12 right-4 bg-white shadow-lg rounded-lg p-3">
+          <p>Quick actions here</p>
+        </div>
+      )}
+    </nav>
+  );
+});
