@@ -1,3 +1,25 @@
+
+'use client';
+
+import { EnhancedErrorBoundary } from './EnhancedErrorBoundary';
+
+// Wrap the existing DIYF component
+export function SafeDIYF(props: any) {
+  return (
+    <EnhancedErrorBoundary
+      sectionName="DIYF Component"
+      fallback={<div className="p-4 text-center text-gray-500">Feature temporarily unavailable</div>}
+    >
+      <DIYFInner {...props} />
+    </EnhancedErrorBoundary>
+  );
+}
+
+// Rename existing component to DIYFInner
+function DIYFInner(props: any) {
+  // ... existing DIYF code ...
+}
+
 "use client";
 
 import React from "react";

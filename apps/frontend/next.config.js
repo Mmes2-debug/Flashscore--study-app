@@ -4,13 +4,13 @@ const withNextIntl = require('next-intl/plugin')();
 const nextConfig = withNextIntl({
   reactStrictMode: false,
   poweredByHeader: false,
-  
+
   // Build optimization
   swcMinify: true,
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
   },
-  
+
   // Error handling
   eslint: {
     ignoreDuringBuilds: true,
@@ -18,16 +18,17 @@ const nextConfig = withNextIntl({
   typescript: {
     ignoreBuildErrors: true,
   },
-  
+
   // Image optimization
   images: {
     domains: ['localhost'],
     unoptimized: true,
     formats: ['image/webp'],
   },
-  
+
   // Experimental features
   experimental: {
+    optimizeCss: true,
     serverActions: {
       allowedOrigins: [
         'localhost:5000',
@@ -37,17 +38,14 @@ const nextConfig = withNextIntl({
       ],
     },
     optimizePackageImports: ['@magajico/shared'],
-    // Prevent build hangs
-    isrMemoryCacheSize: 0, // Disable in-memory cache during build
-    incrementalCacheHandlerPath: undefined,
   },
-  
+
   // Build performance optimizations
   onDemandEntries: {
     maxInactiveAge: 25 * 1000,
     pagesBufferLength: 2,
   },
-  
+
   // Webpack configuration
   webpack: (config, { isServer }) => {
     // Fix for shared package resolution
@@ -55,7 +53,7 @@ const nextConfig = withNextIntl({
       ...config.resolve.alias,
       '@magajico/shared': require('path').resolve(__dirname, '../../packages/shared/src'),
     };
-    
+
     // Optimize chunks
     if (!isServer) {
       config.optimization.splitChunks = {
@@ -82,10 +80,10 @@ const nextConfig = withNextIntl({
         },
       };
     }
-    
+
     return config;
   },
-  
+
   // Output configuration for production
   output: process.env.NODE_ENV === 'production' ? 'standalone' : undefined,
 });
