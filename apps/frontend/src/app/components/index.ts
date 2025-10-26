@@ -57,6 +57,9 @@ export { IOSStyleFeatures } from './IOSStyleFeatures';
 // Type exports
 export type { Achievement } from './AchievementCelebration';
 export { MLPredictionInterface } from './MLPredictionInterface';
+
+// Portal Components
+export { PortalDashboard } from './PortalDashboard';
 export { MLModelDashboard } from './MLModelDashboard';
 export { ConfidenceSlider } from './ConfidenceSlider';
 export { PredictionHub } from './PredictionHub';
