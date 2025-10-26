@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -35,7 +34,7 @@ export function MobileOptimizationWrapper({ children }: { children: React.ReactN
       if (isMobile) {
         // Apply mobile-specific optimizations
         document.body.classList.add('mobile-optimized');
-        
+
         // Amazon-style adaptive loading based on performance tier
         if (tier === 'low') {
           document.body.classList.add('low-performance-mode');
@@ -54,13 +53,13 @@ export function MobileOptimizationWrapper({ children }: { children: React.ReactN
             .hover\\:shadow-lg:hover { box-shadow: none !important; }
             .hover-lift:hover { transform: none !important; }
           }
-          
+
           /* Amazon-style performance optimizations */
           .low-performance-mode * {
             animation: none !important;
             transition: none !important;
           }
-          
+
           .low-performance-mode img {
             image-rendering: auto;
           }
@@ -75,10 +74,10 @@ export function MobileOptimizationWrapper({ children }: { children: React.ReactN
 
       // Optimize touch targets
       document.documentElement.style.setProperty('--touch-target-min', '44px');
-      
+
       // Enable momentum scrolling
       document.body.style.webkitOverflowScrolling = 'touch';
-      
+
       // Prevent zoom on input focus
       const viewport = document.querySelector('meta[name=viewport]');
       if (viewport && viewport instanceof HTMLMetaElement) {

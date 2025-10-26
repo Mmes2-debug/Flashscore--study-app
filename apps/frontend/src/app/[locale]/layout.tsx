@@ -5,12 +5,14 @@ import './styles/globals.css';
 import './styles/mobile-optimizations.css';
 import './styles/responsive-layout.css';
 import './fonts.css';
-import { AppWrapper } from '@/app/components/AppWrapper';
-import { MobileLayout } from '@/app/components/MobileLayout';
-import { MobileOptimizationWrapper } from '@/app/components/MobileOptimizationWrapper';
-import { HydrationSafeWrapper } from '@/app/components/HydrationSafeWrapper';
-import { AmazonStylePerformanceMonitor } from '@/app/components/AmazonStylePerformanceMonitor';
-import { GlobalErrorHandler } from '@/app/components/GlobalErrorHandler';
+import {
+  AppWrapper,
+  MobileLayout,
+  MobileOptimizationWrapper,
+  HydrationSafeWrapper,
+  AmazonStylePerformanceMonitor,
+  GlobalErrorHandler,
+} from '@/app/components';
 import { locales } from '@/i18n';
 import type { Metadata, Viewport } from 'next';
 

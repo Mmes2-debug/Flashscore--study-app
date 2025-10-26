@@ -57,7 +57,7 @@ export function BottomNavigation() {
 
   if (!mounted) {
     return (
-      <nav 
+      <nav
         className="fixed bottom-0 left-0 right-0 z-40 border-t"
         style={{
           backgroundColor: 'var(--bg-secondary)',
@@ -71,7 +71,7 @@ export function BottomNavigation() {
   }
 
   return (
-    <nav 
+    <nav
       className="fixed bottom-0 left-0 right-0 z-40 border-t transition-colors"
       style={{
         backgroundColor: 'var(--bg-secondary)',
@@ -101,7 +101,7 @@ export function BottomNavigation() {
                   </span>
                 )}
               </div>
-              <span 
+              <span
                 className="text-[11px] font-medium whitespace-nowrap"
                 style={{
                   color: isActive ? 'var(--accent-color)' : 'var(--text-secondary)'
@@ -110,7 +110,7 @@ export function BottomNavigation() {
                 {item.label}
               </span>
               {isActive && (
-                <div 
+                <div
                   className="absolute bottom-0 left-0 right-0 h-0.5 rounded-t-full"
                   style={{ backgroundColor: 'var(--accent-color)' }}
                 />

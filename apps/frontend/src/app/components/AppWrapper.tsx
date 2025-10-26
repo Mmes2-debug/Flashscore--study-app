@@ -2,7 +2,7 @@
 "use client";
 import React from "react";
 import { usePathname } from 'next/navigation';
-import { DIYF } from './diyf';
+import { DIYF } from '@/app/components/diyf';
 
 // Simplified Error Boundary
 class ResilientErrorBoundary extends React.Component<
