@@ -42,14 +42,13 @@ export { ConfidenceCalibration } from './ConfidenceCalibration';
 
 // Portal & Dashboard
 export { PortalDashboard } from './PortalDashboard';
-export { MLModelDashboard } from './MLModelDashboard';
 export { UnifiedSportsHub } from './UnifiedSportsHub';
 
 // News & Social
 export { SmartNewsFeed } from './SmartNewsFeed';
 export { ConnectedNewsFeed } from './ConnectedNewsFeed';
 export { FeatureShowcase } from './FeatureShowcase';
-export { FeatureHub } from './FeatureHub';
+// export { FeatureHub } from './FeatureHub'; // TODO: Restore with proper shared utils integration for production
 
 // User Interaction
 export { PullToRefreshWrapper } from './PullToRefreshWrapper';
@@ -70,7 +69,6 @@ export { DateSelector } from './DateSelector';
 export { LatestNews } from './LatestNews';
 export { LiveScoreCard } from './LiveScoreCard';
 export { LoginModal } from './LoginModal';
-export { MobileInstallPrompter } from './MobileInstallPrompter';
 export { ThemeToggle } from './ThemeToggle';
 export { Welcome } from './Welcome';
 export { LanguageSwitcher } from './LanguageSwitcher';

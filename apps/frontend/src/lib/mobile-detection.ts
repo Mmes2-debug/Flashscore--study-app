@@ -16,6 +16,11 @@ export interface MobileDetectionResult {
   deviceType: 'mobile' | 'tablet' | 'desktop';
   screenWidth: number;
   userAgent: string;
+  supportsHaptics: boolean;
+  supportsVoice: boolean;
+  supportsTouchGestures: boolean;
+  supportsAR: boolean;
+  networkSpeed: 'slow' | 'fast' | 'offline';
 }
 
 class MobileDetector {
@@ -54,6 +59,11 @@ class MobileDetector {
         deviceType: 'desktop',
         screenWidth: 1920,
         userAgent: '',
+        supportsHaptics: false,
+        supportsVoice: false,
+        supportsTouchGestures: false,
+        supportsAR: false,
+        networkSpeed: 'fast',
       };
     }
 
@@ -82,6 +92,22 @@ class MobileDetector {
     const deviceType: 'mobile' | 'tablet' | 'desktop' = 
       isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop';
 
+    // Advanced capability detection
+    const supportsHaptics = 'vibrate' in navigator || 'Haptics' in (window as any);
+    const supportsVoice = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+    const supportsTouchGestures = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const supportsAR = 'xr' in navigator || 'getVRDisplays' in navigator;
+    
+    // Network speed detection
+    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    let networkSpeed: 'slow' | 'fast' | 'offline' = 'fast';
+    if (!navigator.onLine) {
+      networkSpeed = 'offline';
+    } else if (connection) {
+      const effectiveType = connection.effectiveType;
+      networkSpeed = effectiveType === '2g' || effectiveType === 'slow-2g' ? 'slow' : 'fast';
+    }
+
     return {
       isMobile,
       isTablet,
@@ -92,6 +118,11 @@ class MobileDetector {
       deviceType,
       screenWidth: width,
       userAgent,
+      supportsHaptics,
+      supportsVoice,
+      supportsTouchGestures,
+      supportsAR,
+      networkSpeed,
     };
   }
 

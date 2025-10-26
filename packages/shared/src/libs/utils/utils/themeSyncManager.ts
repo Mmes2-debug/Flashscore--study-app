@@ -19,7 +19,8 @@ export class ThemeSyncManager {
         lastUpdated: new Date().toISOString()
       };
       
-      await ReplitStorage.uploadText(
+      const storage = ReplitStorage.getInstance();
+      await storage.uploadText(
         `${this.SYNC_KEY}_${this.getUserId()}`,
         JSON.stringify(data)
       );
@@ -32,7 +33,8 @@ export class ThemeSyncManager {
 
   static async syncFromCloud(): Promise<ThemePreferences | null> {
     try {
-      const data = await ReplitStorage.downloadText(
+      const storage = ReplitStorage.getInstance();
+      const data = await storage.downloadText(
         `${this.SYNC_KEY}_${this.getUserId()}`
       );
       

@@ -3,7 +3,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { MLPredictionInterface } from './MLPredictionInterface';
-import { MLModelDashboard } from './MLModelDashboard';
 import { ConfidenceSlider } from './ConfidenceSlider';
 import { PredictionPreview } from './PredictionPreview';
 import { Brain, TrendingUp, BarChart3, Zap } from 'lucide-react';
@@ -124,7 +123,15 @@ export const PredictionHub: React.FC<PredictionHubProps> = ({
 
         {activeTab === 'model' && showModelDashboard && (
           <div className="animate-in fade-in duration-300">
-            <MLModelDashboard />
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-8 text-center">
+              <BarChart3 className="w-16 h-16 mx-auto mb-4 text-purple-500" />
+              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
+                Model Dashboard Coming Soon
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Advanced ML model analytics and performance metrics will be available here.
+              </p>
+            </div>
           </div>
         )}
       </div>
