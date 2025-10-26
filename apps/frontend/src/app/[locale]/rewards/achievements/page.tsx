@@ -1,11 +1,7 @@
 "use client";
 
-import React, { Suspense } from 'react';
-import { Trophy, Star, Coins, TrendingUp } from 'lucide-react';
-
-const AchievementSystem = React.lazy(() => 
-  import('@/app/components/AchievementSystem').then(m => ({ default: m.AchievementSystem }))
-);
+import React from 'react';
+import { Trophy, Star, Coins, TrendingUp, Award, Target, Zap } from 'lucide-react';
 
 export default function AchievementsPage() {
   return (
@@ -51,11 +47,39 @@ export default function AchievementsPage() {
         </div>
       </div>
 
-      <Suspense fallback={
-        <div className="h-screen bg-gray-800/50 backdrop-blur-xl rounded-2xl animate-pulse" />
-      }>
-        <AchievementSystem />
-      </Suspense>
+      <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700">
+        <h2 className="text-2xl font-bold text-white mb-6">Your Achievements</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            { icon: Award, name: "First Prediction", desc: "Made your first prediction", unlocked: true, color: "blue" },
+            { icon: Target, name: "Accuracy Master", desc: "Reached 75% accuracy", unlocked: true, color: "green" },
+            { icon: Zap, name: "Speed Demon", desc: "Made 10 predictions in one day", unlocked: true, color: "purple" },
+            { icon: Trophy, name: "Weekly Warrior", desc: "Predict every day for a week", unlocked: false, color: "gray" },
+            { icon: Star, name: "Social Star", desc: "Get 100 followers", unlocked: false, color: "gray" },
+            { icon: Coins, name: "Coin Collector", desc: "Earn 1000 Pi Coins", unlocked: false, color: "gray" },
+          ].map((achievement, index) => (
+            <div key={index} className={`p-4 rounded-xl border-2 ${
+              achievement.unlocked 
+                ? `bg-${achievement.color}-600/20 border-${achievement.color}-500/30` 
+                : 'bg-gray-700/20 border-gray-600/30 opacity-60'
+            }`}>
+              <achievement.icon className={`w-8 h-8 mb-2 ${
+                achievement.unlocked ? `text-${achievement.color}-400` : 'text-gray-500'
+              }`} />
+              <h3 className={`font-bold mb-1 ${achievement.unlocked ? 'text-white' : 'text-gray-400'}`}>
+                {achievement.name}
+              </h3>
+              <p className="text-sm text-gray-400">{achievement.desc}</p>
+              {achievement.unlocked && (
+                <div className="mt-2 text-xs text-green-400 flex items-center gap-1">
+                  <span>✓</span>
+                  <span>Unlocked</span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
 
       <div className="bg-gradient-to-br from-blue-600/10 to-purple-600/10 backdrop-blur-xl rounded-xl p-6 border border-gray-700">
         <h2 className="text-2xl font-bold text-white mb-4">How to Earn Rewards</h2>
