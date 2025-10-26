@@ -6,6 +6,8 @@ import { LiveScoreCard } from '@/app/components/LiveScoreCard';
 import { BottomNavigation } from '@/app/components/BottomNavigation';
 import { DateSelector } from '@/app/components/DateSelector';
 
+import { SwipeNavigationWrapper } from '@/app/components/SwipeNavigationWrapper';
+
 export default function LivePage() {
   const [liveMatches, setLiveMatches] = useState([
     {
@@ -41,6 +43,7 @@ export default function LivePage() {
   };
 
   return (
+    <SwipeNavigationWrapper routes={{ left: '/matches', right: '/predictions' }}>
     <div className="min-h-screen pb-20" style={{ backgroundColor: 'var(--bg-primary)', paddingTop: '60px' }}>
       {/* Header */}
       <div
@@ -129,6 +132,7 @@ export default function LivePage() {
 
       <BottomNavigation />
     </div>
+    </SwipeNavigationWrapper>
   );
 }
 

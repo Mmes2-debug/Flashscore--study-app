@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { FlashScoreMatchTracker } from '@/app/components/FlashScoreMatchTracker';
 import { Breadcrumbs } from '@/app/components/Breadcrumbs';
 import { LiveScoreCard } from '@/app/components/LiveScoreCard';
+import { SwipeNavigationWrapper } from '@/app/components/SwipeNavigationWrapper';
 
 export default function MatchesPage() {
   const [matches, setMatches] = useState([]);
@@ -31,6 +32,7 @@ export default function MatchesPage() {
   }, []);
 
   return (
+    <SwipeNavigationWrapper routes={{ left: '/predictions', right: '/live' }}>
     <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
       <div className="max-w-7xl mx-auto px-4 pt-6 pb-20">
         <Breadcrumbs 
@@ -43,7 +45,7 @@ export default function MatchesPage() {
           <h1 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>
             Live Matches
           </h1>
-          
+
           {/* View Mode Toggle */}
           <div className="flex gap-2">
             <button
@@ -126,5 +128,6 @@ export default function MatchesPage() {
         </div>
       </div>
     </div>
+    </SwipeNavigationWrapper>
   );
 }
