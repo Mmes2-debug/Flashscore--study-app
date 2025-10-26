@@ -1,5 +1,9 @@
-import { Welcome } from '@/app/components/Welcome';
+
+"use client";
+
+import React from 'react';
+import { UnifiedSportsHub } from '@/app/components';
 
 export default function HomePage() {
-  return <Welcome />;
+  return <UnifiedSportsHub showPortalView={true} />;
 }
