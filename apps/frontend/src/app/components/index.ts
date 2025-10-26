@@ -42,7 +42,6 @@ export { ConfidenceCalibration } from './ConfidenceCalibration';
 
 // Portal & Dashboard
 export { PortalDashboard } from './PortalDashboard';
-export { MLModelDashboard } from './MLModelDashboard';
 export { UnifiedSportsHub } from './UnifiedSportsHub';
 
 // News & Social
@@ -70,7 +69,6 @@ export { DateSelector } from './DateSelector';
 export { LatestNews } from './LatestNews';
 export { LiveScoreCard } from './LiveScoreCard';
 export { LoginModal } from './LoginModal';
-export { MobileInstallPrompter } from './MobileInstallPrompter';
 export { ThemeToggle } from './ThemeToggle';
 export { Welcome } from './Welcome';
 export { LanguageSwitcher } from './LanguageSwitcher';
