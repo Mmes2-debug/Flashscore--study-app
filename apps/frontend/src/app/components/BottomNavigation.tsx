@@ -82,7 +82,7 @@ export function BottomNavigation() {
       <div className="flex justify-around items-center h-16 max-w-7xl mx-auto px-2">
         {navItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-          
+
           return (
             <Link
               key={item.id}

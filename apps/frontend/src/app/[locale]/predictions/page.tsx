@@ -204,3 +204,19 @@ export default function PredictionsPage() {
   );
 }
 
+"use client";
+
+import React from 'react';
+import { MLPredictionInterface } from '@/app/components/MLPredictionInterface';
+
+export default function PredictionsPage() {
+  return (
+    <div className="predictions-page">
+      <div className="page-header">
+        <h1>AI Predictions</h1>
+        <p>Get ML-powered predictions with 87% accuracy</p>
+      </div>
+      <MLPredictionInterface />
+    </div>
+  );
+}

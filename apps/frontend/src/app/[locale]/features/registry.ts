@@ -1,4 +1,3 @@
-
 export interface FeatureMetadata {
   id: string;
   name: string;
@@ -14,12 +13,12 @@ export const FEATURE_REGISTRY: Record<string, FeatureMetadata> = {
   // AI Features
   'ai-predictions': {
     id: 'ai-predictions',
-    name: 'AI-Powered Predictions',
-    description: 'Get real-time predictions with 87% accuracy using advanced ML models',
+    name: 'AI Predictions',
+    description: 'ML-powered match predictions with 87% accuracy',
+    icon: '🤖',
     category: 'ai',
     status: 'live',
-    icon: '🤖',
-    link: '/empire/ai-ceo'
+    link: '/predictions'
   },
   'live-chat': {
     id: 'live-chat',

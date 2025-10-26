@@ -31,13 +31,19 @@ const startServer = async () => {
     // Connect to MongoDB (optional if REQUIRE_DB=false)
     await connectDB();
 
-    // Register routes
+    // Register core routes
     await fastify.register(healthRoutes);
     await fastify.register(authRoutes, { prefix: "/api/auth" });
-    await fastify.register(predictionsRoutes, { prefix: "/api/predictions" });
-    await fastify.register(matchRoutes, { prefix: "/api" });
-    await fastify.register(newsRoutes, { prefix: "/api/news" });
-    await fastify.register(newsAuthorsRoutes, { prefix: "/api/news-authors" });
+    
+    // Register feature modules
+    await fastify.register(async (instance) => {
+      await instance.register(predictionsRoutes, { prefix: "/predictions" });
+      await instance.register(matchRoutes);
+      await instance.register(newsRoutes, { prefix: "/news" });
+      await instance.register(newsAuthorsRoutes, { prefix: "/news-authors" });
+    }, { prefix: "/api" });
+    
+    // Register foundation & payments
     await fastify.register(foundationRoutes, { prefix: "/api" });
     await fastify.register(errorsRoutes, { prefix: "/api" });
     await fastify.register(stripeRoutes, { prefix: "/api/stripe" });
