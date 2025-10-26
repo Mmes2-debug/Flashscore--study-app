@@ -1,3 +1,4 @@
+
 // Error Monitoring & Boundaries
 export { ErrorMonitor } from './ErrorMonitor';
 export { ProductionErrorBoundary as ErrorBoundary } from './ErrorBoundary/ErrorBoundaryWithPerformance';
@@ -43,6 +44,7 @@ export { ConfidenceCalibration } from './ConfidenceCalibration';
 // Portal & Dashboard
 export { PortalDashboard } from './PortalDashboard';
 export { MLModelDashboard } from './MLModelDashboard';
+export { UnifiedSportsHub } from './UnifiedSportsHub';
 
 // News & Social
 export { SmartNewsFeed } from './SmartNewsFeed';
@@ -86,6 +88,9 @@ export { PlatformShowcase } from './PlatformShowcase';
 // iOS Components
 export { IOSInterface } from './iOSInterface';
 export { IOSStyleFeatures } from './IOSStyleFeatures';
+
+// Achievements
+export { AchievementSystem } from './AchievementSystem';
 
 // Type exports
 export type { Achievement } from './AchievementCelebration';

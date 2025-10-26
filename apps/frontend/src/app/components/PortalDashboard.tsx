@@ -3,10 +3,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { Brain, Activity, Users, Trophy, TrendingUp, Target, Zap, Star } from 'lucide-react';
-import { MLPredictionInterface } from './MLPredictionInterface';
-import { LiveMatchTracker } from './LiveMatchTracker';
-import { AchievementSystem } from './AchievementSystem';
-import { SmartNewsFeed } from './SmartNewsFeed';
+import { 
+  MLPredictionInterface,
+  LiveMatchTracker,
+  AchievementSystem,
+  SmartNewsFeed
+} from '@/app/components';
 
 interface DashboardStats {
   totalPredictions: number;
