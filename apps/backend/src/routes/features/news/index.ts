@@ -1,3 +1,3 @@
 export { newsRoutes } from '../../news';
-export { newsAuthorRoutes } from '../../newsAuthors';
-export { authorRoutes } from '../../authors';
+export { newsAuthorsRoutes } from '../../newsAuthors';
+export { authorsRoutes } from '../../authors';

@@ -1,3 +1,3 @@
-export { predictionRoutes } from '../../prediction';
+export { predictionsRoutes } from '../../prediction';
 export { enhancedPredictionRoutes } from '../../enhanced-predictions';
 export { confidenceEvolutionRoutes } from '../../confidence-evolution';
