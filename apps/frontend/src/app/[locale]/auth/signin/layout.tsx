@@ -1,3 +1,7 @@
+"use client";
+
+import React from 'react';
+
 //app/[locale]/auth/layout.tsx
 export default function AuthLayout({
   children,
@@ -14,12 +18,12 @@ export default function AuthLayout({
           margin: 0;
           padding: 0;
         }
-        
+
         /* Remove any inherited padding/margins */
         .auth-layout > * {
           margin: 0;
         }
-        
+
         /* Ensure body has no padding on auth pages */
         body:has(.auth-layout) {
           padding: 0 !important;
