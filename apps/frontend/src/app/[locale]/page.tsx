@@ -18,37 +18,37 @@ export default function HomePage() {
       id: 'predictions',
       title: 'AI Predictions',
       icon: <Brain className="w-8 h-8" />,
-      href: '/predictions'
+      href: 'predictions'
     },
     {
       id: 'live',
       title: 'Live Matches',
       icon: <Radio className="w-8 h-8" />,
-      href: '/live'
+      href: 'live'
     },
     {
       id: 'social',
       title: 'Social',
       icon: <Users className="w-8 h-8" />,
-      href: '/social/feed'
+      href: 'social/feed'
     },
     {
       id: 'kids',
       title: 'Kids Mode',
       icon: <Baby className="w-8 h-8" />,
-      href: '/kids-mode'
+      href: 'kids-mode'
     },
     {
       id: 'rewards',
       title: 'Rewards',
       icon: <Trophy className="w-8 h-8" />,
-      href: '/rewards/achievements'
+      href: 'rewards/achievements'
     },
     {
       id: 'news',
       title: 'News',
       icon: <Newspaper className="w-8 h-8" />,
-      href: '/news'
+      href: 'news'
     }
   ];
 
