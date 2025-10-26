@@ -18,4 +18,4 @@ export { usePerformanceMonitor } from './usePerformanceMonitor';
 export { useHydrationSafe } from './useHydrationSafe';
 
 // ML & AI
-export { useAiAnalysis } from './useAiAnalysis';
+export { useAIAnalysis } from './useAiAnalysis';
