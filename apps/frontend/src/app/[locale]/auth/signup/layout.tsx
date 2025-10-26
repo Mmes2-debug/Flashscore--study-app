@@ -1,3 +1,7 @@
+"use client";
+
+import React from 'react';
+
 //app/[locale]/auth/layout.tsx
 export default function AuthLayout({
   children,
