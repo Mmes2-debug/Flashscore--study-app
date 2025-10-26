@@ -3,6 +3,16 @@
 import React, { useState, useEffect, lazy, Suspense, useRef } from 'react';
 import { useMobile } from '@/app/hooks/useMobile';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { 
+  Brain, 
+  Radio, 
+  Users, 
+  Baby, 
+  Trophy, 
+  Newspaper
+} from 'lucide-react';
 
 // Lazy load heavy components
 const LiveMatchTracker = dynamic(() => import('./LiveMatchTracker').then(mod => ({ default: mod.LiveMatchTracker })), {
@@ -48,6 +58,8 @@ interface SocialComment {
 
 export const ComprehensiveSportsHub: React.FC = () => {
   const isMobile = useMobile();
+  const params = useParams();
+  const locale = params?.locale || 'en';
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState('live');
   const [matches, setMatches] = useState<EnhancedMatch[]>([]);
@@ -425,8 +437,95 @@ export const ComprehensiveSportsHub: React.FC = () => {
     );
   }
 
+  const features = [
+    {
+      id: 'predictions',
+      title: 'AI Predictions',
+      icon: <Brain className="w-6 h-6" />,
+      href: `/${locale}/predictions`
+    },
+    {
+      id: 'live',
+      title: 'Live Matches',
+      icon: <Radio className="w-6 h-6" />,
+      href: `/${locale}/live`
+    },
+    {
+      id: 'social',
+      title: 'Social',
+      icon: <Users className="w-6 h-6" />,
+      href: `/${locale}/social/feed`
+    },
+    {
+      id: 'kids',
+      title: 'Kids Mode',
+      icon: <Baby className="w-6 h-6" />,
+      href: `/${locale}/kids-mode`
+    },
+    {
+      id: 'rewards',
+      title: 'Rewards',
+      icon: <Trophy className="w-6 h-6" />,
+      href: `/${locale}/rewards/achievements`
+    },
+    {
+      id: 'news',
+      title: 'News',
+      icon: <Newspaper className="w-6 h-6" />,
+      href: `/${locale}/news`
+    }
+  ];
+
   return (
     <div className="sports" style={{ minHeight: '100vh' }}>
+      {/* Feature Navigation */}
+      <div style={{ 
+        padding: '16px', 
+        background: 'rgba(15, 23, 42, 0.8)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(10px)'
+      }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? 'repeat(3, 1fr)' : 'repeat(6, 1fr)',
+          gap: '8px',
+          maxWidth: '1200px',
+          margin: '0 auto'
+        }}>
+          {features.map((feature) => (
+            <Link 
+              key={feature.id}
+              href={feature.href}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                padding: '12px 8px',
+                borderRadius: '12px',
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#fff',
+                textDecoration: 'none',
+                transition: 'all 0.2s',
+                cursor: 'pointer'
+              }}
+              className="hover:bg-white/10 hover:border-white/20"
+            >
+              <div style={{ color: '#60a5fa', marginBottom: '6px' }}>
+                {feature.icon}
+              </div>
+              <span style={{ 
+                fontSize: isMobile ? '11px' : '13px', 
+                fontWeight: '600',
+                textAlign: 'center'
+              }}>
+                {feature.title}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
       {/* Floating Notifications */}
       <div ref={notificationRef} style={{
         position: 'fixed',
