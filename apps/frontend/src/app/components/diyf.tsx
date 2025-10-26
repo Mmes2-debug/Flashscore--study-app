@@ -4,25 +4,25 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
-import LoadingSkeleton from './LoadingSkeleton';
+import { LoadingSkeleton } from './LoadingSkeleton';
 
 // Dynamically import all heavy components
-const NavBar = dynamic(() => import('./NavBar'), {
+const NavBar = dynamic(() => import('./NavBar').then(mod => mod.NavBar), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
 
-const BottomNavigation = dynamic(() => import('./BottomNavigation'), {
+const BottomNavigation = dynamic(() => import('./BottomNavigation').then(mod => mod.BottomNavigation), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
 
-const AppDrawer = dynamic(() => import('./AppDrawer'), {
+const AppDrawer = dynamic(() => import('./AppDrawer').then(mod => mod.AppDrawer), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
 
-const MobileOptimizationWrapper = dynamic(() => import('./MobileOptimizationWrapper'), {
+const MobileOptimizationWrapper = dynamic(() => import('./MobileOptimizationWrapper').then(mod => mod.MobileOptimizationWrapper), {
   loading: () => <LoadingSkeleton />,
   ssr: false
 });
