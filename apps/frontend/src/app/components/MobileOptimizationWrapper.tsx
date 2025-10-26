@@ -7,12 +7,15 @@ export function MobileOptimizationWrapper({ children }: { children: React.ReactN
   const [isOptimized, setIsOptimized] = useState(false);
 
   useEffect(() => {
-    // Detect mobile device
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    );
+    const checkAndOptimize = () => {
+      // Detect mobile device via width and user agent
+      const isMobileWidth = window.innerWidth < 768;
+      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+      const isMobile = isMobileWidth || isMobileDevice;
 
-    if (isMobile) {
+      if (isMobile) {
       // Apply mobile-specific optimizations
       document.body.classList.add('mobile-optimized');
       
@@ -51,12 +54,25 @@ export function MobileOptimizationWrapper({ children }: { children: React.ReactN
       window.addEventListener('orientationchange', setVH);
 
       setIsOptimized(true);
+      } else {
+        document.body.classList.remove('mobile-optimized');
+        setIsOptimized(false);
+      }
 
       return () => {
         window.removeEventListener('resize', setVH);
         window.removeEventListener('orientationchange', setVH);
       };
-    }
+    };
+
+    checkAndOptimize();
+    window.addEventListener('resize', checkAndOptimize);
+    window.addEventListener('orientationchange', checkAndOptimize);
+
+    return () => {
+      window.removeEventListener('resize', checkAndOptimize);
+      window.removeEventListener('orientationchange', checkAndOptimize);
+    };
   }, []);
 
   return <>{children}</>;
