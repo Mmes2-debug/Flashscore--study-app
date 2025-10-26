@@ -134,7 +134,7 @@ function EnhancedMicroInteractions() {
           <div className="tab-indicator" style={{ left: `${(selectedTab / tabs.length) * 100}%` }} />
         </div>
 
-        <div className="content-area">
+        <div className="content-area scrollable-container">
           {selectedTab === 0 && (
             <div className="tab-content">
               <ConfidenceSlider
@@ -165,7 +165,7 @@ function EnhancedMicroInteractions() {
             <div className="tab-content">
               <div className="predictions-section">
                 <h3>Your Predictions</h3>
-                <div className="predictions-list">
+                <div className="predictions-list scrollable">
                   <SwipeableCard
                     title="Manchester United vs Liverpool"
                     onAction={(direction) => {
@@ -180,6 +180,42 @@ function EnhancedMicroInteractions() {
                   />
                   <SwipeableCard
                     title="Barcelona vs Real Madrid"
+                    onAction={(direction) => {
+                      if (direction === 'left') {
+                        console.log('Archived prediction');
+                        haptic.swipeAction();
+                      } else {
+                        console.log('Favorited prediction');
+                        haptic.swipeAction();
+                      }
+                    }}
+                  />
+                  <SwipeableCard
+                    title="Chelsea vs Arsenal"
+                    onAction={(direction) => {
+                      if (direction === 'left') {
+                        console.log('Archived prediction');
+                        haptic.swipeAction();
+                      } else {
+                        console.log('Favorited prediction');
+                        haptic.swipeAction();
+                      }
+                    }}
+                  />
+                  <SwipeableCard
+                    title="PSG vs Bayern Munich"
+                    onAction={(direction) => {
+                      if (direction === 'left') {
+                        console.log('Archived prediction');
+                        haptic.swipeAction();
+                      } else {
+                        console.log('Favorited prediction');
+                        haptic.swipeAction();
+                      }
+                    }}
+                  />
+                  <SwipeableCard
+                    title="Juventus vs AC Milan"
                     onAction={(direction) => {
                       if (direction === 'left') {
                         console.log('Archived prediction');
@@ -284,6 +320,31 @@ function EnhancedMicroInteractions() {
             margin-bottom: 24px;
           }
 
+          .scrollable-container {
+            max-height: calc(100vh - 300px);
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+          }
+
+          .scrollable-container::-webkit-scrollbar {
+            width: 8px;
+          }
+
+          .scrollable-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+          }
+
+          .scrollable-container::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.5);
+            border-radius: 4px;
+          }
+
+          .scrollable-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.7);
+          }
+
           .tab-content {
             animation: fadeIn 0.3s ease;
           }
@@ -314,6 +375,32 @@ function EnhancedMicroInteractions() {
             display: flex;
             flex-direction: column;
             gap: 12px;
+          }
+
+          .predictions-list.scrollable {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 8px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+          }
+
+          .predictions-list.scrollable::-webkit-scrollbar {
+            width: 6px;
+          }
+
+          .predictions-list.scrollable::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+          }
+
+          .predictions-list.scrollable::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 3px;
+          }
+
+          .predictions-list.scrollable::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
           }
 
           .swipeable-card-wrapper {
