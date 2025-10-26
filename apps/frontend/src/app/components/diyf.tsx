@@ -19,11 +19,6 @@ const BottomNavigation = dynamic(() => import("./BottomNavigation").then(mod => 
   ssr: false,
 });
 
-const AppDrawer = dynamic(() => import("./AppDrawer").then(mod => ({ default: mod.AppDrawer })), {
-  loading: () => <LoadingSkeleton />,
-  ssr: false,
-});
-
 const MobileOptimizationWrapper = dynamic(
   () => import("./MobileOptimizationWrapper").then(mod => ({ default: mod.MobileOptimizationWrapper })),
   {
@@ -55,7 +50,6 @@ export function DIYF({ children }: DIYFProps) {
       <SessionProvider>
         <UserPreferencesProvider>
           <NavBar />
-          <AppDrawer />
           <div
             className="pt-16 pb-20 md:pb-0"
             style={{ minHeight: "calc(var(--vh, 1vh) * 100)" }}
