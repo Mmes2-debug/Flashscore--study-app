@@ -35,6 +35,10 @@
       "@utils/*": ["apps/frontend/src/app/utils/*"],
       "@providers": ["apps/frontend/src/app/providers"],
       "@providers/*": ["apps/frontend/src/app/providers/*"],
+      "@navigation": ["apps/frontend/src/lib/navigation"],
+      "@navigation/*": ["apps/frontend/src/lib/navigation/*"],
+      "@lib": ["apps/frontend/src/lib"],
+      "@lib/*": ["apps/frontend/src/lib/*"],
       
       // --- Backend ---
       "@": ["apps/backend/src"],
