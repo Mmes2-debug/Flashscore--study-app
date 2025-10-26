@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@magajico/shared": "file:../../packages/shared",
+    "@magajico/shared": "workspace:*",
     "next": "^14.2.33",
     "next-auth": "^4.24.10",
     "next-intl": "^3.0.0",
