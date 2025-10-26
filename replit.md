@@ -3,17 +3,26 @@ Sports Central is a premium monorepo sports prediction and community platform bu
 
 ## Recent Changes (October 26, 2025)
 
-- **Codebase Cleanup & Homepage Optimization (Latest)**:
+- **Homepage Minimal Refactor & Lib Framework Documentation (Latest)**:
+  - ✅ Simplified [locale]/page.tsx from ~115 lines to 4 lines (97% reduction)
+  - ✅ Homepage now only imports and renders Welcome component
+  - ✅ Moved all feature navigation to ComprehensiveSportsHub component
+  - ✅ Fixed locale-aware routing using useParams hook (/${locale}/predictions pattern)
+  - ✅ Created comprehensive lib/platform framework documentation (docs/LIB_PLATFORM_FRAMEWORK.md)
+  - ✅ Documented carousel module (types only), navigation components, UI components
+  - ✅ Fixed all component export indexes to match actual available components
+  - ✅ All workflows running successfully (Backend on 3001, Frontend on 5000, ML Service on 8000)
+  - 📊 Performance: Minimal homepage improves TTI and initial bundle size
+  - 🎯 Goal: Ultra-lean homepage + clear Vercel build documentation
+
+- **Previous: Codebase Cleanup & Homepage Optimization**:
   - ✅ Created recyclebin directory at root with 9 unused/deprecated components
   - ✅ Moved test components (App.jsx, ApiTest.tsx, DebugPanel.tsx)
   - ✅ Moved mock/placeholder components (MLModelDashboard, PerformanceOptimizer)
   - ✅ Moved PWA installers and error recovery systems
   - ✅ Simplified homepage from ~190 lines to ~75 lines (60% reduction)
   - ✅ Removed static promotional content, animations, and marketing copy
-  - ✅ Fixed locale-aware routing (changed absolute to relative hrefs)
   - ✅ All workflows verified running (Backend, Frontend, ML Service)
-  - 📊 Expected performance improvement: Reduced TTI (Time to Interactive)
-  - 🎯 Goal: Lean, functional homepage focusing on navigation over marketing
 
 - **Feature Organization & Modular Architecture**:
   - ✅ Reorganized platform into feature-based apps for better maintainability
