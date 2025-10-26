@@ -8,7 +8,7 @@ export * from './timeZoneService';
 export * from './translationService';
 
 // Re-export PiCoinManager from shared package
-export { PiCoinManager } from '@magajico/shared/utils';
+export { piCoinManagerInstance } from '@magajico/shared';
 
 // Re-export types
 export type { NewsItem, NewsAuthor } from './newsService';

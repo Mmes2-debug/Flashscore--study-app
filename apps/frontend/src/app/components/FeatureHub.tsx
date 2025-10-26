@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { systemOptimizerInstance, paymentManagerInstance, emailManagerInstance, crudManagerInstance } from '@magajico/shared/utils';
-import { useMobile } from '@hooks/useMobile';
+import { systemOptimizerInstance, paymentManagerInstance, emailManagerInstance, crudManagerInstance } from '@magajico/shared';
+import { useMobile } from '@/app/hooks';
 
 interface FeatureGroup {
   id: string;
