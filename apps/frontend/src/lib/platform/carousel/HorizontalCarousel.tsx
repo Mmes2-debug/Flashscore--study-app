@@ -3,22 +3,14 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import type { CarouselCard, CarouselConfig } from './types';
 
-interface Card {
-  id: string;
-  title: string;
-  subtitle: string;
-  value: string;
-  gradient: string;
-  bgGradient: string;
-  icon: string;
-  action: () => void;
-  priority: number;
-  show: boolean;
-  category: 'sports' | 'social' | 'achievements' | 'finance' | 'community';
+interface HorizontalCarouselProps {
+  config?: CarouselConfig;
+  customCards?: CarouselCard[];
 }
 
-export function HorizontalCarousel() {
+export function HorizontalCarousel({ config, customCards }: HorizontalCarouselProps) {
   const router = useRouter();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
@@ -33,6 +25,15 @@ export function HorizontalCarousel() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+
+  const defaultConfig: CarouselConfig = {
+    enableDrag: true,
+    enableTouch: true,
+    snapToCenter: false,
+    autoRefreshInterval: 30000,
+    visibleCards: 5,
+    ...config
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -73,12 +74,14 @@ export function HorizontalCarousel() {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 30000);
-    return () => clearInterval(interval);
-  }, [mounted]);
+    if (defaultConfig.autoRefreshInterval) {
+      const interval = setInterval(fetchData, defaultConfig.autoRefreshInterval);
+      return () => clearInterval(interval);
+    }
+  }, [mounted, defaultConfig.autoRefreshInterval]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (!scrollContainerRef.current) return;
+    if (!defaultConfig.enableDrag || !scrollContainerRef.current) return;
     setIsDragging(true);
     setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
     setScrollLeft(scrollContainerRef.current.scrollLeft);
@@ -101,7 +104,7 @@ export function HorizontalCarousel() {
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (!scrollContainerRef.current) return;
+    if (!defaultConfig.enableTouch || !scrollContainerRef.current) return;
     setIsDragging(true);
     setStartX(e.touches[0].pageX - scrollContainerRef.current.offsetLeft);
     setScrollLeft(scrollContainerRef.current.scrollLeft);
@@ -118,7 +121,7 @@ export function HorizontalCarousel() {
     setIsDragging(false);
   };
 
-  const lifeConnectingCards: Card[] = [
+  const defaultCards: CarouselCard[] = [
     {
       id: "live-matches",
       title: "Live Matches",
@@ -186,7 +189,8 @@ export function HorizontalCarousel() {
     },
   ];
 
-  const visibleCards = lifeConnectingCards.filter((card) => card.show);
+  const cards = customCards || defaultCards;
+  const visibleCards = cards.filter((card) => card.show);
 
   if (!mounted || visibleCards.length === 0) {
     return null;
