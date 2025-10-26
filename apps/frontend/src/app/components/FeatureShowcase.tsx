@@ -16,6 +16,14 @@ export function FeatureShowcase() {
   // Legacy features array kept for backwards compatibility
   const legacyFeatures = [
     {
+      id: 'mobile-performance',
+      title: 'Mobile Performance',
+      description: 'Optimized for speed and battery efficiency on mobile devices',
+      icon: '📱',
+      category: 'ai',
+      status: 'live'
+    },
+    {
       id: 'ai-predictions',
       title: 'AI-Powered Predictions',
       description: 'Get real-time predictions with 87% accuracy using advanced ML models',
@@ -144,14 +152,6 @@ export function FeatureShowcase() {
       description: 'Earn badges and rewards for milestones',
       icon: '🏅',
       category: 'education',
-      status: 'live'
-    },
-    {
-      id: 'mobile-performance',
-      title: 'Mobile Performance',
-      description: 'Optimized for speed and battery efficiency on mobile devices',
-      icon: '📱',
-      category: 'ai',
       status: 'live'
     }
   ];
