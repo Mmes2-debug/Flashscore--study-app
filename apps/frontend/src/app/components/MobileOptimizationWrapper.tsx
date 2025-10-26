@@ -2,6 +2,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { mobileDetector } from '@/lib/mobile-detection';
 
 export function MobileOptimizationWrapper({ children }: { children: React.ReactNode }) {
   const [isOptimized, setIsOptimized] = useState(false);
@@ -9,12 +10,8 @@ export function MobileOptimizationWrapper({ children }: { children: React.ReactN
 
   useEffect(() => {
     const checkAndOptimize = () => {
-      // Amazon-style device detection with performance tier
-      const isMobileWidth = window.innerWidth < 768;
-      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      );
-      const isMobile = isMobileWidth || isMobileDevice;
+      // Get centralized mobile detection
+      const { isMobile } = mobileDetector.current;
 
       // Determine device performance tier (Amazon-style optimization)
       const getPerformanceTier = () => {

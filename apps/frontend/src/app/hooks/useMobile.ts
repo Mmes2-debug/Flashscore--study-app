@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { mobileDetector } from '@/lib/mobile-detection';
 
 export function useMobile() {
   const [isMobile, setIsMobile] = useState(false);
@@ -10,30 +11,39 @@ export function useMobile() {
   useEffect(() => {
     setMounted(true);
     
-    const checkMobile = () => {
-      // Use window width as primary detection method
-      const width = window.innerWidth;
-      const isMobileWidth = width < 768;
-      
-      // Combine with user agent for better detection
-      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      );
-      
-      // Use width-based detection primarily, with user agent as secondary
-      setIsMobile(isMobileWidth || isMobileDevice);
-    };
+    // Subscribe to mobile detection changes
+    const unsubscribe = mobileDetector.subscribe((result) => {
+      setIsMobile(result.isMobile);
+    });
 
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    window.addEventListener('orientationchange', checkMobile);
-
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-      window.removeEventListener('orientationchange', checkMobile);
-    };
+    return unsubscribe;
   }, []);
 
   // Return false during SSR to match initial server render
   return mounted ? isMobile : false;
+}
+
+// Extended hook for more detailed detection
+export function useMobileDetection() {
+  const [detection, setDetection] = useState(mobileDetector.current);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    
+    const unsubscribe = mobileDetector.subscribe(setDetection);
+    return unsubscribe;
+  }, []);
+
+  return mounted ? detection : {
+    isMobile: false,
+    isTablet: false,
+    isDesktop: true,
+    isMobileWidth: false,
+    isMobileDevice: false,
+    isPWA: false,
+    deviceType: 'desktop' as const,
+    screenWidth: 1920,
+    userAgent: '',
+  };
 }

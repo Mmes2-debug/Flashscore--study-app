@@ -1,8 +1,8 @@
+"use client";
 
-'use client';
-
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMobile } from '@/app/hooks/useMobile';
+import { mobileDetector } from '@/lib/mobile-detection';
 
 interface MobileLayoutProps {
   children: React.ReactNode;
@@ -15,7 +15,7 @@ export function MobileLayout({ children }: MobileLayoutProps) {
 
   useEffect(() => {
     setMounted(true);
-    
+
     // Detect if running as PWA
     const isPWAMode = window.matchMedia('(display-mode: standalone)').matches ||
                       (window.navigator as any).standalone === true;
@@ -26,25 +26,25 @@ export function MobileLayout({ children }: MobileLayoutProps) {
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
     };
-    
+
     setVH();
     window.addEventListener('resize', setVH);
     window.addEventListener('orientationchange', setVH);
-    
+
     // Mobile optimizations
     if (isMobile) {
       // Prevent pull-to-refresh on mobile
       document.body.style.overscrollBehavior = 'none';
-      
+
       // Enable smooth scrolling
       document.documentElement.style.scrollBehavior = 'smooth';
-      
+
       // Add mobile class to body
       document.body.classList.add('mobile-view');
     } else {
       document.body.classList.add('desktop-view');
     }
-    
+
     return () => {
       window.removeEventListener('resize', setVH);
       window.removeEventListener('orientationchange', setVH);
@@ -56,7 +56,7 @@ export function MobileLayout({ children }: MobileLayoutProps) {
   }
 
   return (
-    <div 
+    <div
       className={`responsive-layout ${isMobile ? 'mobile-mode' : 'desktop-mode'} ${isPWA ? 'pwa-mode' : ''}`}
       style={{
         minHeight: isMobile ? 'calc(var(--vh, 1vh) * 100)' : '100vh',
