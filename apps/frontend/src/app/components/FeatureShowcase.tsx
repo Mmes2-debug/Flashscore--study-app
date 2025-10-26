@@ -145,6 +145,14 @@ export function FeatureShowcase() {
       icon: '🏅',
       category: 'education',
       status: 'live'
+    },
+    {
+      id: 'mobile-performance',
+      title: 'Mobile Performance',
+      description: 'Optimized for speed and battery efficiency on mobile devices',
+      icon: '📱',
+      category: 'ai',
+      status: 'live'
     }
   ];
 
