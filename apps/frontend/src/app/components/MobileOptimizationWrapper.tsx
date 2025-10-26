@@ -35,8 +35,6 @@ export function MobileOptimizationWrapper({ children }: { children: React.ReactN
       setPerformanceLevel(tier);
       document.body.setAttribute('data-performance', tier);
 
-      const isMobile = isMobileWidth || isMobileDevice;
-
       if (isMobile) {
         // Apply mobile-specific optimizations
         document.body.classList.add('mobile-optimized');
