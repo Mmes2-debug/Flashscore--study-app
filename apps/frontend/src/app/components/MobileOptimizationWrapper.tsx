@@ -5,30 +5,78 @@ import { useEffect, useState } from 'react';
 
 export function MobileOptimizationWrapper({ children }: { children: React.ReactNode }) {
   const [isOptimized, setIsOptimized] = useState(false);
+  const [performanceLevel, setPerformanceLevel] = useState<'high' | 'medium' | 'low'>('high');
 
   useEffect(() => {
     const checkAndOptimize = () => {
-      // Detect mobile device via width and user agent
+      // Amazon-style device detection with performance tier
       const isMobileWidth = window.innerWidth < 768;
       const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
       );
       const isMobile = isMobileWidth || isMobileDevice;
 
-      if (isMobile) {
-      // Apply mobile-specific optimizations
-      document.body.classList.add('mobile-optimized');
-      
-      // Disable hover effects on mobile
-      const style = document.createElement('style');
-      style.textContent = `
-        @media (hover: none) and (pointer: coarse) {
-          .hover\\:scale-105:hover { transform: none !important; }
-          .hover\\:shadow-lg:hover { box-shadow: none !important; }
-          .hover-lift:hover { transform: none !important; }
+      // Determine device performance tier (Amazon-style optimization)
+      const getPerformanceTier = () => {
+        const memory = (navigator as any).deviceMemory || 4;
+        const cores = navigator.hardwareConcurrency || 2;
+        const connection = (navigator as any).connection;
+        const effectiveType = connection?.effectiveType || '4g';
+
+        if (memory < 2 || cores < 2 || effectiveType === '2g' || effectiveType === 'slow-2g') {
+          return 'low';
+        } else if (memory < 4 || cores < 4 || effectiveType === '3g') {
+          return 'medium';
         }
-      `;
-      document.head.appendChild(style);
+        return 'high';
+      };
+
+      const tier = getPerformanceTier();
+      setPerformanceLevel(tier);
+      document.body.setAttribute('data-performance', tier);
+
+      const isMobile = isMobileWidth || isMobileDevice;
+
+      if (isMobile) {
+        // Apply mobile-specific optimizations
+        document.body.classList.add('mobile-optimized');
+        
+        // Amazon-style adaptive loading based on performance tier
+        if (tier === 'low') {
+          document.body.classList.add('low-performance-mode');
+          // Disable animations and heavy effects
+          document.documentElement.style.setProperty('--animation-duration', '0ms');
+        } else if (tier === 'medium') {
+          document.body.classList.add('medium-performance-mode');
+          document.documentElement.style.setProperty('--animation-duration', '150ms');
+        }
+
+        // Disable hover effects on mobile
+        const style = document.createElement('style');
+        style.textContent = `
+          @media (hover: none) and (pointer: coarse) {
+            .hover\\:scale-105:hover { transform: none !important; }
+            .hover\\:shadow-lg:hover { box-shadow: none !important; }
+            .hover-lift:hover { transform: none !important; }
+          }
+          
+          /* Amazon-style performance optimizations */
+          .low-performance-mode * {
+            animation: none !important;
+            transition: none !important;
+          }
+          
+          .low-performance-mode img {
+            image-rendering: auto;
+          }
+        `;
+        document.head.appendChild(style);
+
+        // Add resource hints for critical resources (Amazon strategy)
+        const preconnect = document.createElement('link');
+        preconnect.rel = 'preconnect';
+        preconnect.href = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+        document.head.appendChild(preconnect);
 
       // Optimize touch targets
       document.documentElement.style.setProperty('--touch-target-min', '44px');

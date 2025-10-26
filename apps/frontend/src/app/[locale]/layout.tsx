@@ -7,6 +7,9 @@ import './styles/responsive-layout.css';
 import './fonts.css';
 import { AppWrapper } from '@/app/components/AppWrapper';
 import { MobileLayout } from '@/app/components/MobileLayout';
+import { MobileOptimizationWrapper } from '@/app/components/MobileOptimizationWrapper';
+import { HydrationSafeWrapper } from '@/app/components/HydrationSafeWrapper';
+import { AmazonStylePerformanceMonitor } from '@/app/components/AmazonStylePerformanceMonitor';
 import { GlobalErrorHandler } from '@/app/components/GlobalErrorHandler';
 import { locales } from '@/i18n';
 import type { Metadata, Viewport } from 'next';
@@ -118,11 +121,16 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
     <html lang={locale} className={`${inter.variable} ${roboto.variable}`} suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <MobileLayout>
-            <AppWrapper>
-              {children}
-            </AppWrapper>
-          </MobileLayout>
+          <MobileOptimizationWrapper>
+            <MobileLayout>
+              <AppWrapper>
+                <HydrationSafeWrapper>
+                  <AmazonStylePerformanceMonitor />
+                  {children}
+                </HydrationSafeWrapper>
+              </AppWrapper>
+            </MobileLayout>
+          </MobileOptimizationWrapper>
           <GlobalErrorHandler />
         </NextIntlClientProvider>
       </body>

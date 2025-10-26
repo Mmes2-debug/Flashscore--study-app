@@ -124,3 +124,52 @@ body.desktop-view {
     font-size: 16px;
   }
 }
+
+/* Amazon-style performance optimizations */
+[data-performance="low"] {
+  /* Disable expensive effects on low-end devices */
+  --animation-duration: 0ms !important;
+  --transition-duration: 0ms !important;
+}
+
+[data-performance="low"] * {
+  animation: none !important;
+  transition: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+[data-performance="medium"] {
+  --animation-duration: 150ms;
+  --transition-duration: 150ms;
+}
+
+[data-performance="high"] {
+  --animation-duration: 300ms;
+  --transition-duration: 300ms;
+}
+
+/* Amazon Lite Mode (activated on low memory devices) */
+.amazon-lite-mode img {
+  /* Reduce image quality on constrained devices */
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.amazon-lite-mode video {
+  display: none; /* Hide videos in lite mode */
+}
+
+/* Content visibility optimization (Amazon's strategy) */
+.lazy-load-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
+
+/* Reduce motion for accessibility and battery */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
