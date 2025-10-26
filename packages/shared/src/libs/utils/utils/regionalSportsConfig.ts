@@ -1,5 +1,5 @@
 
-import { Locale } from '@/i18n';
+export type Locale = 'en' | 'es' | 'fr' | 'de' | 'pt';
 
 export const regionalSportsPreferences: Record<Locale, string[]> = {
   en: ['Premier League', 'Championship', 'NFL', 'NBA', 'MLB', 'NHL', 'IPL', 'Big Bash League'],
