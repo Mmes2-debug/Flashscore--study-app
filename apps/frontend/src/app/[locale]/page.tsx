@@ -1,237 +1,117 @@
-
 "use client";
 
-import React, { useState, useEffect, Suspense, lazy } from 'react';
-import dynamic from 'next/dynamic';
-import { useMobile } from '../hooks/useMobile';
-import LoadingSkeleton from '../components/LoadingSkeleton';
+import React from 'react';
 import Link from "next/link";
-
-const HorizontalCarousel = dynamic(() => import('../components/HorizontalCarousel'), {
-  loading: () => <LoadingSkeleton />,
-  ssr: false
-});
-
-const ComprehensiveSportsHub = dynamic(() => import("@/app/components/ComprehensiveSportsHub"), {
-  loading: () => <LoadingSkeleton />,
-  ssr: false
-});
-
-const AuthorsSidebar = dynamic(() => import("@/app/components/AuthorsSidebar"), {
-  loading: () => <LoadingSkeleton />,
-  ssr: false
-});
-
-const ChessboardCompetitiveAnalysis = dynamic(() => import("../components/ChessboardCompetitiveAnalysis"), {
-  loading: () => <LoadingSkeleton />,
-  ssr: false
-});
-
-const MobileHomeOptimizer = dynamic(() => import("../components/MobileHomeOptimizer"), {
-  loading: () => <LoadingSkeleton />,
-  ssr: false
-});
+import { useMobile } from '../hooks/useMobile';
 
 export default function HomePage() {
   const isMobile = useMobile();
-  const [liveStats, setLiveStats] = useState({
-    activeUsers: 2341,
-    predictions24h: 8547,
-    accuracyRate: 78.5,
-    topStreak: 12
-  });
-
-  const [currentFeature, setCurrentFeature] = useState(0);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
-
-  useEffect(() => {
-    if (isMobile) {
-      const images = document.querySelectorAll('img');
-      let loadedCount = 0;
-
-      images.forEach(img => {
-        if (img.complete) {
-          loadedCount++;
-        } else {
-          img.addEventListener('load', () => {
-            loadedCount++;
-            if (loadedCount === images.length) {
-              setImagesLoaded(true);
-            }
-          });
-        }
-      });
-    }
-  }, [isMobile]);
-
-  const featuredPreviews = [
-    {
-      title: "AI-Powered Predictions",
-      description: "Get 87% accurate predictions with our advanced ML models",
-      icon: "🤖",
-      link: "/empire/ai-ceo",
-      color: "from-blue-500 to-cyan-500"
-    },
-    {
-      title: "Live Match Tracking",
-      description: "Real-time updates and analytics for every game",
-      icon: "⚡",
-      link: "/predictions",
-      color: "from-purple-500 to-pink-500"
-    },
-    {
-      title: "Achievement System",
-      description: "Earn badges and climb the leaderboard",
-      icon: "🏆",
-      link: "/features",
-      color: "from-orange-500 to-red-500"
-    },
-    {
-      title: "Kids Safe Mode",
-      description: "COPPA-compliant safe environment for young users",
-      icon: "🛡️",
-      link: "/privacy",
-      color: "from-green-500 to-emerald-500"
-    }
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentFeature((prev) => (prev + 1) % featuredPreviews.length);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7]">
-      <Suspense fallback={<LoadingSkeleton />}>
-        <MobileHomeOptimizer />
-      </Suspense>
-      {!isMobile && <Suspense fallback={<LoadingSkeleton />}><AuthorsSidebar /></Suspense>}
+    <div className="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#334155] flex items-center justify-center px-4">
+      <div className="text-center max-w-4xl mx-auto">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
 
-      <div className={isMobile ? "mt-16 px-4" : "ml-80 mt-16 px-8"}>
-        <section className="py-8 max-w-7xl mx-auto">
-          <div className="text-center mb-10">
-            <h1 className="text-5xl md:text-6xl font-bold mb-3 text-[#1d1d1f] tracking-tight">
-              🏆 Sports Central
-            </h1>
-            <p className="text-xl text-[#6e6e73] font-medium">
-              AI-Powered Sports Intelligence • Live • Accurate • Profitable
-            </p>
+        {/* Main Content */}
+        <div className="relative z-10">
+          {/* Icon/Logo */}
+          <div className="mb-8 animate-bounce-slow">
+            <div className="text-8xl md:text-9xl mb-6">🏆</div>
           </div>
 
-          <div className={`grid ${isMobile ? 'grid-cols-2' : 'md:grid-cols-4'} gap-4 mb-10`}>
-            <div className="bg-white rounded-3xl p-6 shadow-sm border border-[#e5e5e7] hover:shadow-md transition-all">
-              <div className="text-4xl font-bold text-[#007AFF] mb-1">{liveStats.activeUsers.toLocaleString()}</div>
-              <div className="text-sm text-[#6e6e73] font-medium">Active Users</div>
-              <div className="w-2 h-2 bg-[#34C759] rounded-full mx-auto mt-3 animate-pulse"></div>
-            </div>
+          {/* Welcome Text */}
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white tracking-tight">
+            Welcome to
+            <span className="block mt-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Sports Central
+            </span>
+          </h1>
 
-            <div className="bg-white rounded-3xl p-6 shadow-sm border border-[#e5e5e7] hover:shadow-md transition-all">
-              <div className="text-4xl font-bold text-[#5856D6] mb-1">{liveStats.predictions24h.toLocaleString()}</div>
-              <div className="text-sm text-[#6e6e73] font-medium">Predictions (24h)</div>
-            </div>
+          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-2xl mx-auto font-light">
+            AI-Powered Sports Intelligence • Live Predictions • Real-time Analytics
+          </p>
 
-            <div className="bg-white rounded-3xl p-6 shadow-sm border border-[#e5e5e7] hover:shadow-md transition-all">
-              <div className="text-4xl font-bold text-[#34C759] mb-1">{liveStats.accuracyRate}%</div>
-              <div className="text-sm text-[#6e6e73] font-medium">Accuracy Rate</div>
-            </div>
+          {/* CTA Button */}
+          <Link href="/features">
+            <button className="group relative px-12 py-5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl text-white text-lg md:text-xl font-semibold shadow-2xl hover:shadow-blue-500/50 transform hover:scale-105 active:scale-95 transition-all duration-300">
+              <span className="relative z-10 flex items-center gap-3">
+                Explore Features
+                <svg 
+                  className="w-6 h-6 group-hover:translate-x-2 transition-transform" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </span>
 
-            <div className="bg-white rounded-3xl p-6 shadow-sm border border-[#e5e5e7] hover:shadow-md transition-all">
-              <div className="text-4xl font-bold text-[#FF9500] mb-1">{liveStats.topStreak}</div>
-              <div className="text-sm text-[#6e6e73] font-medium">Top Streak Today</div>
-            </div>
-          </div>
-        </section>
+              {/* Button Glow Effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-50 group-hover:opacity-75 transition-opacity"></div>
+            </button>
+          </Link>
 
-        <section className="py-8 max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-[#1d1d1f] mb-8 text-center tracking-tight">
-            ✨ Explore Our Features
-          </h2>
-
-          <div className="relative h-72 mb-8">
-            {featuredPreviews.map((feature, index) => (
+          {/* Feature Pills */}
+          <div className="mt-16 flex flex-wrap justify-center gap-4">
+            {[
+              { icon: "🤖", text: "AI Predictions" },
+              { icon: "⚡", text: "Live Tracking" },
+              { icon: "🎯", text: "87% Accuracy" },
+              { icon: "🛡️", text: "Kids Safe" }
+            ].map((feature, index) => (
               <div
                 key={index}
-                className={`absolute inset-0 transition-all duration-500 ${
-                  index === currentFeature
-                    ? 'opacity-100 translate-x-0'
-                    : index < currentFeature
-                      ? 'opacity-0 -translate-x-full'
-                      : 'opacity-0 translate-x-full'
-                }`}
+                className="px-6 py-3 bg-white/10 backdrop-blur-lg rounded-full border border-white/20 text-white font-medium hover:bg-white/20 transition-all cursor-default"
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <Link href={feature.link}>
-                  <div className="bg-white rounded-[28px] p-10 h-full flex items-center cursor-pointer transform hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-sm border border-[#e5e5e7] hover:shadow-lg">
-                    <div className="flex-1">
-                      <div className="text-7xl mb-5">{feature.icon}</div>
-                      <h3 className="text-4xl font-bold text-[#1d1d1f] mb-3 tracking-tight">{feature.title}</h3>
-                      <p className="text-lg text-[#6e6e73] mb-5 font-medium">{feature.description}</p>
-                      <button className="px-8 py-3 bg-[#007AFF] hover:bg-[#0051D5] active:bg-[#004BB8] rounded-full text-white font-semibold transition-all shadow-sm text-base">
-                        Try Now →
-                      </button>
-                    </div>
-                  </div>
-                </Link>
+                <span className="mr-2">{feature.icon}</span>
+                {feature.text}
               </div>
             ))}
           </div>
+        </div>
 
-          <div className="flex justify-center gap-2">
-            {featuredPreviews.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentFeature(index)}
-                className={`h-2 rounded-full transition-all ${
-                  index === currentFeature ? 'w-8 bg-[#007AFF]' : 'w-2 bg-[#d1d1d6]'
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
-        </section>
-
-        <section className="py-8 pb-16 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <Link href="/predictions" className="bg-white rounded-[28px] p-8 border border-[#e5e5e7] hover:border-[#007AFF] active:border-[#0051D5] transition-all transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-sm hover:shadow-md">
-              <div className="text-5xl mb-5">🎯</div>
-              <h3 className="text-2xl font-bold text-[#1d1d1f] mb-2 tracking-tight">Make Predictions</h3>
-              <p className="text-[#6e6e73] font-medium">Start predicting and earn rewards</p>
-            </Link>
-
-            <Link href="/features" className="bg-white rounded-[28px] p-8 border border-[#e5e5e7] hover:border-[#5856D6] active:border-[#4745B8] transition-all transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-sm hover:shadow-md">
-              <div className="text-5xl mb-5">🌟</div>
-              <h3 className="text-2xl font-bold text-[#1d1d1f] mb-2 tracking-tight">Explore Features</h3>
-              <p className="text-[#6e6e73] font-medium">Discover all available tools</p>
-            </Link>
-
-            <Link href="/empire" className="bg-white rounded-[28px] p-8 border border-[#e5e5e7] hover:border-[#FF9500] active:border-[#CC7700] transition-all transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-sm hover:shadow-md">
-              <div className="text-5xl mb-5">🏛️</div>
-              <h3 className="text-2xl font-bold text-[#1d1d1f] mb-2 tracking-tight">Build Empire</h3>
-              <p className="text-[#6e6e73] font-medium">Grow your prediction empire</p>
-            </Link>
-          </div>
-        </section>
-
-        {!isMobile && (
-          <Suspense fallback={<LoadingSkeleton />}>
-            <ComprehensiveSportsHub />
-          </Suspense>
-        )}
-
-        {isMobile && (
-          <Suspense fallback={<LoadingSkeleton />}>
-            <HorizontalCarousel />
-          </Suspense>
-        )}
-
-        {!isMobile && (
-          <Suspense fallback={<LoadingSkeleton />}>
-            <ChessboardCompetitiveAnalysis />
-          </Suspense>
-        )}
+        {/* Floating Stats */}
+        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
+          {[
+            { value: "2.3K+", label: "Active Users" },
+            { value: "8.5K+", label: "Predictions" },
+            { value: "78.5%", label: "Accuracy" },
+            { value: "12", label: "Top Streak" }
+          ].map((stat, index) => (
+            <div
+              key={index}
+              className="p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/10 transition-all"
+            >
+              <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
+              <div className="text-sm text-gray-400">{stat.label}</div>
+            </div>
+          ))}
+        </div>
       </div>
+
+      <style jsx>{`
+        @keyframes bounce-slow {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-20px);
+          }
+        }
+
+        .animate-bounce-slow {
+          animation: bounce-slow 3s ease-in-out infinite;
+        }
+
+        .delay-1000 {
+          animation-delay: 1000ms;
+        }
+      `}</style>
     </div>
   );
 }
