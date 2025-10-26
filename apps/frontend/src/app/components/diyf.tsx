@@ -9,23 +9,23 @@ import { SessionProvider } from "@/app/providers/SessionProvider";
 import { UserPreferencesProvider } from "@/app/providers/UserPreferencesProvider";
 
 // Only dynamic import UI components
-const NavBar = dynamic(() => import("./NavBar"), {
+const NavBar = dynamic(() => import("./NavBar").then(mod => ({ default: mod.NavBar })), {
   loading: () => <LoadingSkeleton />,
   ssr: false,
 });
 
-const BottomNavigation = dynamic(() => import("./BottomNavigation"), {
+const BottomNavigation = dynamic(() => import("./BottomNavigation").then(mod => ({ default: mod.BottomNavigation })), {
   loading: () => <LoadingSkeleton />,
   ssr: false,
 });
 
-const AppDrawer = dynamic(() => import("./AppDrawer"), {
+const AppDrawer = dynamic(() => import("./AppDrawer").then(mod => ({ default: mod.AppDrawer })), {
   loading: () => <LoadingSkeleton />,
   ssr: false,
 });
 
 const MobileOptimizationWrapper = dynamic(
-  () => import("./MobileOptimizationWrapper"),
+  () => import("./MobileOptimizationWrapper").then(mod => ({ default: mod.MobileOptimizationWrapper })),
   {
     loading: () => <LoadingSkeleton />,
     ssr: false,
