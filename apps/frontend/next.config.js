@@ -37,6 +37,15 @@ const nextConfig = withNextIntl({
       ],
     },
     optimizePackageImports: ['@magajico/shared'],
+    // Prevent build hangs
+    isrMemoryCacheSize: 0, // Disable in-memory cache during build
+    incrementalCacheHandlerPath: undefined,
+  },
+  
+  // Build performance optimizations
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
   },
   
   // Webpack configuration

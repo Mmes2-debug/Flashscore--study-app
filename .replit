@@ -308,6 +308,112 @@ waitForPort = 8000
 [workflows.workflow.metadata]
 outputType = "console"
 
+[[workflows.workflow]]
+name = "Incremental Build (Debug)"
+author = 49015918
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"🔍 Step 1/4: Clearing problematic cache...\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node scripts/smart-cache-manager.js --clear-selective"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = ""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"🔍 Step 2/4: Building shared package...\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run build --workspace=packages/shared"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = ""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"🔍 Step 3/4: Type-checking frontend...\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd apps/frontend && npx tsc --noEmit"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = ""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"🔍 Step 4/4: Building frontend with monitoring...\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node ../../scripts/build-monitor.js npm run build"
+
+[[workflows.workflow]]
+name = "Smart Build (Recommended)"
+author = 49015918
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"🔍 Pre-build validation...\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node scripts/pre-build-check.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = ""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"🧹 Cache optimization...\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node scripts/smart-cache-manager.js --clear-selective"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = ""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"📦 Building shared package...\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run build --workspace=packages/shared"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = ""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"🔨 Building frontend with monitoring...\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd apps/frontend && node ../../scripts/build-monitor.js npm run build"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = ""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"✅ Build complete! Check health at /api/build-health\""
+
 [deployment]
 build = ["sh", "-c", "npm ci && npm run build --workspace=packages/shared && npm run build --workspace=apps/backend"]
 run = ["sh", "-c", "node apps/backend/dist/src/index.js"]
