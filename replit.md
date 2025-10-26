@@ -2,7 +2,20 @@
 Sports Central is a premium monorepo sports prediction and community platform built with Next.js. It features AI-powered predictions, live scores, interactive experiences, and community rewards. The platform aims to provide a comprehensive multi-sport experience inspired by FlashScore, incorporating real-time data, personalized content, and engaging user interfaces. Key capabilities include multi-sport browsing, live scorecards with AI insights, an authentication system with age verification, and a Kids Mode for educational sports content.
 
 ## Recent Changes (October 26, 2025)
-- **Feature Organization & Modular Architecture (Latest)**:
+
+- **Codebase Cleanup & Homepage Optimization (Latest)**:
+  - ✅ Created recyclebin directory at root with 9 unused/deprecated components
+  - ✅ Moved test components (App.jsx, ApiTest.tsx, DebugPanel.tsx)
+  - ✅ Moved mock/placeholder components (MLModelDashboard, PerformanceOptimizer)
+  - ✅ Moved PWA installers and error recovery systems
+  - ✅ Simplified homepage from ~190 lines to ~75 lines (60% reduction)
+  - ✅ Removed static promotional content, animations, and marketing copy
+  - ✅ Fixed locale-aware routing (changed absolute to relative hrefs)
+  - ✅ All workflows verified running (Backend, Frontend, ML Service)
+  - 📊 Expected performance improvement: Reduced TTI (Time to Interactive)
+  - 🎯 Goal: Lean, functional homepage focusing on navigation over marketing
+
+- **Feature Organization & Modular Architecture**:
   - ✅ Reorganized platform into feature-based apps for better maintainability
   - ✅ Created portal dashboard on homepage with 6 feature cards (Predictions, Live, Social, Rewards, Kids, News)
   - ✅ Updated navigation with feature-based links
