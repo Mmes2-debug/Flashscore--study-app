@@ -1,86 +1,24 @@
-
-'use client';
-
-import { EnhancedErrorBoundary } from './EnhancedErrorBoundary';
-
-// Wrap the existing DIYF component
-export function SafeDIYF(props: any) {
-  return (
-    <EnhancedErrorBoundary
-      sectionName="DIYF Component"
-      fallback={<div className="p-4 text-center text-gray-500">Feature temporarily unavailable</div>}
-    >
-      <DIYFInner {...props} />
-    </EnhancedErrorBoundary>
-  );
-}
-
-// Rename existing component to DIYFInner
-function DIYFInner(props: any) {
-  // ... existing DIYF code ...
-}
-
 "use client";
 
 import React from "react";
 import dynamic from "next/dynamic";
-import { usePathname } from "next/navigation";
-import { LoadingSkeleton } from "./LoadingSkeleton";
-// Import providers normally - they're needed immediately
-import { SessionProvider } from "@/app/providers/SessionProvider";
-import { UserPreferencesProvider } from "@/app/providers/UserPreferencesProvider";
 
-// Only dynamic import UI components
-const NavBar = dynamic(() => import("./NavBar").then(mod => ({ default: mod.NavBar })), {
-  loading: () => <LoadingSkeleton />,
+// Dynamically import heavy components
+const FeatureShowcase = dynamic(() => import("./FeatureShowcase"), {
   ssr: false,
+  loading: () => <div className="loading-skeleton">Loading features...</div>,
 });
 
-const BottomNavigation = dynamic(() => import("./BottomNavigation").then(mod => ({ default: mod.BottomNavigation })), {
-  loading: () => <LoadingSkeleton />,
+const SmartNewsFeed = dynamic(() => import("./SmartNewsFeed"), {
   ssr: false,
+  loading: () => <div className="loading-skeleton">Loading news...</div>,
 });
 
-const MobileOptimizationWrapper = dynamic(
-  () => import("./MobileOptimizationWrapper").then(mod => ({ default: mod.MobileOptimizationWrapper })),
-  {
-    loading: () => <LoadingSkeleton />,
-    ssr: false,
-  },
-);
-
-interface DIYFProps {
-  children: React.ReactNode;
-}
-
-export function DIYF({ children }: DIYFProps) {
-  const pathname = usePathname();
-  const isAuthPage = pathname?.includes("/auth/");
-
-  if (isAuthPage) {
-    return (
-      <MobileOptimizationWrapper>
-        <SessionProvider>
-          <UserPreferencesProvider>{children}</UserPreferencesProvider>
-        </SessionProvider>
-      </MobileOptimizationWrapper>
-    );
-  }
-
+export default function DIYF() {
   return (
-    <MobileOptimizationWrapper>
-      <SessionProvider>
-        <UserPreferencesProvider>
-          <NavBar />
-          <div
-            className="pt-16 pb-20 md:pb-0"
-            style={{ minHeight: "calc(var(--vh, 1vh) * 100)" }}
-          >
-            {children}
-          </div>
-          <BottomNavigation />
-        </UserPreferencesProvider>
-      </SessionProvider>
-    </MobileOptimizationWrapper>
+    <div className="diyf-container">
+      <FeatureShowcase />
+      <SmartNewsFeed />
+    </div>
   );
 }
