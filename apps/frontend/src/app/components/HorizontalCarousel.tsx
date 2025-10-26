@@ -1,6 +1,9 @@
 
 "use client";
 
+// DEPRECATED: Use @/lib/platform/carousel instead
+// This file is kept for backward compatibility only
+
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 

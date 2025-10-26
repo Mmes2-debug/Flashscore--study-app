@@ -1,14 +1,15 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { HorizontalCarousel } from '@/app/components/HorizontalCarousel';
-import PWAInstaller from '@/app/components/PWAInstaller';
+import { HorizontalCarousel } from '@/lib/platform/carousel'; // Updated import path for HorizontalCarousel
+import PWAInstaller from '@/app/components/PWAInstaller'; // Keep PWAInstaller if it's still relevant, though not used in the edited snippet
 import { AdvancedPullToRefreshWrapper, useRefreshListener } from '@/app/components/AdvancedPullToRefreshWrapper';
 import { Breadcrumbs } from '@/app/components/Breadcrumbs';
-import PredictionDashboard from '@/app/components/PredictionDashboard';
-import { MLPredictionInterface } from '@/app/components/MLPredictionInterface';
-import { MLModelDashboard } from '@/app/components/MLModelDashboard';
-import { ConfidenceSlider } from '@/app/components/ConfidenceSlider';
+import PredictionDashboard from '@/app/components/PredictionDashboard'; // Keep if still relevant
+import { MLPredictionInterface } from '@/app/components/MLPredictionInterface'; // Keep if still relevant
+import { MLModelDashboard } from '@/app/components/MLModelDashboard'; // Keep if still relevant
+import { ConfidenceSlider } from '@/app/components/ConfidenceSlider'; // Keep if still relevant
 
 interface Prediction {
   id: string;
@@ -45,14 +46,12 @@ export default function PredictionsPage() {
         headers: { 'Cache-Control': 'no-cache' }
       });
       if (!res.ok) {
-        // If API fails, show empty state instead of error
         setPredictions([]);
         setLoading(false);
         return;
       }
       const data = await res.json();
 
-      // Ensure data is an array
       if (data.success && Array.isArray(data.predictions)) {
         setPredictions(data.predictions);
       } else {
@@ -68,7 +67,6 @@ export default function PredictionsPage() {
     }
   };
 
-  // Listen to refresh events
   useRefreshListener((detail) => {
     console.log('Data refreshed:', detail);
     fetchPredictions();
@@ -91,7 +89,7 @@ export default function PredictionsPage() {
   };
 
   if (!isMounted) {
-    return null; // or a loading skeleton
+    return null;
   }
 
   return (
@@ -102,7 +100,7 @@ export default function PredictionsPage() {
       refreshEndpoints={['/api/predictions']}
     >
       <div className="p-4 max-w-4xl mx-auto">
-        <Breadcrumbs 
+        <Breadcrumbs
           items={[
             { label: "Predictions" }
           ]}
@@ -174,7 +172,7 @@ export default function PredictionsPage() {
                 Prediction: <span className="font-medium">{p.prediction}</span>
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-400">Confidence: {p.confidence}%</p>
-              
+
               {/* Add Confidence Slider for interactive adjustment */}
               {p.confidence && (
                 <div className="mt-4">
@@ -201,22 +199,5 @@ export default function PredictionsPage() {
         )}
       </div>
     </AdvancedPullToRefreshWrapper>
-  );
-}
-
-"use client";
-
-import React from 'react';
-import { MLPredictionInterface } from '@/app/components/MLPredictionInterface';
-
-export default function PredictionsPage() {
-  return (
-    <div className="predictions-page">
-      <div className="page-header">
-        <h1>AI Predictions</h1>
-        <p>Get ML-powered predictions with 87% accuracy</p>
-      </div>
-      <MLPredictionInterface />
-    </div>
   );
 }
