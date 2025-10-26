@@ -1,3 +1,4 @@
+
 interface VisitorData {
   id: string;
   visitCount: number;
@@ -45,36 +46,62 @@ class VisitorManager {
     }
   ];
 
+  // Check if we're in a browser environment
+  private static isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof document !== 'undefined';
+  }
+
   // Generate unique visitor ID based on browser fingerprint
   static generateVisitorId(): string {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      ctx.textBaseline = 'top';
-      ctx.font = '14px Arial';
-      ctx.fillText('Visitor fingerprint', 2, 2);
+    if (!this.isBrowser()) {
+      return 'visitor_ssr_' + Math.random().toString(36).substring(7);
     }
 
-    const fingerprint = [
-      navigator.userAgent,
-      navigator.language,
-      screen.width + 'x' + screen.height,
-      new Date().getTimezoneOffset(),
-      canvas.toDataURL()
-    ].join('|');
+    try {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.textBaseline = 'top';
+        ctx.font = '14px Arial';
+        ctx.fillText('Visitor fingerprint', 2, 2);
+      }
 
-    // Simple hash function
-    let hash = 0;
-    for (let i = 0; i < fingerprint.length; i++) {
-      const char = fingerprint.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash;
+      const fingerprint = [
+        navigator.userAgent,
+        navigator.language,
+        screen.width + 'x' + screen.height,
+        new Date().getTimezoneOffset(),
+        canvas.toDataURL()
+      ].join('|');
+
+      // Simple hash function
+      let hash = 0;
+      for (let i = 0; i < fingerprint.length; i++) {
+        const char = fingerprint.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      return 'visitor_' + Math.abs(hash).toString(36);
+    } catch (error) {
+      console.error('Error generating visitor ID:', error);
+      return 'visitor_fallback_' + Math.random().toString(36).substring(7);
     }
-    return 'visitor_' + Math.abs(hash).toString(36);
   }
 
   // Track visitor and update visit count
   static trackVisitor(userId?: string): VisitorData {
+    if (!this.isBrowser()) {
+      // Return a default visitor data for SSR
+      return {
+        id: userId || 'ssr_visitor',
+        visitCount: 1,
+        firstVisit: new Date(),
+        lastVisit: new Date(),
+        accessLevel: userId ? 'registered' : 'guest',
+        contentAccessed: []
+      };
+    }
+
     const visitorId = userId || this.generateVisitorId();
     const stored = localStorage.getItem('visitor_data');
     let visitorData: VisitorData;
@@ -102,12 +129,17 @@ class VisitorManager {
     localStorage.setItem('visitor_data', JSON.stringify(visitorData));
 
     // Log visitor activity for security
-    const SecurityUtils = require('./securityUtils').default;
-    SecurityUtils.logSecurityEvent('visitor_tracked', {
-      visitorId: visitorData.id,
-      visitCount: visitorData.visitCount,
-      accessLevel: visitorData.accessLevel
-    });
+    try {
+      const SecurityUtils = require('./securityUtils').default;
+      SecurityUtils.logSecurityEvent('visitor_tracked', {
+        visitorId: visitorData.id,
+        visitCount: visitorData.visitCount,
+        accessLevel: visitorData.accessLevel
+      });
+    } catch (error) {
+      // Silently fail if SecurityUtils is not available
+      console.warn('SecurityUtils not available for logging');
+    }
 
     return visitorData;
   }
@@ -119,6 +151,10 @@ class VisitorManager {
     visitsRemaining?: number;
     upgradeRequired?: boolean;
   } {
+    if (!this.isBrowser()) {
+      return { allowed: true }; // Allow during SSR
+    }
+
     const visitorData = this.getVisitorData();
     if (!visitorData) {
       return { allowed: false, reason: 'Visitor data not found' };
@@ -154,6 +190,10 @@ class VisitorManager {
 
   // Check if guest visit limit exceeded
   static isGuestLimitExceeded(): boolean {
+    if (!this.isBrowser()) {
+      return false;
+    }
+
     const visitorData = this.getVisitorData();
     if (!visitorData || visitorData.accessLevel !== 'guest') {
       return false;
@@ -164,6 +204,10 @@ class VisitorManager {
 
   // Record content access
   static recordContentAccess(contentType: string, contentId: string): void {
+    if (!this.isBrowser()) {
+      return;
+    }
+
     const visitorData = this.getVisitorData();
     if (!visitorData) return;
 
@@ -180,6 +224,10 @@ class VisitorManager {
 
   // Get visitor data
   static getVisitorData(): VisitorData | null {
+    if (!this.isBrowser()) {
+      return null;
+    }
+
     const stored = localStorage.getItem('visitor_data');
     return stored ? JSON.parse(stored) : null;
   }
@@ -222,6 +270,10 @@ class VisitorManager {
 
   // Reset daily limits (called by cron job)
   static resetDailyLimits(): void {
+    if (!this.isBrowser()) {
+      return;
+    }
+
     const visitorData = this.getVisitorData();
     if (!visitorData) return;
 
@@ -251,6 +303,16 @@ class VisitorManager {
     premiumUsers: number;
     contentStats: { [key: string]: number };
   } {
+    if (!this.isBrowser()) {
+      return {
+        totalVisitors: 0,
+        guestVisitors: 0,
+        registeredUsers: 0,
+        premiumUsers: 0,
+        contentStats: {}
+      };
+    }
+
     const visitorData = this.getVisitorData();
 
     return {
@@ -284,3 +346,4 @@ class VisitorManager {
 }
 
 export { VisitorManager };
+export type { VisitorData, ContentRestriction };
