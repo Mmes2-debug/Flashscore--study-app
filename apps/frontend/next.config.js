@@ -28,7 +28,6 @@ const nextConfig = withNextIntl({
 
   // Experimental features
   experimental: {
-    optimizeCss: true,
     serverActions: {
       allowedOrigins: [
         'localhost:5000',
