@@ -4,13 +4,13 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { GoogleStyleMenu } from './GoogleStyleMenu';
 
 export const NavBar: React.FC = React.memo(() => {
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -51,8 +51,16 @@ export const NavBar: React.FC = React.memo(() => {
               </span>
             </Link>
 
-            {/* Main Navigation Links - Hidden on mobile */}
+            {/* Main Navigation Links */}
             <div className="hidden md:flex items-center gap-6">
+              <Link
+                href="/"
+                className={`text-sm font-medium transition-colors hover:text-blue-600 ${
+                  pathname === '/' ? 'text-blue-600' : 'text-gray-700'
+                }`}
+              >
+                Home
+              </Link>
               <Link
                 href="/matches"
                 className={`text-sm font-medium transition-colors hover:text-blue-600 ${
@@ -77,14 +85,76 @@ export const NavBar: React.FC = React.memo(() => {
               >
                 Predictions
               </Link>
+              <Link
+                href="/author"
+                className={`text-sm font-medium transition-colors hover:text-blue-600 ${
+                  pathname === '/author' ? 'text-blue-600' : 'text-gray-700'
+                }`}
+              >
+                Authors
+              </Link>
+
+              {/* More Menu Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setMoreMenuOpen(!moreMenuOpen)}
+                  className={`text-sm font-medium transition-colors hover:text-blue-600 flex items-center gap-1 ${
+                    moreMenuOpen ? 'text-blue-600' : 'text-gray-700'
+                  }`}
+                  aria-label="More menu"
+                >
+                  More
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+
+                {/* More Dropdown Menu */}
+                {moreMenuOpen && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setMoreMenuOpen(false)}
+                    />
+                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+                      <Link
+                        href="/kids-mode"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        onClick={() => setMoreMenuOpen(false)}
+                      >
+                        🌈 Kids Mode
+                      </Link>
+                      <Link
+                        href="/partnerships"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        onClick={() => setMoreMenuOpen(false)}
+                      >
+                        🤝 Partnerships
+                      </Link>
+                      <div className="border-t border-gray-200 my-2" />
+                      <Link
+                        href="/management/users"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        onClick={() => setMoreMenuOpen(false)}
+                      >
+                        🛠️ Management
+                      </Link>
+                      <Link
+                        href="/management/analytics"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        onClick={() => setMoreMenuOpen(false)}
+                      >
+                        📈 Analytics
+                      </Link>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Right side - Apps Menu and User Menu */}
+          {/* Right side - User Menu */}
           <div className="flex items-center gap-3">
-            {/* Google Style Apps Menu */}
-            <GoogleStyleMenu />
-
             {/* User Menu */}
             {status === 'loading' ? (
               <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
@@ -164,7 +234,7 @@ export const NavBar: React.FC = React.memo(() => {
         </div>
       </div>
 
-      {/* Mobile Status Bar - Optional */}
+      {/* Mobile Status Bar */}
       <div className="md:hidden border-t border-gray-200 px-4 py-2 bg-white/80">
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
