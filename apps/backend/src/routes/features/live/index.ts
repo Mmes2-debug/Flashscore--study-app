@@ -1,0 +1,1 @@
+export { matchRoutes } from '../../matches';
