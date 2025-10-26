@@ -42,7 +42,6 @@ export { ConfidenceCalibration } from './ConfidenceCalibration';
 
 // Portal & Dashboard
 export { PortalDashboard } from './PortalDashboard';
-export { MLModelDashboard } from './MLModelDashboard';
 export { UnifiedSportsHub } from './UnifiedSportsHub';
 
 // News & Social

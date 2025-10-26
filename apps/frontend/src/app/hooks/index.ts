@@ -1,4 +1,3 @@
-
 // Authentication & Authorization
 export { useAuth } from './useAuth';
 export { useBackendHealth } from './useBackendHealth';
@@ -14,14 +13,9 @@ export { useThemeScheduler } from './useThemeScheduler';
 export { useColorBlindMode } from './useColorBlindMode';
 export { useBatteryOptimization } from './useBatteryOptimization';
 export { usePerformanceMonitor } from './usePerformanceMonitor';
-export { useBackendHealth } from './useBackendHealth';
-export { useOfflineStatus } from './useOfflineStatus';
 
-// AI & Analysis
+// Hydration Safety
+export { useHydrationSafe } from './useHydrationSafe';
+
+// ML & AI
 export { useAiAnalysis } from './useAiAnalysis';
-
-// Features
-export { useFeatures } from './useFeatures';
-
-// Utilities
-export { useDebounce } from './useDebounce';
