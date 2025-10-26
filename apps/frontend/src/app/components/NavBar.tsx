@@ -37,38 +37,38 @@ interface QuickMenuItem {
 
 const navItems: NavItem[] = [
   {
-    label: "⚽ Matches",
-    link: "/matches",
-  },
-  {
-    label: "Sports",
-    link: "/sports",
-    subItems: [
-      { label: "Football", link: "/sports/football" },
-      { label: "Basketball", link: "/sports/basketball" },
-      { label: "Baseball", link: "/sports/baseball" },
-    ],
-  },
-  {
-    label: "Predictions",
+    label: "🤖 Predictions",
     link: "/predictions",
   },
   {
-    label: "🌈 Kids Mode",
+    label: "📡 Live",
+    link: "/live",
+  },
+  {
+    label: "👥 Social",
+    link: "/social/feed",
+  },
+  {
+    label: "🏆 Rewards",
+    link: "/rewards/achievements",
+  },
+  {
+    label: "🌈 Kids",
     link: "/kids-mode",
   },
   {
-    label: "Leaderboard",
-    link: "/leaderboard",
+    label: "📰 News",
+    link: "/news",
   },
 ];
 
 const quickMenuItems: QuickMenuItem[] = [
-  { label: "🏠 Home", link: "/" },
+  { label: "🏠 Portal", link: "/" },
+  { label: "🤖 Predictions", link: "/predictions" },
+  { label: "📡 Live", link: "/live" },
+  { label: "👥 Social", link: "/social/feed" },
+  { label: "🏆 Rewards", link: "/rewards/achievements" },
   { label: "📰 News", link: "/news" },
-  { label: "📊 Predictions", link: "/predictions" },
-  { label: "📂 Archive", link: "/archive" },
-  { label: "✍️ Author", link: "/author" },
 ];
 
 export const NavBar: React.FC = () => {
