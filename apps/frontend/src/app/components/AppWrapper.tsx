@@ -2,6 +2,7 @@
 "use client";
 import React from "react";
 import { usePathname } from 'next/navigation';
+import { DIYF } from './diyf';
 
 // Simplified Error Boundary
 class ResilientErrorBoundary extends React.Component<
@@ -41,53 +42,12 @@ class ResilientErrorBoundary extends React.Component<
   }
 }
 
-import { SessionProvider } from '@/app/providers/SessionProvider';
-import { UserPreferencesProvider } from '@/app/providers/UserPreferencesProvider';
-import { NavBar } from './NavBar';
-import { BottomNavigation } from './BottomNavigation';
-import { AppDrawer } from './AppDrawer';
-import { MobileOptimizationWrapper } from './MobileOptimizationWrapper';
-
-function AppWrapperContent({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  
-  // Check if we're on an auth page
-  const isAuthPage = pathname?.includes('/auth/');
-  
-  // For auth pages, skip all navigation wrappers
-  if (isAuthPage) {
-    return (
-      <ResilientErrorBoundary>
-        <MobileOptimizationWrapper>
-          <SessionProvider>
-            <UserPreferencesProvider>
-              {children}
-            </UserPreferencesProvider>
-          </SessionProvider>
-        </MobileOptimizationWrapper>
-      </ResilientErrorBoundary>
-    );
-  }
-  
-  // For regular pages, include all navigation
+export function AppWrapper({ children }: { children: React.ReactNode }) {
   return (
     <ResilientErrorBoundary>
-      <MobileOptimizationWrapper>
-        <SessionProvider>
-          <UserPreferencesProvider>
-            <NavBar />
-            <AppDrawer />
-            <div className="pt-16 pb-20 md:pb-0" style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}>
-              {children}
-            </div>
-            <BottomNavigation />
-          </UserPreferencesProvider>
-        </SessionProvider>
-      </MobileOptimizationWrapper>
+      <DIYF>
+        {children}
+      </DIYF>
     </ResilientErrorBoundary>
   );
-}
-
-export function AppWrapper({ children }: { children: React.ReactNode }) {
-  return <AppWrapperContent>{children}</AppWrapperContent>;
 }
