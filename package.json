@@ -8,8 +8,8 @@
   ],
   "scripts": {
     "start:safe": "node error-monitor.js",
-    "build:shared": "npm run build --workspace=packages/shared",
-    "build:frontend": "npm run build --workspace=@magajico/frontend",
+    "build:shared": "npm --workspace=@magajico/shared run build",
+    "build:frontend": "npm --workspace=@magajico/frontend run build",
     "build": "npm run build:shared && npm run build:frontend",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
