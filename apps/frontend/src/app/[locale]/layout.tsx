@@ -2,8 +2,11 @@ import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { Inter, Roboto } from 'next/font/google';
 import './styles/globals.css';
+import './styles/mobile-optimizations.css';
+import './styles/responsive-layout.css';
 import './fonts.css';
 import { AppWrapper } from '@/app/components/AppWrapper';
+import { MobileLayout } from '@/app/components/MobileLayout';
 import { GlobalErrorHandler } from '@/app/components/GlobalErrorHandler';
 import { locales } from '@/i18n';
 import type { Metadata, Viewport } from 'next';
@@ -115,9 +118,11 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
     <html lang={locale} className={`${inter.variable} ${roboto.variable}`} suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <AppWrapper>
-            {children}
-          </AppWrapper>
+          <MobileLayout>
+            <AppWrapper>
+              {children}
+            </AppWrapper>
+          </MobileLayout>
           <GlobalErrorHandler />
         </NextIntlClientProvider>
       </body>
